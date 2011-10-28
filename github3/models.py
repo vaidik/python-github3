@@ -110,7 +110,8 @@ class User(BaseResource):
     def orgs(self):
         return self._gh._get_resources(('users', self.login, 'orgs'), Org)
 
-
+    def gists(self):
+        return self._gh._get_resources(('users', self.login, 'gists'), Gist)
 
 class CurrentUser(User):
     """Github Current User object model."""
@@ -140,6 +141,9 @@ class CurrentUser(User):
 
     def org(self, orgname):
         return self._gh._get_resource(('orgs', orgname), Org)
+
+    def gists(self, limit=None):
+        return self._gh._get_resources('gists', Gist, limit=limit)
 
 
 
@@ -209,7 +213,19 @@ class Org(BaseResource):
         return (r.status_code == 204)
 
 
+class Gist(BaseResource):
+    _strs = ['url', 'description', 'html_url', 'git_pull_url', 'git_push_url']
+    _ints = ['id', 'comments']
+    _bools = ['public']
+    _dates = ['created_at']
+    _map = {'user': User} #TODO: file
 
+    @property
+    def ri(self):
+        return ('users', self.user.login, self.id)
+
+    def __repr__(self):
+        return '<gist %s/%s>' % (self.user.login, self.description)
 
 class Repo(BaseResource):
     _strs = [
