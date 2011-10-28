@@ -85,7 +85,7 @@ class User(BaseResource):
     """Github User object model."""
 
     _strs = [
-        'login','gravatar_url', 'url', 'name', 'company', 'blog', 'location',
+        'login','avatar_url', 'url', 'name', 'company', 'blog', 'location',
         'email', 'bio', 'html_url']
 
     _ints = ['id', 'public_repos', 'public_gists', 'followers', 'following']
