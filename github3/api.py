@@ -66,8 +66,8 @@ class GithubCore(object):
     def _requests_post_hook(self, r):
         """Post-processing for HTTP response objects."""
 
-        self._ratelimit = int(r.headers.get('x-ratelimit-limit', -1))
-        self._ratelimit_remaining = int(r.headers.get('x-ratelimit-remaining', -1))
+        self._rate_limit = int(r.headers.get('x-ratelimit-limit', -1))
+        self._rate_limit_remaining = int(r.headers.get('x-ratelimit-remaining', -1))
 
         return r
 
