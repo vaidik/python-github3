@@ -18,8 +18,7 @@ from .packages.link_header import parse_link_value
 from .models import *
 from .helpers import is_collection, to_python, to_api, get_scope
 from .config import settings
-
-
+import handlers
 
 
 PAGING_SIZE = 100
@@ -199,24 +198,13 @@ class Github(GithubCore):
         super(Github, self).__init__()
         self.is_authenticated = False
 
-
-    def get_user(self, username):
-        """Get a single user."""
-        return self._get_resource(('users', username), User)
-
-
-    def get_me(self):
-        """Get the authenticated user."""
-        return self._get_resource(('user'), CurrentUser)
-
-    def get_repo(self, username, reponame):
-        """Get the given repo."""
-        return self._get_resource(('repos', username, reponame), Repo)
-
-    def get_org(self, login):
-        """Get organization."""
-        return self._get_resource(('orgs', login), Org)
-
+    def user_handler(self, username=None):
+        if not getattr(self, '_user_handler'):
+            if self.is_authenticated:
+                self._user_handler = handlers.AuthUser(self)
+            else:
+                self._user_handler = handlers.User(self, username)
+        return self._user_handler
 
 class ResponseError(Exception):
     """The API Response was unexpected."""
