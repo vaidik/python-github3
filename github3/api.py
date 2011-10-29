@@ -217,6 +217,9 @@ class Github(GithubCore):
         """Get organization."""
         return self._get_resource(('orgs', login), Org)
 
+    def post_gist(self, json_data):
+        self.session.post(settings.base_url+'gist', json_data)
+
 
 class ResponseError(Exception):
     """The API Response was unexpected."""
