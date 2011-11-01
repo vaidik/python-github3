@@ -6,9 +6,9 @@ This module provides the Github3 object model.
 """
 
 import json
+import inspect
 
-from .helpers import to_python, to_api, key_diff
-
+from github3.helpers import to_python, to_api, key_diff
 
 class BaseResource(object):
     """A BaseResource object."""
@@ -18,14 +18,23 @@ class BaseResource(object):
     _dates = []
     _bools = []
     _map = {}
+    _list_map = {}
     _writeable = []
     _cache = {}
 
+    def post_map(self):
+        try:
+            handler = self.handler()
+            methods = filter(lambda x: x[0].startswith('get') and callable(x),
+                             inspect.getmembers(handler, inspect.ismethod))
+            for name, callback in methods:
+                setattr(self, method, callback)
+        except:
+            pass
 
     def __init__(self):
         self._bootstrap()
         super(BaseResource, self).__init__()
-
 
     def __dir__(self):
         return self.keys()
@@ -56,6 +65,7 @@ class BaseResource(object):
             date_keys = cls._dates,
             bool_keys = cls._bools,
             object_map = cls._map,
+            list_map = cls._list_map,
             _gh = gh
         )
 
@@ -70,109 +80,70 @@ class BaseResource(object):
         return r
 
 
-class Plan(BaseResource):
-    """Github Plan object model."""
 
-    _strs = ['name']
-    _ints = ['space', 'collaborators', 'private_repos']
-
-    def __repr__(self):
-        return '<plan {0}>'.format(str(self.name))
-
-class Org(BaseResource):
-    """Github Organization object model."""
-
-    _strs = [
-        'login', 'url', 'avatar_url', 'name', 'company', 'blog', 'location', 'email'
-        'html_url', 'type', 'billing_email']
-    _ints = [
-        'id', 'public_repos', 'public_gists', 'followers', 'following',
-        'total_private_repos', 'owned_private_repos', 'private_gists', 'disk_usage',
-        'collaborators']
-    _dates = ['created_at']
-    _map = {'plan': Plan}
-    _writable = ['billing_email', 'blog', 'company', 'email', 'location', 'name']
-
-    @property
-    def ri(self):
-        return ('orgs', self.login)
-
-    def __repr__(self):
-        return '<org {0}>'.format(self.login)
-
-    def repos(self, limit=None):
-         return self._gh._get_resources(('orgs', self.login, 'repos'), Repo, limit=limit)
-
-    def members(self, limit=None):
-        return self._gh._get_resources(('orgs', self.login, 'members'), User, limit=limit)
-
-    def is_member(self, username):
-        if isinstance(username, User):
-            username = username.login
-
-        r = self._gh._http_resource('GET', ('orgs', self.login, 'members', username), check_status=False)
-        return (r.status_code == 204)
-
-    def publicize_member(self, username):
-        if isinstance(username, User):
-            username = username.login
-
-        r = self._gh._http_resource('PUT', ('orgs', self.login, 'public_members', username), check_status=False, data='')
-        return (r.status_code == 204)
-
-    def conceal_member(self, username):
-        if isinstance(username, User):
-            username = username.login
-
-        r = self._gh._http_resource('DELETE', ('orgs', self.login, 'public_members', username), check_status=False)
-        return (r.status_code == 204)
-
-    def remove_member(self, username):
-        if isinstance(username, User):
-            username = username.login
-
-        r = self._gh._http_resource('DELETE', ('orgs', self.login, 'members', username), check_status=False)
-        return (r.status_code == 204)
-
-    def public_members(self, limit=None):
-        return self._gh._get_resources(('orgs', self.login, 'public_members'), User, limit=limit)
-
-    def is_public_member(self, username):
-        if isinstance(username, User):
-            username = username.login
-
-        r = self._gh._http_resource('GET', ('orgs', self.login, 'public_members', username), check_status=False)
-        return (r.status_code == 204)
-
-
-class Gist(BaseResource):
-    _strs = ['url', 'description', 'html_url', 'git_pull_url', 'git_push_url']
-    _ints = ['id', 'comments']
-    _bools = ['public']
-    _dates = ['created_at']
-    _map = {'user': User} #TODO: file
-
-    @property
-    def ri(self):
-        return ('users', self.user.login, self.id)
-
-    def __repr__(self):
-        return '<gist %s/%s>' % (self.user.login, self.description)
-
-class Repo(BaseResource):
-    _strs = [
-        'url', 'html_url', 'clone_url', 'git_url', 'ssh_url', 'svn_url',
-        'name', 'description', 'homepage', 'language', 'master_branch']
-    _bools = ['private', 'fork']
-    _ints = ['forks', 'watchers', 'size',]
-    _dates = ['pushed_at', 'created_at']
-    _map = {'owner': User}
-
-
-    @property
-    def ri(self):
-        return ('repos', self.owner.login, self.name)
-
-    def __repr__(self):
-        return '<repo {0}/{1}>'.format(self.owner.login, self.name)
-    # owner
+#class Org(BaseResource):
+#    """Github Organization object model."""
+#
+#    _strs = [
+#        'login', 'url', 'avatar_url', 'name', 'company', 'blog', 'location', 'email'
+#        'html_url', 'type', 'billing_email']
+#    _ints = [
+#        'id', 'public_repos', 'public_gists', 'followers', 'following',
+#        'total_private_repos', 'owned_private_repos', 'private_gists', 'disk_usage',
+#        'collaborators']
+#    _dates = ['created_at']
+#    _map = {'plan': Plan}
+#    _writable = ['billing_email', 'blog', 'company', 'email', 'location', 'name']
+#
+#    @property
+#    def ri(self):
+#        return ('orgs', self.login)
+#
+#    def __repr__(self):
+#        return '<org {0}>'.format(self.login)
+#
+#    def repos(self, limit=None):
+#         return self._gh._get_resources(('orgs', self.login, 'repos'), Repo, limit=limit)
+#
+#    def members(self, limit=None):
+#        return self._gh._get_resources(('orgs', self.login, 'members'), User, limit=limit)
+#
+#    def is_member(self, username):
+#        if isinstance(username, User):
+#            username = username.login
+#
+#        r = self._gh._http_resource('GET', ('orgs', self.login, 'members', username), check_status=False)
+#        return (r.status_code == 204)
+#
+#    def publicize_member(self, username):
+#        if isinstance(username, User):
+#            username = username.login
+#
+#        r = self._gh._http_resource('PUT', ('orgs', self.login, 'public_members', username), check_status=False, data='')
+#        return (r.status_code == 204)
+#
+#    def conceal_member(self, username):
+#        if isinstance(username, User):
+#            username = username.login
+#
+#        r = self._gh._http_resource('DELETE', ('orgs', self.login, 'public_members', username), check_status=False)
+#        return (r.status_code == 204)
+#
+#    def remove_member(self, username):
+#        if isinstance(username, User):
+#            username = username.login
+#
+#        r = self._gh._http_resource('DELETE', ('orgs', self.login, 'members', username), check_status=False)
+#        return (r.status_code == 204)
+#
+#    def public_members(self, limit=None):
+#        return self._gh._get_resources(('orgs', self.login, 'public_members'), User, limit=limit)
+#
+#    def is_public_member(self, username):
+#        if isinstance(username, User):
+#            username = username.login
+#
+#        r = self._gh._http_resource('GET', ('orgs', self.login, 'public_members', username), check_status=False)
+#        return (r.status_code == 204)
+#
+#

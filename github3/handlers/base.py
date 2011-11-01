@@ -3,8 +3,6 @@
 #
 # author: David Medina
 
-import models
-
 class Handler(object):
     """ Abstract handler, that inject github.api """
 
@@ -24,3 +22,4 @@ class Handler(object):
         url = self._extend_url(*args)
         map_model = kwargs.get('model', self._model)
         return self._gh._get_resources(url, map_model, **kwargs)
+

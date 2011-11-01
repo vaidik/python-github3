@@ -15,7 +15,6 @@ from decorator import decorator
 from .packages import omnijson as json
 from .packages.link_header import parse_link_value
 
-from .models import *
 from .helpers import is_collection, to_python, to_api, get_scope
 from .config import settings
 import handlers
@@ -170,6 +169,9 @@ class GithubCore(object):
 
             page += 1
 
+    def _get_bool(self, resource):
+        resp = self._http_resource('GET', resource, check_status=False)
+        return True if resp.status_code == 204 else False
 
     def _to_map(self, obj, iterable):
         """Maps given dict iterable to a given Resource object."""
@@ -181,16 +183,6 @@ class GithubCore(object):
 
         return a
 
-    def _get_url(self, resource):
-
-        if is_collection(resource):
-            resource = map(str, resource)
-            resource = '/'.join(resource)
-
-        return resource
-
-
-
 class Github(GithubCore):
     """docstring for Github"""
 
@@ -198,8 +190,8 @@ class Github(GithubCore):
         super(Github, self).__init__()
         self.is_authenticated = False
 
-    def user_handler(self, username=None):
-        if not getattr(self, '_user_handler'):
+    def user_handler(self, username=None, force=False):
+        if force or not getattr(self, '_user_handler', False):
             if self.is_authenticated:
                 self._user_handler = handlers.AuthUser(self)
             else:

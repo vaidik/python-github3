@@ -4,6 +4,7 @@
 # author: David Medina
 
 from .base import Handler
+import github3.models as models
 
 class User(Handler):
     """ Handler to query public user api """
@@ -13,7 +14,7 @@ class User(Handler):
             raise exceptions.AnomUser("%s need a username" % self.__class__)
 
         self._url = ('users', username)
-        self._model = models.AnomUser
+        self._model = models.User
         self.username = username
         super(User, self).__init__(gh)
 
@@ -29,12 +30,24 @@ class User(Handler):
     def get_following(self, limit=None):
         return self._get_resources('following')
 
-class AuthUser(AnomUser):
+    def get_repos(self, limit=None):
+        return self._get_resources('repos', model=models.Repo)
+
+    def get_watched(self, limit=None):
+        return self._get_resources('watched', model=models.Repo)
+
+    def get_orgs(self, limit=None):
+        return self._get_resources('orgs', model=models.Org)
+
+    def get_gists(self, limit=None):
+        return self._get_resources('gists', model=models.Gist)
+
+class AuthUser(User):
     """ Handler to query public/private api for authenticated user """
 
     def __init__(self, gh):
         self._url = ('user',)
-        self._model = models.User
+        self._model = models.AuthUser
         super(AnomUser, self).__init__(gh)
 
     def __repr__(self):
