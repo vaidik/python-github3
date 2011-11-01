@@ -20,7 +20,7 @@ class User(Handler):
         super(User, self).__init__(gh)
 
     def __repr__(self):
-        return '<Handler.AnomUser> %s' % self.username
+        return '<handler.User> %s' % self.username
 
     def get(self):
         return self._get_resource()
@@ -48,8 +48,15 @@ class AuthUser(User):
 
     def __init__(self, gh):
         self._url = ('user',)
-        self._model = models.AuthUser
-        super(AnomUser, self).__init__(gh)
+        self._model = models.User
+        super(User, self).__init__(gh)
 
     def __repr__(self):
-        return '<Handler.User>'
+        return '<handler.AuthUser>'
+
+    def get(self):
+        return self._get_resource(model=models.AuthUser)
+
+    def get_emails(self):
+        return self._get_raw('emails')
+

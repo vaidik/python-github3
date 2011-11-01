@@ -13,6 +13,10 @@ class Handler(object):
     def _extend_url(self, *args):
         return self._url + args
 
+    def _get_raw(self, *args, **kwargs):
+        url = self._extend_url(*args)
+        return self._gh._get_raw(url, **kwargs)
+
     def _get_resource(self, *args, **kwargs):
         url = self._extend_url(*args)
         map_model = kwargs.get('model', self._model)

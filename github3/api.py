@@ -173,6 +173,10 @@ class GithubCore(object):
         resp = self._http_resource('GET', resource, check_status=False)
         return True if resp.status_code == 204 else False
 
+    def _get_raw(self, resource):
+        resp = self._http_resource('GET', resource)
+        return self._resource_deserialize(resp.content)
+
     def _to_map(self, obj, iterable):
         """Maps given dict iterable to a given Resource object."""
 
@@ -190,9 +194,9 @@ class Github(GithubCore):
         super(Github, self).__init__()
         self.is_authenticated = False
 
-    def user_handler(self, username=None, force=False):
-        if force or not getattr(self, '_user_handler', False):
-            if self.is_authenticated:
+    def user_handler(self, username=None, **kwargs):
+        if kwargs.get('force') or not getattr(self, '_user_handler', False):
+            if kwargs.get('private'):
                 self._user_handler = handlers.AuthUser(self)
             else:
                 self._user_handler = handlers.User(self, username)

@@ -30,7 +30,7 @@ class User(BaseResource):
         return ('users', self.login)
 
     def __repr__(self):
-        return '<User {0}>'.format(self.login)
+        return '<model.User {0}>'.format(self.login)
 
     def handler(self):
         return self._gh.user_handler(self.login, force=True)
@@ -45,10 +45,13 @@ class AuthUser(User):
     _map = {'plan': Plan}
     _writeable = ['name', 'email', 'blog', 'company', 'location', 'hireable', 'bio']
 
+    def handler(self):
+        return self._gh.user_handler(self.login, force=True, private=True)
+
     @property
     def ri(self):
         return ('user',)
 
     def __repr__(self):
-        return '<AuthUser {0}>'.format(self.login)
+        return '<model.AuthUser {0}>'.format(self.login)
 
