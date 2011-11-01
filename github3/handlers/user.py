@@ -5,6 +5,7 @@
 
 from .base import Handler
 import github3.models as models
+import github3.exceptions as exceptions
 
 class User(Handler):
     """ Handler to query public user api """
