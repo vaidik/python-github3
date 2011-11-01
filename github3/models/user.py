@@ -14,6 +14,15 @@ class Plan(BaseResource):
     def __repr__(self):
         return '<Plan {0}>'.format(str(self.name))
 
+class Key(BaseResource):
+    """Github Key object model."""
+
+    _strs = ['url', 'title', 'key']
+    _ints = ['id']
+
+    def __repr__(self):
+        return '<Key {0}>'.format(str(self.title))
+
 class User(BaseResource):
     """Github User object model."""
 

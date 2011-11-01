@@ -60,3 +60,15 @@ class AuthUser(User):
     def get_emails(self):
         return self._get_raw('emails')
 
+    def get_is_following(self, user):
+        username = getattr(user, 'login', False)
+        if not username:
+            username = user
+        return self._get_bool('following', username)
+
+    def get_keys(self):
+        return self._get_resources('keys', model=models.Key)
+
+    def get_key(self, key_id):
+        return self._get_resource('keys', key_id, model=models.Key)
+
