@@ -25,10 +25,11 @@ class BaseResource(object):
     def post_map(self):
         try:
             handler = self.handler()
-            methods = filter(lambda x: x[0].startswith('get') and callable(x),
-                             inspect.getmembers(handler, inspect.ismethod))
+            methods = filter(
+                lambda x: x[0].startswith('get') and callable(x[1]),
+                inspect.getmembers(handler, inspect.ismethod))
             for name, callback in methods:
-                setattr(self, method, callback)
+                setattr(self, name, callback)
         except:
             pass
 
