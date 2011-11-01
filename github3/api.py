@@ -15,11 +15,9 @@ from decorator import decorator
 from .packages import omnijson as json
 from .packages.link_header import parse_link_value
 
-from .models import *
 from .helpers import is_collection, to_python, to_api, get_scope
 from .config import settings
-
-
+import handlers
 
 
 PAGING_SIZE = 100
@@ -171,6 +169,9 @@ class GithubCore(object):
 
             page += 1
 
+    def _get_bool(self, resource):
+        resp = self._http_resource('GET', resource, check_status=False)
+        return True if resp.status_code == 204 else False
 
     def _to_map(self, obj, iterable):
         """Maps given dict iterable to a given Resource object."""
@@ -182,16 +183,6 @@ class GithubCore(object):
 
         return a
 
-    def _get_url(self, resource):
-
-        if is_collection(resource):
-            resource = map(str, resource)
-            resource = '/'.join(resource)
-
-        return resource
-
-
-
 class Github(GithubCore):
     """docstring for Github"""
 
@@ -199,27 +190,13 @@ class Github(GithubCore):
         super(Github, self).__init__()
         self.is_authenticated = False
 
-
-    def get_user(self, username):
-        """Get a single user."""
-        return self._get_resource(('users', username), User)
-
-
-    def get_me(self):
-        """Get the authenticated user."""
-        return self._get_resource(('user'), CurrentUser)
-
-    def get_repo(self, username, reponame):
-        """Get the given repo."""
-        return self._get_resource(('repos', username, reponame), Repo)
-
-    def get_org(self, login):
-        """Get organization."""
-        return self._get_resource(('orgs', login), Org)
-
-    def post_gist(self, json_data):
-        self.session.post(settings.base_url+'gist', json_data)
-
+    def user_handler(self, username=None, force=False):
+        if force or not getattr(self, '_user_handler', False):
+            if self.is_authenticated:
+                self._user_handler = handlers.AuthUser(self)
+            else:
+                self._user_handler = handlers.User(self, username)
+        return self._user_handler
 
 class ResponseError(Exception):
     """The API Response was unexpected."""
