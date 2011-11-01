@@ -54,7 +54,7 @@ class GithubCore(object):
 
         if is_collection(endpoint):
             resource = map(str, endpoint)
-            resource = '/'.join(endpoint)
+            resource = '/'.join(resource)
         else:
             resource = endpoint
 
