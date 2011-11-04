@@ -72,3 +72,10 @@ class AuthUser(User):
     def get_key(self, key_id):
         return self._get_resource('keys', key_id, model=models.Key)
 
+    def post_emails(self, *emails):
+        emails_parsed = map(str, emails)
+        return self._post_raw('emails', data=emails_parsed)
+
+    def delete_emails(self, *emails):
+        emails_parsed = map(str, emails)
+        return self._delete_raw('emails', data=emails_parsed)

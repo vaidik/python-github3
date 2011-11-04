@@ -54,5 +54,5 @@ class Settings(object):
         return object.__getattribute__(self, key)
 
 settings = Settings()
-settings.verbose = False
+settings.verbose = True
 settings.base_url = 'https://api.github.com/'

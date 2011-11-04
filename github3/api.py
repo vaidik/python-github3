@@ -1,207 +1,68 @@
-# -*- coding: utf-8 -*-
-
-"""
-github3.api
-~~~~~~~~~~~
-
-This module provies the core GitHub3 API interface.
-"""
-
-from urlparse import urlparse, parse_qs
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+#
+# author: David Medina
 
 import requests
-from decorator import decorator
+import json
+from errors import GithubError
+import github3.exceptions as ghexceptions
 
-from .packages import omnijson as json
-from .packages.link_header import parse_link_value
-
-from .helpers import is_collection, to_python, to_api, get_scope
-from .config import settings
-import handlers
-
-
-PAGING_SIZE = 100
+RESOURCES_PER_PAGE = 100
 
 class GithubCore(object):
+    """ Wrapper for requests """
 
-    _rate_limit = None
-    _rate_limit_remaining = None
+    requests_remaining = None
 
     def __init__(self):
         self.session = requests.session()
-        self.session.params = {'per_page': PAGING_SIZE}
+        self.session.params = {'per_page': RESOURCES_PER_PAGE}
+        self._parser = json
 
+    #@paginate to slice a generator after
+    def get(self, request, **kwargs):
+        response = self._request('GET', request, **kwargs)
+        return self._parser.loads(response.content)
 
-    @staticmethod
-    def _resource_serialize(o):
-        """Returns JSON serialization of given object."""
-        return json.dumps(o)
+    def head(self, request, **kwargs):
+        return self._request('HEAD', request, **kwargs).headers
 
+    def post(self, request, data=None, **kwargs):
+        kwargs['data'] = self._parser.dumps(data)
+        response = self._request('POST', request, **kwargs)
+        assert response.status_code == 201
+        return self._parser.loads(response.content)
 
-    @staticmethod
-    def _resource_deserialize(s):
-        """Returns dict deserialization of a given JSON string."""
+    def patch(self, request, data=None, **kwargs):
+        kwargs['data'] = self._parser.dumps(data)
+        response = self._request('PATCH', request, **kwargs)
+        assert response.status_code == 200
+        return self._parser.loads(response.content)
 
+    def put(self, request, **kwargs):
+        response = self._request('PUT', request, **kwargs)
+        assert response.status_code == 204
+
+    def bool(self, request, **kwargs):
         try:
-            return json.loads(s)
-        except ValueError:
-            raise ResponseError('The API Response was not valid.')
+            response = self._request('GET', request, **kwargs)
+        except ghexceptions.NotFound:
+            return False
+        assert response.status_code == 204
+        return True
 
+    def delete(self, request, **kwargs):
+        response = self._request('DELETE', request, **kwargs)
+        assert response.status_code == 204
 
-    @staticmethod
-    def _generate_url(endpoint):
-        """Generates proper endpoint URL."""
+    def _request(self, verb, request, **kwargs):
 
-        if is_collection(endpoint):
-            resource = map(str, endpoint)
-            resource = '/'.join(resource)
-        else:
-            resource = endpoint
+        request = settings.base_url + request
+        response = self.session.request(verb, request, **kwargs)
+        self.requests_remaining = response.headers.get(
+            'x-ratelimit-remaining',-1)
+        error = GithubError(response)
+        error.process()
 
-        return (settings.base_url + resource)
-
-
-    def _requests_post_hook(self, r):
-        """Post-processing for HTTP response objects."""
-
-        self._rate_limit = int(r.headers.get('x-ratelimit-limit', -1))
-        self._rate_limit_remaining = int(r.headers.get('x-ratelimit-remaining', -1))
-
-        return r
-
-
-    def _http_resource(self, verb, endpoint, params=None, check_status=True, **etc):
-
-        url = self._generate_url(endpoint)
-        args = (verb, url)
-
-        if params:
-            kwargs = {'params': params}
-            kwargs.update(etc)
-        else:
-            kwargs = etc
-
-        r = self.session.request(*args, **kwargs)
-        r = self._requests_post_hook(r)
-
-        if check_status:
-            r.raise_for_status()
-
-        return r
-
-
-    def _get_resource(self, resource, obj, **kwargs):
-
-        r = self._http_resource('GET', resource, params=kwargs)
-        item = self._resource_deserialize(r.content)
-
-        return obj.new_from_dict(item, gh=self)
-
-    def _patch_resource(self, resource, data, **kwargs):
-        r = self._http_resource('PATCH', resource, data=data, params=kwargs)
-        msg = self._resource_deserialize(r.content)
-
-        return msg
-
-
-    @staticmethod
-    def _total_pages_from_header(link_header):
-
-        if link_header is None:
-            return link_header
-
-        page_info = {}
-
-        for link in link_header.split(','):
-
-            uri, meta = map(str.strip, link.split(';'))
-
-            # Strip <>'s
-            uri = uri[1:-1]
-
-            # Get query params from header.
-            q = parse_qs(urlparse(uri).query)
-            meta = meta[5:-1]
-
-            page_info[meta] = q
-
-        try:
-            return int(page_info['last']['page'].pop())
-        except KeyError:
-            return True
-
-    def _get_resources(self, resource, obj, limit=None, **kwargs):
-
-        if limit is not None:
-            assert limit > 0
-
-        moar = True
-        is_truncated = (limit > PAGING_SIZE) or (limit is None)
-        r_count = 0
-        page = 1
-
-        while moar:
-
-            if not is_truncated:
-                kwargs['per_page'] = limit
-                moar = False
-            else:
-                kwargs['page'] = page
-                if limit:
-                    if (limit - r_count) < PAGING_SIZE:
-                        kwargs['per_page'] = (limit - r_count)
-                        moar = False
-
-            r = self._http_resource('GET', resource, params=kwargs)
-            max_page = self._total_pages_from_header(r.headers['link'])
-
-            if (max_page is True) or (max_page is None):
-                moar = False
-
-            d_items = self._resource_deserialize(r.content)
-
-            for item in d_items:
-                if (r_count < limit) or (limit is None):
-                    r_count += 1
-                    yield obj.new_from_dict(item, gh=self)
-                else:
-                    moar = False
-
-            page += 1
-
-    def _get_bool(self, resource):
-        resp = self._http_resource('GET', resource, check_status=False)
-        return True if resp.status_code == 204 else False
-
-    def _get_raw(self, resource):
-        resp = self._http_resource('GET', resource)
-        return self._resource_deserialize(resp.content)
-
-    def _to_map(self, obj, iterable):
-        """Maps given dict iterable to a given Resource object."""
-
-        a = list()
-
-        for it in iterable:
-            a.append(obj.new_from_dict(it, rdd=self))
-
-        return a
-
-class Github(GithubCore):
-    """docstring for Github"""
-
-    def __init__(self):
-        super(Github, self).__init__()
-        self.is_authenticated = False
-
-    def user_handler(self, username=None, **kwargs):
-        if kwargs.get('force') or not getattr(self, '_user_handler', False):
-            if kwargs.get('private'):
-                self._user_handler = handlers.AuthUser(self)
-            else:
-                self._user_handler = handlers.User(self, username)
-        return self._user_handler
-
-class ResponseError(Exception):
-    """The API Response was unexpected."""
-
+        return response

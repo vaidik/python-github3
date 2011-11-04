@@ -31,3 +31,11 @@ class Handler(object):
         map_model = kwargs.get('model', self._model)
         return self._gh._get_resources(url, map_model, **kwargs)
 
+    def _post_raw(self, *args, **kwargs):
+        url = self._extend_url(*args)
+        return self._gh._post_raw(url, **kwargs)
+
+    def _delete_raw(self, *args, **kwargs):
+        url = self._extend_url(*args)
+        return self._gh._delete_raw(url, **kwargs)
+
