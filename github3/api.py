@@ -14,16 +14,21 @@ class GithubCore(object):
     """ Wrapper for requests """
 
     requests_remaining = None
+    base_url = 'https://api.github.com/'
 
     def __init__(self):
         self.session = requests.session()
         self.session.params = {'per_page': RESOURCES_PER_PAGE}
         self._parser = json
 
-    #@paginate to slice a generator after
-    def get(self, request, **kwargs):
+    def get(self, request, paginate=False, **kwargs):
+        print '\nGET %s %s\n' % (request, kwargs)
         response = self._request('GET', request, **kwargs)
-        return self._parser.loads(response.content)
+        content = self._parser.loads(response.content)
+        if paginate:
+            return response.headers.get('link'), content
+        else:
+            return content
 
     def head(self, request, **kwargs):
         return self._request('HEAD', request, **kwargs).headers
@@ -56,10 +61,28 @@ class GithubCore(object):
         response = self._request('DELETE', request, **kwargs)
         assert response.status_code == 204
 
+    def _parse_args(self, request_args):
+        request_core = (
+            'params','data','headers','cookies','files','auth','tiemout',
+            'allow_redirects','proxies','return_response','config')
+        request_params = request_args.get('params')
+        extra_params = {}
+        for k, v in request_args.items():
+            if k in request_core: continue
+            extra_params.update({k: v})
+            del request_args[k]
+        if request_params:
+            request_args['params'].update(extra_params)
+        else:
+            request_args['params'] = extra_params
+
+        return request_args
+
     def _request(self, verb, request, **kwargs):
 
-        request = settings.base_url + request
-        response = self.session.request(verb, request, **kwargs)
+        request = self.base_url + request
+        parsed_args = self._parse_args(kwargs)
+        response = self.session.request(verb, request, **parsed_args)
         self.requests_remaining = response.headers.get(
             'x-ratelimit-remaining',-1)
         error = GithubError(response)

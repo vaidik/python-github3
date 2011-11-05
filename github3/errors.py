@@ -12,12 +12,15 @@ class GithubError(object):
     def __init__(self, response):
         self._parser = json
         self.status_code = response.status_code
-        self.debug = self._parser.loads(response.content)
+        if response.content:
+            self.debug = self._parser.loads(response.content)
+        else:
+            self.debug = {}
 
     def error_400(self):
         return exceptions.BadRequest("400 - %s" % self.debug.get('message'))
 
-    def error_404(self)
+    def error_404(self):
         return exceptions.NotFound("404 - %s" % self.debug.get('message'))
 
     def error_422(self):
