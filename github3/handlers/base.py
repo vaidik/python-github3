@@ -3,39 +3,62 @@
 #
 # author: David Medina
 
+class Paginate:
+    """ Paginate resources """
+
+    def __init__(self, resource, requester):
+        self.resource = resource
+        self.requester = requester
+        self.page = 1
+
+    def _last_page(self, link):
+        if not getattr(self, 'last', False):
+            from github3.packages.link_header import parse_link_value
+            from urlparse import urlparse, parse_qs
+            for link, rels in parse_link_value(link).items():
+                if rels.get('rel') == 'last':
+                    query = urlparse(link).query
+                    self.last = int(parse_qs(query).get('page').pop())
+
+        return self.last
+
+    def __iter__(self):
+        return self
+
+    def initial(self):
+        link, content = self.requester(self.resource, paginate=True, page=1)
+        self.last = self._last_page(link) if link else 1
+        return content
+
+    def next(self):
+        if self.page == 1:
+            content = self.initial()
+            self.page += 1
+            return content
+        else:
+            if self.page > self.last:
+                raise StopIteration
+            else:
+                content = self.requester(self.resource, page=self.page)
+                self.page += 1
+                return content
+
 class Handler(object):
-    """ Abstract handler, that inject github.api """
+    """ Handler base. Requests to API and modelize responses """
 
     def __init__(self, gh):
         self._gh = gh
         super(Handler, self).__init__()
 
-    def _extend_url(self, *args):
-        return self._url + args
-
-    def _get_raw(self, *args, **kwargs):
-        url = self._extend_url(*args)
-        return self._gh._get_raw(url, **kwargs)
-
-    def _get_bool(self, *args):
-        url = self._extend_url(*args)
-        return self._gh._get_bool(url)
-
-    def _get_resource(self, *args, **kwargs):
-        url = self._extend_url(*args)
-        map_model = kwargs.get('model', self._model)
-        return self._gh._get_resource(url, map_model, **kwargs)
-
-    def _get_resources(self, *args, **kwargs):
-        url = self._extend_url(*args)
-        map_model = kwargs.get('model', self._model)
-        return self._gh._get_resources(url, map_model, **kwargs)
-
-    def _post_raw(self, *args, **kwargs):
-        url = self._extend_url(*args)
-        return self._gh._post_raw(url, **kwargs)
-
-    def _delete_raw(self, *args, **kwargs):
-        url = self._extend_url(*args)
-        return self._gh._delete_raw(url, **kwargs)
-
+    #TODO: if limit is multiple of per_page... it do another request for nothing
+    def _get_resources(self, resource, model=None, limit=None):
+        page_resources = Paginate(resource, self._gh.get)
+        counter = 1
+        for page in page_resources:
+            for raw_resource in page:
+                if limit and counter > limit: break
+                counter += 1
+                yield raw_resource
+            else:
+                continue
+            break
