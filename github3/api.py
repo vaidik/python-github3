@@ -118,3 +118,6 @@ class GithubCore(object):
         error.process()
 
         return response
+
+class Github(GithubCore):
+    pass
