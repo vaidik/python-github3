@@ -3,8 +3,14 @@
 #
 # author: David Medina
 
+import github3.exceptions as ghexceptions
+
 class Paginate:
-    """ Paginate resources """
+    """ Paginate resource iterator
+
+    :param resource: URL resource
+    :param requester: Bound method to request. See `GithubCore.get`
+    """
 
     def __init__(self, resource, requester):
         self.resource = resource
@@ -12,6 +18,7 @@ class Paginate:
         self.page = 1
 
     def _last_page(self, link):
+        """ Get and cached last page from link header """
         if not getattr(self, 'last', False):
             from github3.packages.link_header import parse_link_value
             from urlparse import urlparse, parse_qs
@@ -26,6 +33,7 @@ class Paginate:
         return self
 
     def initial(self):
+        """ First request. Force requester to paginate returning link header """
         link, content = self.requester(self.resource, paginate=True, page=1)
         self.last = self._last_page(link) if link else 1
         return content
@@ -50,8 +58,18 @@ class Handler(object):
         self._gh = gh
         super(Handler, self).__init__()
 
+    def _bool(self, resource, **kwargs):
+        """ Handler request to boolean response """
+        try:
+            response = self._gh.head(resource, **kwargs)
+        except ghexceptions.NotFound:
+            return False
+        assert response.status_code == 204
+        return True
+
     #TODO: if limit is multiple of per_page... it do another request for nothing
     def _get_resources(self, resource, model=None, limit=None):
+        """ Hander request to multiple resources """
         page_resources = Paginate(resource, self._gh.get)
         counter = 1
         for page in page_resources:
