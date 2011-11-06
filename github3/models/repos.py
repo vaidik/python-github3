@@ -8,23 +8,24 @@ from .user import User
 from .orgs import Org
 
 class Repo(BaseResource):
-    _strs = [
-        'url', 'html_url', 'clone_url', 'git_url', 'ssh_url', 'svn_url',
-        'name', 'description', 'homepage', 'language', 'master_branch']
-    _bools = ['private', 'fork', 'has_issues', 'has_wiki', 'has_downloads']
-    _ints = ['forks', 'watchers', 'size', 'open_issues']
-    _dates = ['pushed_at', 'created_at']
-    _map = {
-        'owner': User,
-        'organization': Org,
-        'parent': 'self',
-        'source': 'self',
-    }
+    """ Repo model """
 
-    @property
-    def ri(self):
-        return ('repos', self.owner.login, self.name)
+    @classmethod
+    def idl(self):
+        return {
+            'strs': [
+                'url', 'html_url', 'clone_url', 'git_url', 'ssh_url', 'svn_url',
+                'name', 'description', 'homepage', 'language', 'master_branch'],
+            'ints': ['forks', 'watchers', 'size', 'open_issues'],
+            'dates': ['created_at', 'pushed_at'],
+            'bools': ['private', 'fork', 'has_issues', 'has_wiki', 'has_downloads'],
+            'maps': {
+                'owner': User,
+                'organization': Org,
+                'parent': 'self',
+                'source': 'self',
+            }
+        }
 
     def __repr__(self):
-        return '<Repo {0}/{1}>'.format(self.owner.login, self.name)
-    # owner
+        return '<Repo %s/%s>' % (self.owner.login, self.name)

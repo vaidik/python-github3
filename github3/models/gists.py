@@ -7,43 +7,71 @@ from .base import BaseResource
 from .user import User
 
 class File(BaseResource):
-    _strs = ['filename', 'raw_url', 'content', 'language', 'type']
-    _ints = ['size']
+    """ File model """
+
+    @classmethod
+    def idl(self):
+        return {
+            'strs': ['filename', 'raw_url', 'content', 'language', 'type'],
+            'ints': ['size'],
+        }
 
     def __repr__(self):
         return '<File gist> %s' % self.filename
 
 class GistFork(BaseResource):
-    _strs = ['url']
-    _dates = ['created_at']
-    _map = {'user': User}
+    """ GistFork model """
+
+    @classmethod
+    def idl(self):
+        return {
+            'strs': ['url'],
+            'dates': ['created_at'],
+            'maps': {'user': User}
+        }
 
     def __repr__(self):
         return '<Gist fork> %s>' % self.user.login
 
 class ChangeStatus(BaseResource):
-    _ints = ['deletions', 'additions', 'total']
+    """ ChangeStatus model """
+
+    @classmethod
+    def idl(self):
+        return {
+            'ints': ['deletions', 'additions', 'total'],
+        }
 
     def __repr__(self):
         return '<Gist history> change_status>'
 
 class GistHistory(BaseResource):
-    _strs = ['url', 'version']
-    _map = {'user': User, 'change_status': ChangeStatus}
-    _dates = ['committed_at']
+    """ """
 
-class Gist(BaseResource):
-    _strs = ['url', 'description', 'html_url', 'git_pull_url', 'git_push_url']
-    _ints = ['id', 'comments']
-    _bools = ['public']
-    _dates = ['created_at']
-    _map = {'user': User}
-    _list_map = {'files': File, 'forks': GistFork, 'history': GistHistory}
-
-    @property
-    def ri(self):
-        return ('users', self.user.login, self.id)
+    @classmethod
+    def idl(self):
+        return {
+            'strs': ['url', 'version'],
+            'maps': {'user': User, 'change_status': ChangeStatus},
+            'dates': ['committed_at'],
+        }
 
     def __repr__(self):
-        return '<gist %s/%s>' % (self.user.login, self.description)
+        return '<GistHistory %s/%s>' % (self.user, self.committed_at)
 
+class Gist(BaseResource):
+    """ """
+
+    @classmethod
+    def idl(self):
+        return {
+            'strs': ['url', 'description', 'html_url', 'git_pull_url', 'git_push_url'],
+            'ints': ['id', 'comments'],
+            'bools': ['public'],
+            'dates': ['created_at'],
+            'maps': {'user': User},
+            'collection_maps': {'files': File, 'forks': GistFork, 'history': GistHistory},
+        }
+
+    def __repr__(self):
+        return '<Gist %s/%s>' % (self.user, self.description)
