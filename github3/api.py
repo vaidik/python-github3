@@ -105,6 +105,11 @@ class GithubCore(object):
 
         return msg
 
+    def _post_resource(self, resource, obj, data, **kwargs):
+        r = self._http_resource('POST', resource, data=data, params=kwargs)
+        item = self._resource_deserialize(r.content)
+
+        return obj.new_from_dict(item, gh=self)
 
     @staticmethod
     def _total_pages_from_header(link_header):
