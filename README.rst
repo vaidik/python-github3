@@ -18,7 +18,10 @@ Usage
 
     gh.get_repo('kennethreitz', 'python-github3')
 
+    me = gh.get_me()
 
+    me.create_gist(u'Description',
+                   files={'file1.txt': {'content': u'Content of first file'}})
 
 
 
