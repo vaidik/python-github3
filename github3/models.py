@@ -113,6 +113,14 @@ class User(BaseResource):
     def gists(self):
         return self._gh._get_resources(('users', self.login, 'gists'), Gist)
 
+    def create_gist(self, description, public=True, files={}):
+        data = {'description': description,
+                'public': public,
+                'files': files}
+        deploy = json.dumps(data)
+        return self._gh._post_resource(('users', self.login, 'gists'), Gist, deploy)
+
+
 class CurrentUser(User):
     """Github Current User object model."""
 
