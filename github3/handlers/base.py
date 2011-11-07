@@ -40,7 +40,7 @@ class Handler(object):
             break
 
     def _get_resource(self, resource, model=None):
-        """ Handler request to single request """
+        """ Handler request to single resource """
 
         raw_resource = self._gh.get(resource)
         return Modelizer(model or self.model).loads(raw_resource)
