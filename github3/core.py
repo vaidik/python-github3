@@ -54,7 +54,6 @@ class Modelizer(object):
 
     def __init__(self, model):
         self.model = model
-        self.attrs = {}
 
     def _parse_date(self, string_date):
         from datetime import datetime
