@@ -3,7 +3,8 @@
 #
 # author: David Medina
 
-from github3.core import Paginate, Modelizer
+from github3.core import Paginate
+from github3.converters import Modelizer
 
 class Handler(object):
     """ Handler base. Requests to API and modelize responses """
@@ -11,6 +12,12 @@ class Handler(object):
     def __init__(self, gh):
         self._gh = gh
         super(Handler, self).__init__()
+
+    def _get_converter(self):
+        try:
+            return getattr(self, 'converter')
+        except AttributeError:
+            return Modelizer()
 
     def _bool(self, resource, **kwargs):
         """ Handler request to boolean response """
@@ -33,8 +40,9 @@ class Handler(object):
             for raw_resource in page:
                 if limit and counter > limit: break
                 counter += 1
-                yield Modelizer(model or self.model).loads(raw_resource)
-                #yield raw_resource
+                converter = self._get_converter()
+                converter.inject(model)
+                yield converter.loads(raw_resource)
             else:
                 continue
             break
@@ -43,4 +51,7 @@ class Handler(object):
         """ Handler request to single resource """
 
         raw_resource = self._gh.get(resource)
-        return Modelizer(model or self.model).loads(raw_resource)
+        converter = self._get_converter()
+        converter.inject(model)
+        return converter.loads(raw_resource)
+
