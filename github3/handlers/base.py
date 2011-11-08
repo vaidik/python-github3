@@ -25,13 +25,26 @@ class Handler(object):
 
         return converter
 
+    def _put(self, resource, **kwargs):
+        """ Put proxy request"""
+
+        resource = self._prefix_resource(resource)
+        return self._bool(resource, method='put', **kwargs)
+
+    def _delete(self, resource, **kwargs):
+        """ Delete proxy request"""
+
+        resource = self._prefix_resource(resource)
+        return self._bool(resource, method='delete', **kwargs)
+
     def _bool(self, resource, **kwargs):
         """ Handler request to boolean response """
 
         from github3.exceptions import NotFound
         resource = self._prefix_resource(resource)
         try:
-            response = self._gh.head(resource, **kwargs)
+            callback = getattr(self._gh, kwargs.get(method,''), self._gh.head)
+            response = callback(resource, **kwargs)
         except NotFound:
             return False
         assert response.status_code == 204
