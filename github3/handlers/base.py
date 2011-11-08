@@ -55,3 +55,10 @@ class Handler(object):
         converter.inject(model)
         return converter.loads(raw_resource)
 
+    def _post_resource(self, resource, data, model=None):
+        """ Handler request to create a resource """
+
+        raw_resource = self._gh.post(resource, data=data)
+        converter = self._get_converter()
+        converter.inject(model)
+        return converter.loads(raw_resource)
