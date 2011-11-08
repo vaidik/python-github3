@@ -8,11 +8,13 @@ class Paginate:
 
     :param resource: URL resource
     :param requester: Bound method to request. See `GithubCore.get`
+    :param kwargs: Args to request (params)
     """
 
-    def __init__(self, resource, requester):
+    def __init__(self, resource, requester, **kwargs):
         self.resource = resource
         self.requester = requester
+        self.kwargs = kwargs
         self.page = 1
 
     def _last_page(self, link):
@@ -27,12 +29,14 @@ class Paginate:
 
         return self.last
 
+    # TODO: reset iterators... multiple?
     def __iter__(self):
         return self
 
     def initial(self):
         """ First request. Force requester to paginate returning link header """
-        link, content = self.requester(self.resource, paginate=True, page=1)
+        link, content = self.requester(self.resource, paginate=True,
+                                       page=1, **self.kwargs)
         self.last = self._last_page(link) if link else 1
         return content
 
@@ -45,7 +49,8 @@ class Paginate:
             if self.page > self.last:
                 raise StopIteration
             else:
-                content = self.requester(self.resource, page=self.page)
+                content = self.requester(self.resource, page=self.page,
+                                         **self.kwargs)
                 self.page += 1
                 return content
 

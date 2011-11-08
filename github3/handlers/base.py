@@ -42,7 +42,7 @@ class Handler(object):
         """ Hander request to multiple resources """
 
         resource = self._prefix_resource(resource)
-        page_resources = Paginate(resource, self._gh.get)
+        page_resources = Paginate(resource, self._gh.get, kwargs)
         counter = 1
         for page in page_resources:
             for raw_resource in page:
