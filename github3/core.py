@@ -1,57 +1,70 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+#
+# author: David Medina
 
-"""
-github3.core
-~~~~~~~~~~~~
+class Paginate:
+    """ Paginate resource iterator
 
-This module provides the entrance point for the GitHub3 module.
-"""
+    :param resource: URL resource
+    :param requester: Bound method to request. See `GithubCore.get`
+    :param kwargs: Args to request (params)
+    """
 
-__version__ = '0.0.0'
-__license__ = 'MIT'
-__author__ = 'Kenneth Reitz'
+    def __init__(self, resource, requester, **kwargs):
+        self.resource = resource
+        self.requester = requester
+        self.kwargs = kwargs
+        self.page = 1
 
+    def _last_page(self, link):
+        """ Get and cached last page from link header """
+        if not getattr(self, 'last', False):
+            from github3.packages.link_header import parse_link_value
+            from urlparse import urlparse, parse_qs
+            for link, rels in parse_link_value(link).items():
+                if rels.get('rel') == 'last':
+                    query = urlparse(link).query
+                    self.last = int(parse_qs(query).get('page').pop())
 
-import envoy
+        return self.last
 
-from .api import Github, settings
+    # TODO: reset iterators... multiple?
+    def __iter__(self):
+        return self
 
+    def initial(self):
+        """ First request. Force requester to paginate returning link header """
+        link, content = self.requester(self.resource, paginate=True,
+                                       page=1, **self.kwargs)
+        self.last = self._last_page(link) if link else 1
+        return content
 
+    def next(self):
+        if self.page == 1:
+            content = self.initial()
+            self.page += 1
+            return content
+        else:
+            if self.page > self.last:
+                raise StopIteration
+            else:
+                content = self.requester(self.resource, page=self.page,
+                                         **self.kwargs)
+                self.page += 1
+                return content
 
-def no_auth():
-    """Returns an un-authenticated Github object."""
+class Converter(object):
+    """ Abstract converter class """
 
-    gh = Github()
+    def loads(self):
+        raise NotImplementedError("%s needs define '%s' method" %
+            (self.__class__.__name__, 'loads'))
 
-    return gh
+    def dumps(self):
+        raise NotImplementedError("%s needs define '%s' method" %
+            (self.__class__.__name__, 'dumps'))
 
-
-def basic_auth(username, password):
-    """Returns an authenticated Github object, via HTTP Basic."""
-
-    gh = Github()
-    gh.is_authenticated = True
-    gh.session.auth = (username, password)
-
-    return gh
-
-
-
-# def git_config():
-#     """Returns an authenticated Github object, via HTTP Basic.
-
-#     GitHub API token is taken from `git config`.
-#     """
-
-#     username = envoy.run('git config github.user').std_out.strip()
-#     token = envoy.run('git config github.token').std_out.strip()
-
-#     def enable_auth(*args, **kwargs):
-#         kwargs['auth'] = (username, token)
-#         return args, kwargs
-
-#     gh = Github()
-#     gh.is_authenticated = True
-#     gh._requests_pre_hook = enable_auth
-
-#     return gh
+    def inject(self):
+        raise NotImplementedError("%s needs define '%s' method" %
+            (self.__class__.__name__, 'inject'))

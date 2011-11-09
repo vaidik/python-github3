@@ -1,3 +1,7 @@
+Fork
+======================================
+Refactor and complete api wrapper. Intensive work in progress
+
 Github3: Python wrapper for the (new) GitHub API v3
 ===================================================
 

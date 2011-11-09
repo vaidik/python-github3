@@ -57,6 +57,7 @@ def to_python(obj,
     date_keys=None,
     int_keys=None,
     object_map=None,
+    list_map=None,
     bool_keys=None, **kwargs):
     """Extends a given object for API Consumption.
 
@@ -96,7 +97,24 @@ def to_python(obj,
     if object_map:
         for (k, v) in object_map.items():
             if in_dict.get(k):
+                if v == 'self':
+                    v = obj.__class__
                 d[k] = v.new_from_dict(in_dict.get(k))
+
+    if list_map:
+        for k, model in list_map.items():
+            nested_map = in_dict.get(k)
+            if nested_map:
+                if getattr(nested_map, 'items', False):
+                    map_dict = {}
+                    for nested_item, nested_dict in nested_map.items():
+                        map_dict[nested_item] = model.new_from_dict(nested_dict)
+                    d[k] = map_dict
+                else:
+                    map_list = []
+                    for item_map in nested_map:
+                        map_list.append(model.new_from_dict(item_map))
+                    d[k] = map_list
 
     obj.__dict__.update(d)
     obj.__dict__.update(kwargs)
@@ -104,6 +122,7 @@ def to_python(obj,
     # Save the dictionary, for write comparisons.
     obj._cache = d
     obj.__cache = in_dict
+    obj.post_map()
 
     return obj
 
