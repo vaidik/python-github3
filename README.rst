@@ -16,16 +16,21 @@ Usage
 
 ::
 
-    import github3
+    from github3.api import Github
+    from github3.handlers.user import AuthUser
+    from github3.handlers.gists import Gist
 
-    gh = github3.basic_auth('username', 'password')
+    gh = Github()
+    gh.session.auth = ('kennethreitz', 'password')
 
-    gh.get_repo('kennethreitz', 'python-github3')
+    me = AuthUser(gh)
+    for repo in me.get_repos():
+        print repo
 
-    me = gh.get_me()
-
-    me.create_gist(u'Description',
-                   files={'file1.txt': {'content': u'Content of first file'}})
+    gists = Gist(gh)
+    gists.create_gist(
+        u'Description',
+        files={'file1.txt': {'content': u'Content of first file'}})
 
 
 
