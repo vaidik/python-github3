@@ -29,37 +29,37 @@ class User(Handler):
     def get(self):
         """ Return user """
 
-        self._get_resource('', model=models.User)
+        return self._get_resource('', model=models.User)
 
     def get_followers(self):
         """ Return user's followers """
 
-        self._get_resources('followers', model=models.User)
+        return self._get_resources('followers', model=models.User)
 
     def get_following(self):
         """ Return users that follow """
 
-        self._get_resources('following', model=models.User)
+        return self._get_resources('following', model=models.User)
 
     def get_repos(self):
         """ Return user's public repositories """
 
-        self._get_resources('repos', model=models.Repo)
+        return self._get_resources('repos', model=models.Repo)
 
     def get_watched(self):
         """ Return repositories that user whatch """
 
-        self._get_resources('watched', model=models.Repo)
+        return self._get_resources('watched', model=models.Repo)
 
     def get_orgs(self):
         """ Return user's public organizations """
 
-        self._get_resources('orgs', model=models.Org)
+        return self._get_resources('orgs', model=models.Org)
 
     def get_gists(self):
         """ Return user's gists """
 
-        self._get_resources('gists', model=models.Gist)
+        return self._get_resources('gists', model=models.Gist)
 
 class AuthUser(User):
     """ User handler with public and private access """
@@ -70,7 +70,7 @@ class AuthUser(User):
         return '<AuthUser handler> %s>' % self._gh.session.auth[0]
 
     def get(self):
-        self._get_resource('', model=models.AuthUser)
+        return self._get_resource('', model=models.AuthUser)
 
     def get_emails(self):
         """ Return list of emails """
@@ -119,9 +119,9 @@ class AuthUser(User):
         """
 
         parse_user = str(getattr(user, 'login', user))
-        return self._put('following/%s', % parse_user)
+        return self._put('following/%s' % parse_user)
 
-    def unfollow(self, user)
+    def unfollow(self, user):
         """
         Unfollow user
 
@@ -129,14 +129,14 @@ class AuthUser(User):
         """
 
         parse_user = str(getattr(user, 'login', user))
-        return self._delete('following/%s', % parse_user)
+        return self._delete('following/%s' % parse_user)
 
     def get_keys(self):
         """ Get public keys """
 
         return self._get_resources('keys', model=models.Key)
 
-    def get_key(self, key_id)
+    def get_key(self, key_id):
         """ Get public key by id """
 
         return self._get_resource('keys/%s' % key_id, model=models.Key)
@@ -151,7 +151,7 @@ class AuthUser(User):
 
         #TODO: render key.pub file
         key = {
-            'title': kwargs.get('title','')
+            'title': kwargs.get('title',''),
             'key': kwargs.get('key','')
         }
         return self._post_resource('keys', data=key, model=models.Key)

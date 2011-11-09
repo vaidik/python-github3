@@ -22,8 +22,8 @@ class Repo(BaseResource):
             'maps': {
                 'owner': User,
                 'organization': Org,
-                'parent': 'self',
-                'source': 'self',
+                'parent': self.__class__,
+                'source': self.__class__,
             }
         }
 

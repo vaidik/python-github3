@@ -12,10 +12,10 @@ class GithubError(object):
     def __init__(self, response):
         self._parser = json
         self.status_code = response.status_code
-        if response.content:
+        try:
             self.debug = self._parser.loads(response.content)
-        else:
-            self.debug = {}
+        except ValueError:
+            self.debug = {'message': response.content}
 
     def error_400(self):
         return exceptions.BadRequest("400 - %s" % self.debug.get('message'))

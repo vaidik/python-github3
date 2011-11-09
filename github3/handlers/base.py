@@ -15,9 +15,9 @@ class Handler(object):
 
     def _prefix_resource(self, resource):
         prefix = getattr(self, 'prefix', '')
-        return '/'.join((prefix, resource))
+        return '/'.join((prefix, resource)).rstrip('/')
 
-    def _get_converter(self, kwargs):
+    def _get_converter(self, **kwargs):
         converter = kwargs.get(
             'converter', # 1. in kwargs
             getattr(self, 'converter', # 2. in handler
@@ -28,13 +28,11 @@ class Handler(object):
     def _put(self, resource, **kwargs):
         """ Put proxy request"""
 
-        resource = self._prefix_resource(resource)
         return self._bool(resource, method='put', **kwargs)
 
     def _delete(self, resource, **kwargs):
         """ Delete proxy request"""
 
-        resource = self._prefix_resource(resource)
         return self._bool(resource, method='delete', **kwargs)
 
     def _bool(self, resource, **kwargs):
@@ -43,7 +41,7 @@ class Handler(object):
         from github3.exceptions import NotFound
         resource = self._prefix_resource(resource)
         try:
-            callback = getattr(self._gh, kwargs.get(method,''), self._gh.head)
+            callback = getattr(self._gh, kwargs.get('method',''), self._gh.head)
             response = callback(resource, **kwargs)
         except NotFound:
             return False
@@ -55,13 +53,13 @@ class Handler(object):
         """ Hander request to multiple resources """
 
         resource = self._prefix_resource(resource)
-        page_resources = Paginate(resource, self._gh.get, kwargs)
+        page_resources = Paginate(resource, self._gh.get, **kwargs)
         counter = 1
         for page in page_resources:
             for raw_resource in page:
                 if limit and counter > limit: break
                 counter += 1
-                converter = self._get_converter(kwargs)
+                converter = self._get_converter(**kwargs)
                 converter.inject(model)
                 yield converter.loads(raw_resource)
             else:
@@ -73,7 +71,7 @@ class Handler(object):
 
         resource = self._prefix_resource(resource)
         raw_resource = self._gh.get(resource)
-        converter = self._get_converter(kwargs)
+        converter = self._get_converter(**kwargs)
         converter.inject(model)
         return converter.loads(raw_resource)
 
@@ -82,6 +80,6 @@ class Handler(object):
 
         resource = self._prefix_resource(resource)
         raw_resource = self._gh.post(resource, data=data)
-        converter = self._get_converter(kwargs)
+        converter = self._get_converter(**kwargs)
         converter.inject(model)
         return converter.loads(raw_resource)

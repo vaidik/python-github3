@@ -18,7 +18,7 @@ class Org(BaseResource):
                      'following', 'total_private_repos', 'owned_private_repos',
                      'private_gists', 'disk_usage', 'collaborators'],
             'dates': ['created_at'],
-            'maps': {'plan': plan}
+            'maps': {'plan': Plan}
         }
 
     def __repr__(self):
