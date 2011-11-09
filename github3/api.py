@@ -43,7 +43,7 @@ class GithubCore(object):
 
     def head(self, request, **kwargs):
         """ HEAD request """
-        return self._request('HEAD', request, **kwargs).headers
+        return self._request('HEAD', request, **kwargs)
 
     def post(self, request, data=None, **kwargs):
         """
@@ -71,11 +71,17 @@ class GithubCore(object):
         """ PUT request """
         response = self._request('PUT', request, **kwargs)
         assert response.status_code == 204
+        return response
 
     def delete(self, request, **kwargs):
         """ DELETE request """
+
+        data = kwargs.get('data')
+        if data:
+            kwargs['data'] = self._parser.dumps(data)
         response = self._request('DELETE', request, **kwargs)
         assert response.status_code == 204
+        return response
 
     def _parse_args(self, request_args):
         """
