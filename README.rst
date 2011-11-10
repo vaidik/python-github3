@@ -2,27 +2,23 @@ Fork
 ======================================
 Refactor and complete api wrapper. Intensive work in progress
 
-Usage
------
+Use with auth user
+---------------------
 
-::
+```python
+from github3.api import Github
 
-    from github3.api import Github
-    from github3.handlers.user import AuthUser
-    from github3.handlers.gists import Gist
+gh = Github('user', 'password')
 
-    gh = Github()
-    gh.session.auth = ('kennethreitz', 'password')
+users_handler = gh.users
+for repo in users_handler.get_repos():
+    print repo
 
-    me = AuthUser(gh)
-    for repo in me.get_repos():
-        print repo
-
-    gists = Gist(gh)
-    gists.create_gist(
-        u'Description',
-        files={'file1.txt': {'content': u'Content of first file'}})
-
+gists_handler = gh.gists
+gists_handler.create_gist(
+    u'Description',
+    files={'file1.txt': {'content': u'Content of first file'}})
+```
 
 
 Installation
