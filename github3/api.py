@@ -6,6 +6,7 @@
 import requests
 import json
 from errors import GithubError
+from handlers import users, gists
 
 RESOURCES_PER_PAGE = 100
 
@@ -126,4 +127,30 @@ class GithubCore(object):
         return response
 
 class Github(GithubCore):
-    pass
+    """ Library enter """
+
+    def __init__(self, *args):
+        super(Github, self).__init__()
+        self.authenticated = False
+        auth = len(args)
+        if auth == 2: # Basic auth
+            self.session.auth = tuple(map(str,args))
+            self.authenticated = True
+        elif auth == 1: # Token oauth
+            raise NotImplementedError
+        elif auth > 2:
+            raise TypeError("user, password or token")
+
+    @property
+    def users(self):
+        if self.authenticated:
+            return users.AuthUser(self)
+        else:
+            return users.User(self)
+
+    @property
+    def gists(self):
+        if self.authenticated:
+            return gists.AuthGist(self)
+        else:
+            return gists.Gist(self)

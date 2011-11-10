@@ -23,7 +23,7 @@ class GistsTestCase(unittest.TestCase):
         g = github3.api.Github()
         g.session.auth = ('testuser', 'password')
         u = github3.handlers.user.AuthUser(g)
-        gists = github3.handlers.gists.Gist(g)
+        gists = github3.handlers.gists.AuthGist(g)
         OpenerDirector = MagicMock(name='OpenerDirector')
         opener = OpenerDirector.return_value
         response = opener.open.return_value
@@ -96,7 +96,3 @@ class GistHandlerTestCase(unittest.TestCase):
                          u'deadbeefdeadbeefdeadbeefdeadbeefdeadbeef')
         self.assertEqual(h.user.__dict__, gist.user.__dict__)
         self.assertEqual(h.version, u'deadbeefdeadbeefdeadbeefdeadbeefdeadbeef')
-
-
-if __name__ == '__main__':
-    unittest.main()

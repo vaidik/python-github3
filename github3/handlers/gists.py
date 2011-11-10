@@ -20,6 +20,9 @@ class Gist(Handler):
 
         return self._get_resource(gist_id, model=models.Gist)
 
+
+class AuthGist(Gist):
+
     def create_gist(self, description, public=True, files={}):
         """ Create a gist """
         data = {'description': description,
