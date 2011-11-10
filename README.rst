@@ -2,15 +2,6 @@ Fork
 ======================================
 Refactor and complete api wrapper. Intensive work in progress
 
-Github3: Python wrapper for the (new) GitHub API v3
-===================================================
-
-Github has a new API. This is the best Python wrapper for it.
-
-**This a work in progress.** Should be relased soon.
-
-
-
 Usage
 -----
 
@@ -81,10 +72,11 @@ sure you add yourself to AUTHORS_.
 Roadmap
 -------
 
+- Unittests
+- Handlers
 - Get it Started
 - HTTP BASIC
 - Get it working
 - Sphinx Documetnation
 - Examples
-- Unittests
 - OAuth Last (how?)
