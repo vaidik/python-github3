@@ -9,6 +9,5 @@ class UnprocessableEntity(Exception):
     pass
 class NotFound(Exception):
     pass
-class AnomUser(Exception):
-    """ Exception for AnomUser handler """
+class Unauthorized(Exception):
     pass

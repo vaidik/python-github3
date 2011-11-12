@@ -21,6 +21,9 @@ class GithubError(object):
     def error_400(self):
         return exceptions.BadRequest("400 - %s" % self.debug.get('message'))
 
+    def error_401(self):
+        return exceptions.Unauthorized("401 - %s" % self.debug.get('message'))
+
     def error_404(self):
         return exceptions.NotFound("404 - %s" % self.debug.get('message'))
 
