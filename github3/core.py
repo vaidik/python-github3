@@ -3,6 +3,7 @@
 #
 # author: David Medina
 
+
 class Paginate:
     """ Paginate resource iterator
 
@@ -33,7 +34,10 @@ class Paginate:
         return self
 
     def initial(self):
-        """ First request. Force requester to paginate returning link header """
+        """
+        First request
+        Force requester to paginate returning link header
+        """
         link, content = self.requester(self.resource, paginate=True,
                                        page=1, **self.kwargs)
         self.last = self._last_page(link) if link else 1
@@ -52,6 +56,7 @@ class Paginate:
                                          **self.kwargs)
                 self.page += 1
                 return content
+
 
 class Converter(object):
     """ Abstract converter class """

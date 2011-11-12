@@ -2,7 +2,6 @@
 # -*- encoding: utf-8 -*-
 
 from unittest import TestCase
-import github3
 from github3 import api
 from github3 import handlers
 
