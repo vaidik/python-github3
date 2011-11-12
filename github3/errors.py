@@ -6,6 +6,7 @@
 import json
 import github3.exceptions as exceptions
 
+
 class GithubError(object):
     """ Handler for API errors """
 
@@ -14,7 +15,7 @@ class GithubError(object):
         self.status_code = response.status_code
         try:
             self.debug = self._parser.loads(response.content)
-        except ValueError:
+        except (ValueError, TypeError):
             self.debug = {'message': response.content}
 
     def error_400(self):

@@ -7,6 +7,7 @@ from .base import Handler
 import github3.models as models
 from github3.converters import Rawlizer
 
+
 class User(Handler):
     """ User handler with public access """
 
@@ -25,6 +26,7 @@ class User(Handler):
         parse_user = str(getattr(user, 'login', user))
         self.username = parse_user
         self.prefix = '/'.join((self.prefix, parse_user))
+        return self
 
     def get(self):
         """ Return user """
@@ -60,6 +62,7 @@ class User(Handler):
         """ Return user's gists """
 
         return self._get_resources('gists', model=models.Gist)
+
 
 class AuthUser(User):
     """ User handler with public and private access """
@@ -116,6 +119,8 @@ class AuthUser(User):
         Follow user
 
         :param `user`: User model or username string
+
+        NOTE: Maybe bug in API, return text/html. Waitingf for answer
         """
 
         parse_user = str(getattr(user, 'login', user))
@@ -151,8 +156,8 @@ class AuthUser(User):
 
         #TODO: render key.pub file
         key = {
-            'title': kwargs.get('title',''),
-            'key': kwargs.get('key','')
+            'title': kwargs.get('title', ''),
+            'key': kwargs.get('key', '')
         }
         return self._post_resource('keys', data=key, model=models.Key)
 
