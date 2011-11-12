@@ -29,7 +29,6 @@ class Paginate:
 
         return self.last
 
-    # TODO: reset iterators... multiple?
     def __iter__(self):
         return self
 
