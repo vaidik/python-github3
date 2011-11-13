@@ -119,7 +119,7 @@ class AuthUser(User):
         """ Return list of emails """
 
         # Ignore converter, it must be Rawlizer
-        emails = self._get_resource('emails', converter=Rawlizer())
+        emails = self._get_resource('emails', converter=Rawlizer)
         return emails
 
     def create_emails(self, *args):
@@ -131,7 +131,7 @@ class AuthUser(User):
         """
         parsed_emails = map(str, args)
         all_mails = self._post_resource(
-            'emails', data=parsed_emails, converter=Rawlizer())
+            'emails', data=parsed_emails, converter=Rawlizer)
         return all_mails
 
     def delete_emails(self, *args):
