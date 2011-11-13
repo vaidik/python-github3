@@ -23,7 +23,8 @@ API_STUB = {
     'list_map': [
         {'test_str': 'string', 'test_int': 1},
         {'test_str': 'string', 'test_int': 2},
-    ]
+    ],
+    'fake_map': 9,
 }
 
 
@@ -36,10 +37,11 @@ class Model(BaseResource):
             'ints': ['test_int'],
             'dates': ['test_date'],
             'bools': ['test_bool'],
-            'maps': {'map': Model},
+            'maps': {'map': Model, 'fake_map': Model},
             'collection_maps': {
                 'dict_map': Model,
                 'list_map': Model,
+                'fake_map': Model,
             },
         }
 

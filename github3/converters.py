@@ -52,7 +52,8 @@ class Modelizer(Converter):
         self.model = model
 
     def _parse_map(self, model, raw_resource):
-        return Modelizer(model).loads(raw_resource)
+        if getattr(raw_resource, 'items', False):
+            return Modelizer(model).loads(raw_resource)
 
     def _parse_collection_map(self, model, raw_resources):
         # Dict of resources (Ex: Gist file)
@@ -62,7 +63,7 @@ class Modelizer(Converter):
                 dict_map[key] = Modelizer(model).loads(raw_resource)
             return dict_map
         # list of resources
-        else:
+        elif getattr(raw_resources, '__iter__', False):
             return [Modelizer(model).loads(raw_resource)
                     for raw_resource in raw_resources]
 
