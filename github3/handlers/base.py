@@ -48,19 +48,20 @@ class Handler(object):
         assert response.status_code == 204
         return True
 
-    #TODO: if limit is multiple of per_page... it do another request for nothing
     def _get_resources(self, resource, model=None, limit=None, **kwargs):
         """ Hander request to multiple resources """
 
+        if limit:
+            limit = abs(limit)
         resource = self._prefix_resource(resource)
         counter = 1
         for page in Paginate(resource, self._gh.get, **kwargs):
             for raw_resource in page:
-                if limit and counter > limit: break
                 counter += 1
                 converter = self._get_converter(**kwargs)
                 converter.inject(model)
                 yield converter.loads(raw_resource)
+                if limit and counter > limit: break
             else:
                 continue
             break

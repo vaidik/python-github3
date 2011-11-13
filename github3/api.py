@@ -11,6 +11,7 @@ from handlers import users, gists
 RESOURCES_PER_PAGE = 100
 
 
+#TODO: refactor: loads json in request editing Response object
 class GithubCore(object):
     """
     Wrapper to github api requests
