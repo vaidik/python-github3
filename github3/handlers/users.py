@@ -49,14 +49,15 @@ class User(Handler):
         user = self._parse_user(user)
         return self._get_resource(user, model=models.User)
 
-    def get_followers(self, user=None):
+    def get_followers(self, user=None, limit=None):
         """ Return user's followers
 
         :param `user`: User model or username string
 
         """
         user = self._parse_user(user)
-        return self._get_resources('%s/followers' % user, model=models.User)
+        return self._get_resources('%s/followers' % user, model=models.User,
+                                   limit=limit)
 
     def get_following(self):
         """ Return users that follow
@@ -65,7 +66,8 @@ class User(Handler):
 
         """
         user = self._parse_user(user)
-        return self._get_resources('%s/following' % user, model=models.User)
+        return self._get_resources('%s/following' % user, model=models.User,
+                                   limit=limit)
 
     def get_repos(self):
         """ Return user's public repositories
@@ -74,7 +76,8 @@ class User(Handler):
 
         """
         user = self._parse_user(user)
-        return self._get_resources('%s/repos' % user, model=models.Repo)
+        return self._get_resources('%s/repos' % user, model=models.Repo,
+                                   limit=limit)
 
     def get_watched(self):
         """ Return repositories that user whatch
@@ -83,7 +86,8 @@ class User(Handler):
 
         """
         user = self._parse_user(user)
-        return self._get_resources('%s/watched' % user, model=models.Repo)
+        return self._get_resources('%s/watched' % user, model=models.Repo,
+                                   limit=limit)
 
     def get_orgs(self):
         """ Return user's public organizations
@@ -92,7 +96,8 @@ class User(Handler):
 
         """
         user = self._parse_user(user)
-        return self._get_resources('%s/orgs' % user, model=models.Org)
+        return self._get_resources('%s/orgs' % user, model=models.Org,
+                                   limit=limit)
 
     def get_gists(self):
         """ Return user's gists
@@ -101,7 +106,8 @@ class User(Handler):
 
         """
         user = self._parse_user(user)
-        return self._get_resources('%s/gists' % user, model=models.Gist)
+        return self._get_resources('%s/gists' % user, model=models.Gist,
+                                   limit=limit)
 
 
 class AuthUser(User):
@@ -179,7 +185,8 @@ class AuthUser(User):
     def get_keys(self):
         """ Get public keys """
 
-        return self._get_resources('keys', model=models.Key)
+        return self._get_resources('keys', model=models.Key,
+                                   limit=limit)
 
     def get_key(self, key_id):
         """ Get public key by id """
@@ -214,7 +221,7 @@ class AuthUser(User):
         """
 
         return self._get_resources('repos', model=models.Repo,
-                                   type=str(filter))
+                                   limit=limit, type=str(filter))
 
     def is_watching_repo(self, owner, repo):
         """
