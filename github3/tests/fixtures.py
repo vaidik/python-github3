@@ -23,7 +23,10 @@ GET_USER = {
 }
 
 GET_LINK = '<https://api.github.com/gists/public?page=2>; rel="next", <https://api.github.com/gists/public?page=5>; rel="last"'
-
+GET_RESOURCES = [
+    {'login': 'octocat'},
+    {'login': 'octocat'}
+]
 GET_FOLLOWERS = [
     {
         "login": "octocat",

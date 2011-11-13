@@ -7,6 +7,8 @@ from github3 import api
 from github3.handlers.base import Handler
 from github3.exceptions import *
 from github3.converters import *
+from github3.models.user import User
+from fixtures import *
 import json
 import requests
 
@@ -51,3 +53,54 @@ class TestHandler(TestCase):
                                        data={'some': 'data'})
         self.assertTrue(bool1)
         self.assertTrue(bool2)
+
+    @patch.object(api.Github, '_request')
+    def test_get_resources(self, request):
+        #  Simulating per_page=2 with STUB (it returns two resources)
+        response = request.return_value
+        response.status_code = 200
+        response.headers = {'link': GET_LINK}
+        response.content = self.gh._parser.dumps(GET_RESOURCES)
+        resources = self.handler._get_resources('users', model=User)
+        self.assertFalse(request.called)
+        resources = list(resources)
+        self.assertTrue(request.call_count, 5)
+        request_args = ('GET', 'users')
+        self.assertEquals(request.call_args_list, [
+            (request_args, {'page': 1}),
+            (request_args, {'page': 2}),
+            (request_args, {'page': 3}),
+            (request_args, {'page': 4}),
+            (request_args, {'page': 5})])
+        self.assertEquals(len(resources), 10)
+        self.assertEquals(resources[0].login, 'octocat')
+
+        request.reset_mock()
+        resources = self.handler._get_resources('users', model=User, limit=5)
+        resources = list(resources)
+        self.assertEquals(request.call_count, 3)
+        self.assertEquals(len(resources), 5)
+        request.reset_mock()
+        resources = self.handler._get_resources('users', model=User, limit=4)
+        resources = list(resources)
+        self.assertEquals(request.call_count, 2)
+        self.assertEquals(len(resources), 4)
+        request.reset_mock()
+        resources = self.handler._get_resources('users', model=User, limit=-5)
+        resources = list(resources)
+        self.assertEquals(request.call_count, 3)
+        self.assertEquals(len(resources), 5)
+
+    @patch.object(api.Github, 'get')
+    def test_get_resource(self, get):
+        #  Converter test + api(get) test. Half trivial
+        get.return_value = {'login': 'octocat'}
+        model = self.handler._get_resource('test', model=User)
+        self.assertEquals(model.login, 'octocat')
+
+    @patch.object(api.Github, 'post')
+    def test_post_resource(self, post):
+        post.return_value = {'data': 'posted'}
+        data = {'data': 'to_post'}
+        user_new = self.handler._post_resource('test', data=data, model=User)
+        post.assert_called_with('test', data=data)
