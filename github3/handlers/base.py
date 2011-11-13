@@ -15,15 +15,15 @@ class Handler(object):
 
     def _prefix_resource(self, resource):
         prefix = getattr(self, 'prefix', '')
-        return '/'.join((prefix, resource)).rstrip('/')
+        return '/'.join((prefix, resource)).strip('/')
 
     def _get_converter(self, **kwargs):
         converter = kwargs.get(
             'converter', # 1. in kwargs
             getattr(self, 'converter', # 2. in handler
-            Modelizer())) # 3. Default
+            Modelizer)) # 3. Default
 
-        return converter
+        return converter()
 
     def _put(self, resource, **kwargs):
         """ Put proxy request"""

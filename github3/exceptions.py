@@ -11,3 +11,5 @@ class NotFound(Exception):
     pass
 class Unauthorized(Exception):
     pass
+class UserIsAnonymous(Exception):
+    pass

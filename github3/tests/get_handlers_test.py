@@ -16,13 +16,14 @@ class TestGetHandlers(TestCase):
         anom_user = self.anom_gh.users
         auth_user = self.auth_gh.users
 
-        self.assertEquals(isinstance(anom_user, handlers.users.User), True)
-        self.assertEquals(isinstance(auth_user, handlers.users.AuthUser), True)
+        self.assertIsInstance(anom_user, handlers.users.User)
+        self.assertEquals(anom_user.prefix, 'users')
+        self.assertIsInstance(auth_user, handlers.users.AuthUser)
+        self.assertEquals(auth_user.prefix, 'user')
 
     def test_get_gists(self):
         anom_gists = self.anom_gh.gists
         auth_gists = self.auth_gh.gists
 
-        self.assertEquals(isinstance(anom_gists, handlers.gists.Gist), True)
-        self.assertEquals(
-            isinstance(auth_gists, handlers.gists.AuthGist), True)
+        self.assertIsInstance(anom_gists, handlers.gists.Gist)
+        self.assertIsInstance(auth_gists, handlers.gists.AuthGist)
