@@ -6,6 +6,7 @@
 from .base import Handler
 import github3.models as models
 from github3.converters import Rawlizer
+from github3.exceptions import UserIsAnonymous
 
 
 class User(Handler):
@@ -16,52 +17,91 @@ class User(Handler):
     def __repr__(self):
         return '<User handler> %s>' % getattr(self, 'username', 'without user')
 
+    def _parse_user(self, user):
+        """ Parse user, and if it fails then try with username in handler
+
+        :param user: It can be a `models.User` or alphanumeric user string
+
+        """
+        username = getattr(user, 'login', user)
+        if not username or not str(username).isalpha():
+            username = getattr(self, 'username', False)
+        if not username:
+            raise UserIsAnonymous('%s user is not valid' % username)
+        return str(username)
+
     def set_username(self, user):
-        """
-        Set username to query public handler
+        """ Set username to query public handler
+        Helper to less writing
 
-        :param `user`: User model or username string
-        """
+        :param user: It can be a `models.User` or alphanumeric user string
 
-        parse_user = str(getattr(user, 'login', user))
-        self.username = parse_user
-        self.prefix = '/'.join((self.prefix, parse_user))
+        """
+        self.username = self._parse_user(user)
         return self
 
-    def get(self):
-        """ Return user """
+    def get(self, user=None):
+        """ Return user
 
-        return self._get_resource('', model=models.User)
+        :param `user`: User model or username string
 
-    def get_followers(self):
-        """ Return user's followers """
+        """
+        user = self._parse_user(user)
+        return self._get_resource(user, model=models.User)
 
-        return self._get_resources('followers', model=models.User)
+    def get_followers(self, user=None):
+        """ Return user's followers
+
+        :param `user`: User model or username string
+
+        """
+        user = self._parse_user(user)
+        return self._get_resources('%s/followers' % user, model=models.User)
 
     def get_following(self):
-        """ Return users that follow """
+        """ Return users that follow
 
-        return self._get_resources('following', model=models.User)
+        :param `user`: User model or username string
+
+        """
+        user = self._parse_user(user)
+        return self._get_resources('%s/following' % user, model=models.User)
 
     def get_repos(self):
-        """ Return user's public repositories """
+        """ Return user's public repositories
 
-        return self._get_resources('repos', model=models.Repo)
+        :param `user`: User model or username string
+
+        """
+        user = self._parse_user(user)
+        return self._get_resources('%s/repos' % user, model=models.Repo)
 
     def get_watched(self):
-        """ Return repositories that user whatch """
+        """ Return repositories that user whatch
 
-        return self._get_resources('watched', model=models.Repo)
+        :param `user`: User model or username string
+
+        """
+        user = self._parse_user(user)
+        return self._get_resources('%s/watched' % user, model=models.Repo)
 
     def get_orgs(self):
-        """ Return user's public organizations """
+        """ Return user's public organizations
 
-        return self._get_resources('orgs', model=models.Org)
+        :param `user`: User model or username string
+
+        """
+        user = self._parse_user(user)
+        return self._get_resources('%s/orgs' % user, model=models.Org)
 
     def get_gists(self):
-        """ Return user's gists """
+        """ Return user's gists
 
-        return self._get_resources('gists', model=models.Gist)
+        :param `user`: User model or username string
+
+        """
+        user = self._parse_user(user)
+        return self._get_resources('%s/gists' % user, model=models.Gist)
 
 
 class AuthUser(User):
