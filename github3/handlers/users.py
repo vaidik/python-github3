@@ -59,7 +59,7 @@ class User(Handler):
         return self._get_resources('%s/followers' % user, model=models.User,
                                    limit=limit)
 
-    def get_following(self):
+    def get_following(self, user=None, limit=None):
         """ Return users that follow
 
         :param `user`: User model or username string
@@ -69,7 +69,7 @@ class User(Handler):
         return self._get_resources('%s/following' % user, model=models.User,
                                    limit=limit)
 
-    def get_repos(self):
+    def get_repos(self, user=None, limit=None):
         """ Return user's public repositories
 
         :param `user`: User model or username string
@@ -79,7 +79,7 @@ class User(Handler):
         return self._get_resources('%s/repos' % user, model=models.Repo,
                                    limit=limit)
 
-    def get_watched(self):
+    def get_watched(self, user=None, limit=None):
         """ Return repositories that user whatch
 
         :param `user`: User model or username string
@@ -89,7 +89,7 @@ class User(Handler):
         return self._get_resources('%s/watched' % user, model=models.Repo,
                                    limit=limit)
 
-    def get_orgs(self):
+    def get_orgs(self, user=None, limit=None):
         """ Return user's public organizations
 
         :param `user`: User model or username string
@@ -99,7 +99,7 @@ class User(Handler):
         return self._get_resources('%s/orgs' % user, model=models.Org,
                                    limit=limit)
 
-    def get_gists(self):
+    def get_gists(self, user=None, limit=None):
         """ Return user's gists
 
         :param `user`: User model or username string
