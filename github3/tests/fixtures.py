@@ -5,6 +5,7 @@ GET_USER = {
     "login": "octocat",
     "id": 1,
     "avatar_url": "https://github.com/images/error/octocat_happy.gif",
+    "gravatar_id": "somehexcode",
     "url": "https://api.github.com/users/octocat",
     "name": "monalisa octocat",
     "company": "GitHub",
@@ -24,24 +25,29 @@ GET_USER = {
 
 GET_LINK = '<https://api.github.com/gists/public?page=2>; rel="next", \
 <https://api.github.com/gists/public?page=5>; rel="last"'
+
 GET_RESOURCES = [
     {'login': 'octocat'},
     {'login': 'octocat'}
 ]
+
 GET_SHORT_USERS = [
     {
         "login": "octocat",
         "id": 1,
         "avatar_url": "https://github.com/images/error/octocat_happy.gif",
+        "gravatar_id": "somehexcode",
         "url": "https://api.github.com/users/octocat"
     },
     {
         "login": "octocat",
         "id": 1,
         "avatar_url": "https://github.com/images/error/octocat_happy.gif",
+        "gravatar_id": "somehexcode",
         "url": "https://api.github.com/users/octocat"
     },
 ]
+
 GET_SHORT_ORGS = [
     {
         "login": "github",
@@ -63,6 +69,7 @@ GET_SHORT_REPOS = [
             "login": "octocat",
             "id": 1,
             "avatar_url": "https://github.com/images/error/octocat_happy.gif",
+            "gravatar_id": "somehexcode",
             "url": "https://api.github.com/users/octocat"
         },
         "name": "Hello-World",
@@ -80,6 +87,7 @@ GET_SHORT_REPOS = [
         "created_at": "2011-01-26T19:01:12Z"
     }
 ]
+
 GET_SHORT_GISTS = [
     {
         "url": "https://api.github.com/gists/1",
@@ -90,6 +98,7 @@ GET_SHORT_GISTS = [
             "login": "octocat",
             "id": 1,
             "avatar_url": "https://github.com/images/error/octocat_happy.gif",
+            "gravatar_id": "somehexcode",
             "url": "https://api.github.com/users/octocat"
         },
         "files": {

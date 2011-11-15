@@ -14,6 +14,9 @@ class BaseResource(object):
                 setattr(self, attr, value)
         super(BaseResource, self).__init__()
 
+    def __len__(self):
+        return len(self.__dict__)
+
     @classmethod
     def idl(self):
         raise NotImplementedError('Each model need subcass that method')

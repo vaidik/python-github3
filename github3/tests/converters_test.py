@@ -7,8 +7,10 @@ from unittest import TestCase
 from datetime import datetime
 
 API_STUB = {
-    'test_str': 'string', 'test_int': 1,
-    'test_date': '2008-01-14T04:33:35Z', 'test_bool': True,
+    'test_str': 'string',
+    'test_int': 1,
+    'test_date': '2008-01-14T04:33:35Z',
+    'test_bool': True,
     'map': {'test_str': 'string'},
     'dict_map': {
         'map1': {
@@ -55,6 +57,7 @@ class TestModelizer(TestCase):
 
     def test_loads(self):
         parsed_model = self.modelizer.loads(API_STUB)
+        self.assertEquals(len(parsed_model), len(API_STUB))
         self.assertEquals(parsed_model.test_str, 'string')
         self.assertEquals(parsed_model.test_int, 1)
         self.assertEquals(

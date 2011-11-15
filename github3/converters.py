@@ -75,24 +75,24 @@ class Modelizer(Converter):
         idl = self.model.idl()
         attrs.update(
             {attr: raw_resource[attr] for attr in idl.get('strs',())
-             if raw_resource.get(attr)})
+             if attr in raw_resource})
         attrs.update(
             {attr: raw_resource[attr] for attr in idl.get('ints',())
-             if raw_resource.get(attr)})
+             if attr in raw_resource})
         attrs.update(
             {attr: self._parse_date(raw_resource[attr])
-             for attr in idl.get('dates',()) if raw_resource.get(attr)})
+             for attr in idl.get('dates',()) if attr in raw_resource})
         attrs.update(
             {attr: raw_resource[attr] for attr in idl.get('bools',())
-             if raw_resource.get(attr)})
+             if attr in raw_resource})
         attrs.update(
             {attr: self._parse_map(model, raw_resource[attr])
              for attr, model in idl.get('maps',{}).items()
-             if raw_resource.get(attr)})
+             if attr in raw_resource})
         attrs.update(
             {attr: self._parse_collection_map(model, raw_resource[attr])
              for attr, model in idl.get('collection_maps',{}).items()
-             if raw_resource.get(attr)})
+             if attr in raw_resource})
 
         return self.model(attrs)
 
