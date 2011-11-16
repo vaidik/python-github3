@@ -113,3 +113,12 @@ class TestGithubCore(TestCase):
         delete = self.gh.delete('core')
         request_method.assert_called_with(
             'DELETE', self.base_url + 'core')
+
+    def test_put(self, request_method):
+        response = request_method.return_value
+        response.status_code = 204
+        response.content = ''
+        put = self.gh.put('core')
+        request_method.assert_called_with(
+            'PUT', self.base_url + 'core',
+            headers={'Content-length': '0'})

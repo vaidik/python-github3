@@ -72,8 +72,9 @@ class GithubCore(object):
 
     def put(self, request, **kwargs):
         """ PUT request """
-        # Content-length: 0 to headers ?
-        response = self._request('PUT', request, **kwargs)
+
+        response = self._request('PUT', request,
+                                 headers={'Content-length': '0'}, **kwargs)
         assert response.status_code == 204
         return response
 
