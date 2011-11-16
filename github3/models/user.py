@@ -52,17 +52,18 @@ class User(BaseResource):
         }
 
     def __repr__(self):
-        return '<User %s>' % self.login
+        return '<User %s>' % getattr(self, 'login', 'without user')
 
     #def handler(self):
-    #    return self._gh.user_handler(self.login, force=True)
+    #    return self._gh.users
 
 
 class AuthUser(User):
     """Github Authenticated User object model."""
 
-    #def handler(self):
-    #    return self._gh.user_handler(self.login, force=True, private=True)
-
     def __repr__(self):
         return '<AuthUser %s>' % self.login
+
+    #def handler(self):
+    #    return self._gh.users
+

@@ -5,7 +5,7 @@ from unittest import TestCase
 from mock import Mock, patch
 from github3 import api
 from fixtures import *
-from github3.models import User, AuthUser, Repo, Gist, Org
+from github3.models import User, AuthUser, Repo, Gist, Org, Key
 from github3.exceptions import *
 
 
@@ -15,6 +15,8 @@ class TestAuthUserHandler(TestCase):
     def setUp(self):
         self.gh = api.Github('test', 'pass')
         self.handler = self.gh.users
+        self.user_mock = Mock()
+        self.user_mock.login = 'user_model'
 
     @patch.object(api.Github, 'get')
     def test_get(self, get):
@@ -47,6 +49,123 @@ class TestAuthUserHandler(TestCase):
         delete.assert_called_with('user/emails', data=GET_USER_EMAILS,
                                   method='delete')
         self.assertTrue(emails)
+
+    @patch.object(api.Github, 'head')
+    def test_is_following(self, head):
+        response = head.return_value
+        response.status_code = 204
+        self.assertTrue(self.handler.is_following('test'))
+        head.assert_called_with('user/following/test')
+        self.handler.is_following(self.user_mock)
+        head.assert_called_with('user/following/user_model')
+
+    @patch.object(api.Github, 'put')
+    def test_follow(self, put):
+        response = put.return_value
+        response.status_code = 204
+        self.assertTrue(self.handler.follow('test'))
+        put.assert_called_with('user/following/test', method='put')
+
+    @patch.object(api.Github, 'delete')
+    def test_unfollow(self, delete):
+        response = delete.return_value
+        response.status_code = 204
+        self.assertTrue(self.handler.unfollow('test'))
+        delete.assert_called_with('user/following/test', method='delete')
+
+    @patch.object(api.Github, '_request')
+    def test_get_keys(self, request):
+        response = request.return_value
+        response.status_code = 200
+        response.content = self.gh._parser.dumps(GET_USER_KEYS)
+        response.headers = {'link': GET_LINK}  # 1 per page
+        keys = list(self.handler.get_keys())
+        self.assertEquals(len(keys), 5)
+        self.assertIsInstance(keys[0], Key)
+        request.assert_called_with('GET', 'user/keys', page=5)
+        keys = list(self.handler.get_keys(limit=2))
+        self.assertEquals(len(keys), 2)
+
+    @patch.object(api.Github, 'get')
+    def test_get_key(self, get):
+        get.return_value = GET_USER_KEYS[0]
+        key = self.handler.get_key(1)
+        self.assertIsInstance(key, Key)
+        get.assert_called_with('user/keys/1')
+        model_key = Mock()
+        model_key.id = 1
+        key = self.handler.get_key(model_key)
+        get.assert_called_with('user/keys/1')
+
+    @patch.object(api.Github, 'post')
+    def test_create_key(self, post):
+        post.return_value = GET_USER_KEYS[0]
+        key_data = {'title': 'some', 'key': 'ssh-rsa AAA'}
+        created_key = self.handler.create_key(**key_data)
+        self.assertIsInstance(created_key, Key)
+        post.assert_called_with('user/keys', data=key_data)
+
+    @patch.object(api.Github, 'delete')
+    def test_delete_key(self, delete):
+        response = delete.return_value
+        response.status_code = 204
+        self.assertTrue(self.handler.delete_key(1))
+        delete.assert_called_with('user/keys/1', method='delete')
+        model_key = Mock()
+        model_key.id = 1
+        key = self.handler.delete_key(model_key)
+        delete.assert_called_with('user/keys/1', method='delete')
+
+    @patch.object(api.Github, '_request')
+    def test_get_repos(self, request):
+        response = request.return_value
+        response.status_code = 200
+        response.content = self.gh._parser.dumps(GET_SHORT_REPOS)
+        response.headers = {'link': GET_LINK}  # 1 per page
+        repos = list(self.handler.get_repos(filter='public'))
+        self.assertEquals(len(repos), 5)
+        self.assertIsInstance(repos[0], Repo)
+        request.assert_called_with('GET', 'user/repos',
+                                   page=5, type='public')
+        repos = list(self.handler.get_repos(limit=2))
+        self.assertEquals(len(repos), 2)
+
+    @patch.object(api.Github, 'head')
+    def test_is_watching_repo(self, head):
+        response = head.return_value
+        response.status_code = 204
+        self.assertTrue(self.handler.is_watching_repo('user', 'repo'))
+        head.assert_called_with('user/watched/user/repo')
+        model_user, model_repo = Mock(), Mock()
+        model_user.login = 'user'
+        model_repo.name = 'repo'
+        self.assertTrue(self.handler.is_watching_repo('user', 'repo'))
+        head.assert_called_with('user/watched/user/repo')
+
+    @patch.object(api.Github, 'put')
+    def test_watch_repo(self, put):
+        response = put.return_value
+        response.status_code = 204
+        self.assertTrue(self.handler.watch_repo('user', 'repo'))
+        put.assert_called_with('user/watched/user/repo', method='put')
+        model_user, model_repo = Mock(), Mock()
+        model_user.login = 'user'
+        model_repo.name = 'repo'
+        self.assertTrue(self.handler.watch_repo('user', 'repo'))
+        put.assert_called_with('user/watched/user/repo', method='put')
+
+    @patch.object(api.Github, 'delete')
+    def test_unwatch_repo(self, delete):
+        response = delete.return_value
+        response.status_code = 204
+        self.assertTrue(self.handler.unwatch_repo('user', 'repo'))
+        delete.assert_called_with('user/watched/user/repo', method='delete')
+        model_user, model_repo = Mock(), Mock()
+        model_user.login = 'user'
+        model_repo.name = 'repo'
+        self.assertTrue(self.handler.unwatch_repo('user', 'repo'))
+        delete.assert_called_with('user/watched/user/repo', method='delete')
+
 
 class TestUserHandler(TestCase):
     """ Test public api about users """

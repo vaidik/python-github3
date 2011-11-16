@@ -155,7 +155,7 @@ class AuthUser(User):
         :param `user`: User model or username string
         """
 
-        parse_user = str(getattr(user, 'login', user))
+        parse_user = getattr(user, 'login', user)
         return self._bool('following/%s' % parse_user)
 
     def follow(self, user):
@@ -179,23 +179,28 @@ class AuthUser(User):
         parse_user = getattr(user, 'login', user)
         return self._delete('following/%s' % parse_user)
 
-    def get_keys(self):
+    def get_keys(self, limit=None):
         """ Get public keys """
 
         return self._get_resources('keys', model=models.Key,
                                    limit=limit)
 
-    def get_key(self, key_id):
-        """ Get public key by id """
+    def get_key(self, key):
+        """ Get public key
 
-        return self._get_resource('keys/%s' % key_id, model=models.Key)
+        :param `key`: Key model or key id
+
+        """
+
+        parse_key_id = getattr(key, 'id', key)
+        return self._get_resource('keys/%s' % parse_key_id, model=models.Key)
 
     def create_key(self, **kwargs):
         """
         Create public key
 
         :param title
-        :param key: Key string
+        :param key: Key string (It must starts with 'ssh-rsa')
         """
 
         #TODO: render key.pub file
@@ -205,12 +210,17 @@ class AuthUser(User):
         }
         return self._post_resource('keys', data=key, model=models.Key)
 
-    def delete_key(self, key_id):
-        """ Delete public key """
+    def delete_key(self, key):
+        """ Delete public key
 
-        return self._delete('keys/%s' % key_id)
+        :param `key`: Key model or key id
 
-    def get_repos(self, filter='all'):
+        """
+
+        parse_key_id = getattr(key, 'id', key)
+        return self._delete('keys/%s' % parse_key_id)
+
+    def get_repos(self, filter='all', limit=None):
         """
         Return user's public repositories
 
@@ -224,8 +234,8 @@ class AuthUser(User):
         """
         Return true if you are watching the user repository
 
-        :param owner: username
-        :param repo: repository name
+        :param owner: Model user or username string
+        :param repo: Model repo or repo name string
             is_watching_repo('copitux', 'python-github3')
         """
 
@@ -237,18 +247,22 @@ class AuthUser(User):
         """
         Watch the repository
 
-        :param owner: username
-        :param repo: repository name
+        :param owner: Model user or username string
+        :param repo: Model repo or repo name string
         """
 
+        owner = getattr(owner, 'login', owner)
+        repo = getattr(repo, 'name', repo)
         return self._put('watched/%s/%s' % (owner, repo))
 
     def unwatch_repo(self, owner, repo):
         """
         Unwatch the repository
 
-        :param owner: username
-        :param repo: repository name
+        :param owner: Model user or username string
+        :param repo: Model repo or repo name string
         """
 
+        owner = getattr(owner, 'login', owner)
+        repo = getattr(repo, 'name', repo)
         return self._delete('watched/%s/%s' % (owner, repo))

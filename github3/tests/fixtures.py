@@ -23,8 +23,8 @@ GET_USER = {
     "type": "User"
 }
 
-GET_LINK = '<https://api.github.com/gists/public?page=2>; rel="next", \
-<https://api.github.com/gists/public?page=5>; rel="last"'
+GET_LINK = '<https://api.github.com/it_doesnt_matter?page=2>; rel="next", \
+<https://api.github.com/it_doesnt_matter?page=5>; rel="last"'
 
 GET_RESOURCES = [
     {'login': 'octocat'},
@@ -152,4 +152,13 @@ GET_FULL_USER = {
 GET_USER_EMAILS = [
   "octocat@github.com",
   "support@github.com"
+]
+
+GET_USER_KEYS = [
+    {
+        "url": "https://api.github.com/user/keys/1",
+        "id": 1,
+        "title": "octocat@octomac",
+        "key": "ssh-rsa AAA..."
+    }
 ]
