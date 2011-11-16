@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-#
-# author: Antti Kaihola
 
 from .base import Handler
 from .. import models

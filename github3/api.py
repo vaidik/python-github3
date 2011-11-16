@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-#
-# author: David Medina
 
 import requests
 import json

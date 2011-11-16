@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-#
-# author: David Medina
 
 from github3.core import Paginate
 from github3.converters import Modelizer

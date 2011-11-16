@@ -1,9 +1,5 @@
-"""
-github3.models
-~~~~~~~~~~~~~~
-
-This package provides the Github3 object model.
-"""
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
 
 class BaseResource(object):
     """A BaseResource object."""
