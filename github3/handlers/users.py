@@ -166,10 +166,9 @@ class AuthUser(User):
 
         :param `user`: User model or username string
 
-        NOTE: Maybe bug in API, return text/html. Waitingf for answer
         """
 
-        parse_user = str(getattr(user, 'login', user))
+        parse_user = getattr(user, 'login', user)
         return self._put('following/%s' % parse_user)
 
     def unfollow(self, user):
@@ -179,7 +178,7 @@ class AuthUser(User):
         :param `user`: User model or username string
         """
 
-        parse_user = str(getattr(user, 'login', user))
+        parse_user = getattr(user, 'login', user)
         return self._delete('following/%s' % parse_user)
 
     def get_keys(self):

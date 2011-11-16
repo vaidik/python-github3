@@ -15,7 +15,7 @@ class Handler(object):
 
     def _prefix_resource(self, resource):
         prefix = getattr(self, 'prefix', '')
-        return '/'.join((prefix, resource)).strip('/')
+        return '/'.join((prefix, str(resource))).strip('/')
 
     def _get_converter(self, **kwargs):
         converter = kwargs.get(

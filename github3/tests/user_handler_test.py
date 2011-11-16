@@ -13,8 +13,40 @@ class TestAuthUserHandler(TestCase):
     """ Test private api about user logged """
 
     def setUp(self):
-        pass
+        self.gh = api.Github('test', 'pass')
+        self.handler = self.gh.users
 
+    @patch.object(api.Github, 'get')
+    def test_get(self, get):
+        get.return_value = GET_FULL_USER
+        user = self.handler.get()
+        self.assertIsInstance(user, AuthUser)
+        get.assert_called_with('user')
+        self.assertEquals(len(user), len(GET_FULL_USER))
+
+    @patch.object(api.Github, 'get')
+    def test_get_emails(self, get):
+        get.return_value = GET_USER_EMAILS
+        emails = self.handler.get_emails()
+        get.assert_called_with('user/emails')
+        self.assertEquals(emails, GET_USER_EMAILS)
+
+    @patch.object(api.Github, 'post')
+    def test_create_emails(self, post):
+        post.return_value = GET_USER_EMAILS
+        emails = self.handler.create_emails(*GET_USER_EMAILS)
+        post.assert_called_with('user/emails', data=GET_USER_EMAILS)
+        self.assertEquals(emails, GET_USER_EMAILS)
+
+    @patch.object(api.Github, 'delete')
+    def test_delete_emails(self, delete):
+        response = delete.return_value
+        response.return_value = ''
+        response.status_code = 204
+        emails = self.handler.delete_emails(*GET_USER_EMAILS)
+        delete.assert_called_with('user/emails', data=GET_USER_EMAILS,
+                                  method='delete')
+        self.assertTrue(emails)
 
 class TestUserHandler(TestCase):
     """ Test public api about users """
