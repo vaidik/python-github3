@@ -108,16 +108,34 @@ class User(Handler):
                                    limit=limit)
 
 
-class AuthUser(User):
+class AuthUser(Handler):
     """ User handler with public and private access """
 
     prefix = 'user'
 
+    def __init__(self, gh):
+        super(AuthUser, self).__init__(gh)
+        self._inject_handler(User(gh), prefix='get')
+
     def __repr__(self):
         return '<AuthUser handler> %s>' % self._gh.session.auth[0]
 
-    def get(self):
+    def me(self):
+        """ Return authenticated user """
+
         return self._get_resource('', model=models.AuthUser)
+
+    def my_followers(self, limit=None):
+        """ Return authenticated user followers """
+
+        return self._get_resources('followers', model=models.User,
+                                   limit=limit)
+
+    def my_following(self, limit=None):
+        """ Return authenticated user following """
+
+        return self._get_resources('following', model=models.User,
+                                   limit=limit)
 
     def get_emails(self):
         """ Return list of emails """
@@ -220,7 +238,7 @@ class AuthUser(User):
         parse_key_id = getattr(key, 'id', key)
         return self._delete('keys/%s' % parse_key_id)
 
-    def get_repos(self, filter='all', limit=None):
+    def my_repos(self, filter='all', limit=None):
         """
         Return user's public repositories
 
@@ -229,6 +247,12 @@ class AuthUser(User):
 
         return self._get_resources('repos', model=models.Repo,
                                    limit=limit, type=str(filter))
+
+    def my_watched(self, limit=None):
+        """ Return authenticated user repos that he watch """
+
+        return self._get_resources('watched', model=models.Repo,
+                                   limit=limit)
 
     def is_watching_repo(self, owner, repo):
         """
@@ -266,3 +290,10 @@ class AuthUser(User):
         owner = getattr(owner, 'login', owner)
         repo = getattr(repo, 'name', repo)
         return self._delete('watched/%s/%s' % (owner, repo))
+
+    def my_orgs(self, limit=None):
+        """ List public and private organizations
+        for the authenticated user
+        """
+
+        return self._get_resources('orgs', model=models.Org, limit=limit)

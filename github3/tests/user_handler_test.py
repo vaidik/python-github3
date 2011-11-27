@@ -7,6 +7,7 @@ from github3 import api
 from fixtures import *
 from github3.models import User, AuthUser, Repo, Gist, Org, Key
 from github3.exceptions import *
+from github3 import handlers
 
 
 class TestAuthUserHandler(TestCase):
@@ -18,13 +19,53 @@ class TestAuthUserHandler(TestCase):
         self.user_mock = Mock()
         self.user_mock.login = 'user_model'
 
+    def test_inject_user_handler(self):
+        self.assertEquals(self.handler.get.im_class, handlers.users.User)
+        self.assertEquals(self.handler.get_followers.im_class,
+            handlers.users.User)
+        self.assertEquals(self.handler.get_following.im_class,
+            handlers.users.User)
+        self.assertEquals(self.handler.get_repos.im_class,
+            handlers.users.User)
+        self.assertEquals(self.handler.get_watched.im_class,
+            handlers.users.User)
+        self.assertEquals(self.handler.get_orgs.im_class,
+            handlers.users.User)
+        self.assertEquals(self.handler.get_gists.im_class,
+            handlers.users.User)
+
     @patch.object(api.Github, 'get')
-    def test_get(self, get):
+    def test_me(self, get):
         get.return_value = GET_FULL_USER
-        user = self.handler.get()
+        user = self.handler.me()
         self.assertIsInstance(user, AuthUser)
         get.assert_called_with('user')
         self.assertEquals(len(user), len(GET_FULL_USER))
+
+    @patch.object(handlers.base.Handler, '_get_resource')
+    def test_get(self, get):
+        user = self.handler.get('test')
+        get.assert_called_with('test', model=User)
+
+    @patch.object(handlers.base.Handler, '_get_resources')
+    def test_get_my_followers(self, get):
+        followers = self.handler.my_followers()
+        get.assert_called_with('followers', model=User, limit=None)
+
+    @patch.object(handlers.base.Handler, '_get_resources')
+    def test_get_my_following(self, get):
+        following = self.handler.my_following()
+        get.assert_called_with('following', model=User, limit=None)
+
+    @patch.object(handlers.base.Handler, '_get_resources')
+    def test_get_my_watched(self, get):
+        following = self.handler.my_watched()
+        get.assert_called_with('watched', model=Repo, limit=None)
+
+    @patch.object(handlers.base.Handler, '_get_resources')
+    def test_get_my_orgs(self, get):
+        following = self.handler.my_orgs()
+        get.assert_called_with('orgs', model=Org, limit=None)
 
     @patch.object(api.Github, 'get')
     def test_get_emails(self, get):
@@ -117,17 +158,17 @@ class TestAuthUserHandler(TestCase):
         delete.assert_called_with('user/keys/1', method='delete')
 
     @patch.object(api.Github, '_request')
-    def test_get_repos(self, request):
+    def test_my_repos(self, request):
         response = request.return_value
         response.status_code = 200
         response.content = self.gh._parser.dumps(GET_SHORT_REPOS)
         response.headers = {'link': GET_LINK}  # 1 per page
-        repos = list(self.handler.get_repos(filter='public'))
+        repos = list(self.handler.my_repos(filter='public'))
         self.assertEquals(len(repos), 5)
         self.assertIsInstance(repos[0], Repo)
         request.assert_called_with('GET', 'user/repos',
                                    page=5, type='public')
-        repos = list(self.handler.get_repos(limit=2))
+        repos = list(self.handler.my_repos(limit=2))
         self.assertEquals(len(repos), 2)
 
     @patch.object(api.Github, 'head')
