@@ -78,7 +78,7 @@ class User(Handler):
                                    limit=limit)
 
     def get_watched(self, user=None, limit=None):
-        """ Return repositories that user whatch
+        """ Return repositories that user watch
 
         :param `user`: User model or username string
 

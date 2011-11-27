@@ -11,6 +11,12 @@ class Handler(object):
         self._gh = gh
         super(Handler, self).__init__()
 
+    def _inject_handler(self, handler, prefix=''):
+        import inspect
+        for method, callback in inspect.getmembers(handler):
+            if method.startswith(prefix) and inspect.ismethod(callback):
+                setattr(self, method, callback)
+
     def _prefix_resource(self, resource):
         prefix = getattr(self, 'prefix', '')
         return '/'.join((prefix, str(resource))).strip('/')
