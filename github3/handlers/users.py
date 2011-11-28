@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 from .base import Handler
-import github3.models as models
+from github3 import models
 from github3.converters import Rawlizer
 from github3.exceptions import UserIsAnonymous
 

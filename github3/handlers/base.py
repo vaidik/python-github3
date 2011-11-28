@@ -4,6 +4,38 @@
 from github3.core import Paginate
 from github3.converters import Modelizer
 
+
+class MimeTypeMixin(object):
+
+    VERSION = 'beta'
+
+    def __init__(self):
+        self.mimetypes = set()
+
+    def _parse_mime_type(self, type):
+        return 'application/vnd.github.%s.%s+json' % (
+            self.VERSION, type)
+
+    def add_raw(self):
+        self.mimetypes.add(self._parse_mime_type('raw'))
+        return self
+
+    def add_text(self):
+        self.mimetypes.add(self._parse_mime_type('text'))
+        return self
+
+    def add_html(self):
+        self.mimetypes.add(self._parse_mime_type('html'))
+        return self
+
+    def add_full(self):
+        self.mimetypes.add(self._parse_mime_type('full'))
+        return self
+
+    def mime_header(self):
+        return {'Accept': ', '.join(self.mimetypes)}
+
+
 class Handler(object):
     """ Handler base. Requests to API and modelize responses """
 

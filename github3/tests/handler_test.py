@@ -4,13 +4,35 @@
 from mock import Mock, patch
 from unittest import TestCase
 from github3 import api
-from github3.handlers.base import Handler
+from github3.handlers.base import Handler, MimeTypeMixin
 from github3.exceptions import *
 from github3.converters import *
 from github3.models.user import User
 from fixtures import *
 import json
 import requests
+
+
+class TestMimeTypeMixin(TestCase):
+
+    def setUp(self):
+        self.mixin = MimeTypeMixin()
+
+    def _parse_mime_type(self, type):
+        return 'application/vnd.github.%s.%s+json' % (
+            MimeTypeMixin.VERSION, type)
+
+    def test_add_mimetypes(self):
+        self.mixin.add_raw()
+        self.mixin.add_text()
+        self.mixin.add_html()
+        self.mixin.add_full()
+        self.assertEquals(sorted(self.mixin.mime_header()), sorted({
+            'Accept': '%s, %s, %s, %s' % (
+            self._parse_mime_type('raw'),
+            self._parse_mime_type('text'),
+            self._parse_mime_type('html'),
+            self._parse_mime_type('full'))}))
 
 
 class TestHandler(TestCase):
