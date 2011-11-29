@@ -26,4 +26,6 @@ class TestGetHandlers(TestCase):
         auth_gists = self.auth_gh.gists
 
         self.assertIsInstance(anom_gists, handlers.gists.Gist)
+        self.assertEquals(anom_gists.prefix, 'gists')
         self.assertIsInstance(auth_gists, handlers.gists.AuthGist)
+        self.assertEquals(anom_gists.prefix, 'gists')
