@@ -43,8 +43,10 @@ class TestHandler(TestCase):
 
     def test_get_converter(self):
         self.assertIsInstance(self.handler._get_converter(), Modelizer)
-        self.assertIsInstance(self.handler._get_converter(converter=Rawlizer),
+        kwargs = {'converter': Rawlizer}
+        self.assertIsInstance(self.handler._get_converter(kwargs),
                               Rawlizer)
+        self.assertEquals(kwargs, {})
         self.handler.converter = Modelizer
         self.assertIsInstance(self.handler._get_converter(), Modelizer)
 

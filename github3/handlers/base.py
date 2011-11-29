@@ -53,8 +53,8 @@ class Handler(object):
         prefix = getattr(self, 'prefix', '')
         return '/'.join((prefix, str(resource))).strip('/')
 
-    def _get_converter(self, **kwargs):
-        converter = kwargs.get(
+    def _get_converter(self, kwargs={}):
+        converter = kwargs.pop(
             'converter',  # 1. in kwargs
             getattr(self, 'converter',  # 2. in handler
             Modelizer))  # 3. Default
@@ -91,11 +91,11 @@ class Handler(object):
         if limit:
             limit = abs(limit)
         resource = self._prefix_resource(resource)
+        converter = self._get_converter(kwargs)
         counter = 1
         for page in Paginate(resource, self._gh.get, **kwargs):
             for raw_resource in page:
                 counter += 1
-                converter = self._get_converter(**kwargs)
                 converter.inject(model)
                 yield converter.loads(raw_resource)
                 if limit and counter > limit:
@@ -108,8 +108,8 @@ class Handler(object):
         """ Handler request to single resource """
 
         resource = self._prefix_resource(resource)
-        raw_resource = self._gh.get(resource)
-        converter = self._get_converter(**kwargs)
+        converter = self._get_converter(kwargs)
+        raw_resource = self._gh.get(resource, **kwargs)
         converter.inject(model)
         return converter.loads(raw_resource)
 
@@ -118,6 +118,6 @@ class Handler(object):
 
         resource = self._prefix_resource(resource)
         raw_resource = self._gh.post(resource, data=data)
-        converter = self._get_converter(**kwargs)
+        converter = self._get_converter(kwargs)
         converter.inject(model)
         return converter.loads(raw_resource)
