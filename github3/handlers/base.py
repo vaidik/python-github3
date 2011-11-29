@@ -33,7 +33,9 @@ class MimeTypeMixin(object):
         return self
 
     def mime_header(self):
-        return {'Accept': ', '.join(self.mimetypes)}
+        if self.mimetypes:
+            return {'Accept': ', '.join(self.mimetypes)}
+        return None
 
 
 class Handler(object):

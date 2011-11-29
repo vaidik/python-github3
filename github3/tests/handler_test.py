@@ -22,6 +22,9 @@ class TestMimeTypeMixin(TestCase):
         return 'application/vnd.github.%s.%s+json' % (
             MimeTypeMixin.VERSION, type)
 
+    def test_header(self):
+        self.assertEquals(self.mixin.mime_header(), None)
+
     def test_add_mimetypes(self):
         self.mixin.add_raw()
         self.mixin.add_text()
