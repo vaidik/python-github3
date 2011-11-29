@@ -55,9 +55,9 @@ class Handler(object):
 
     def _get_converter(self, **kwargs):
         converter = kwargs.get(
-            'converter', # 1. in kwargs
-            getattr(self, 'converter', # 2. in handler
-            Modelizer)) # 3. Default
+            'converter',  # 1. in kwargs
+            getattr(self, 'converter',  # 2. in handler
+            Modelizer))  # 3. Default
 
         return converter()
 
@@ -77,7 +77,8 @@ class Handler(object):
         from github3.exceptions import NotFound
         resource = self._prefix_resource(resource)
         try:
-            callback = getattr(self._gh, kwargs.get('method',''), self._gh.head)
+            callback = getattr(self._gh, kwargs.get('method', ''),
+                               self._gh.head)
             response = callback(resource, **kwargs)
         except NotFound:
             return False
@@ -97,7 +98,8 @@ class Handler(object):
                 converter = self._get_converter(**kwargs)
                 converter.inject(model)
                 yield converter.loads(raw_resource)
-                if limit and counter > limit: break
+                if limit and counter > limit:
+                    break
             else:
                 continue
             break
