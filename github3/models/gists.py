@@ -4,6 +4,23 @@
 from .base import BaseResource
 from .user import User
 
+
+class GistComment(BaseResource):
+    """ Gist comment """
+
+    @classmethod
+    def idl(self):
+        return {
+            'strs': ['url', 'body', 'body_text', 'body_html'],
+            'ints': ['id'],
+            'maps': {'user': User},
+            'dates': ['created_at'],
+        }
+
+    def __repr__(self):
+        return '<GistComment %s>' % self.user.login
+
+
 class File(BaseResource):
     """ File model """
 
