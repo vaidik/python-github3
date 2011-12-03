@@ -242,7 +242,7 @@ class AuthUser(Handler):
         """
         Return user's public repositories
 
-        param: filter: 'all', 'public', 'private' or 'member'
+        param: filter: 'all', 'owner', 'public', 'private' or 'member'
         """
 
         return self._get_resources('repos', model=models.Repo,
