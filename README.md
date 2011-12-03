@@ -1,50 +1,34 @@
 Fork
-======================================
+====
 Refactor and complete api wrapper. Intensive work in progress
 
-Github3: Python wrapper for the (new) GitHub API v3
-===================================================
+Use with auth user
+------------------
 
-Github has a new API. This is the best Python wrapper for it.
+    from github3.api import Github
 
-**This a work in progress.** Should be relased soon.
+    gh = Github('user', 'password')
 
+    users_handler = gh.users
+    for repo in users_handler.get_repos():
+        print repo
 
-
-Usage
------
-
-::
-
-    import github3
-
-    gh = github3.basic_auth('username', 'password')
-
-    gh.get_repo('kennethreitz', 'python-github3')
-
-
-
-
+    gists_handler = gh.gists
+    gists_handler.create_gist(
+        u'Description',
+        files={'file1.txt': {'content': u'Content of first file'}})
 
 Installation
 ------------
 
-To install Github3, simply: ::
+To install Github3, simply:
 
-    $ pip install github3
-
-Or, if you absolutely must: ::
-
-    $ easy_install github3
-
-But, you really shouldn't do that.
-
-
+    $ pip -e git+https://copitux@github.com/copitux/python-github3#egg=python-github3
 
 License
 -------
 
-ISC License. ::
+ISC License.
 
     Copyright (c) 2011, Kenneth Reitz <me@kennethreitz.com>
 
@@ -64,19 +48,16 @@ ISC License. ::
 Contribute
 ----------
 
-If you'd like to contribute, simply fork `the repository`_, commit your changes
+If you'd like to contribute, simply fork `the repository`, commit your changes
 to the **develop** branch (or branch off of it), and send a pull request. Make
-sure you add yourself to AUTHORS_.
-
+sure you add yourself to `AUTHORS`.
 
 
 Roadmap
 -------
 
-- Get it Started
-- HTTP BASIC
-- Get it working
-- Sphinx Documetnation
-- Examples
 - Unittests
+- Handlers
+- Sphinx Documentation
+- Examples
 - OAuth Last (how?)

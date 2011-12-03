@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-#
-# author: David Medina
 
 import requests
 import json
 from errors import GithubError
+from handlers import users, gists
 
 RESOURCES_PER_PAGE = 100
 
+
+#TODO: refactor: loads json in request editing Response object
 class GithubCore(object):
     """
     Wrapper to github api requests
@@ -69,7 +70,9 @@ class GithubCore(object):
 
     def put(self, request, **kwargs):
         """ PUT request """
-        response = self._request('PUT', request, **kwargs)
+
+        response = self._request('PUT', request,
+                                 headers={'Content-length': '0'}, **kwargs)
         assert response.status_code == 204
         return response
 
@@ -87,22 +90,21 @@ class GithubCore(object):
         """
         Arg's parser to `_request` method
 
-        It check keyword args to parse extra request args to params
-        Sample:
-            _parse_args(arg1=1, arg2=2) => params = {'arg1': 1, 'arg2': 2}
+        Put extra request_args in params
         """
         request_core = (
-            'params','data','headers','cookies','files','auth','tiemout',
-            'allow_redirects','proxies','return_response','config')
+            'params', 'data', 'headers', 'cookies', 'files', 'auth', 'tiemout',
+            'allow_redirects', 'proxies', 'return_response', 'config')
         request_params = request_args.get('params')
         extra_params = {}
         for k, v in request_args.items():
-            if k in request_core: continue
+            if k in request_core:
+                continue
             extra_params.update({k: v})
             del request_args[k]
-        if request_params:
+        if request_params and getattr(request_params, 'update'):
             request_args['params'].update(extra_params)
-        else:
+        elif extra_params:
             request_args['params'] = extra_params
 
         return request_args
@@ -116,14 +118,42 @@ class GithubCore(object):
         :param kwargs: Keyword args to request
         """
         request = self.base_url + request
-        parsed_args = self._parse_args(kwargs)
-        response = self.session.request(verb, request, **parsed_args)
+        self._parse_args(kwargs)
+        response = self.session.request(verb, request, **kwargs)
         self.requests_remaining = response.headers.get(
-            'x-ratelimit-remaining',-1)
+            'x-ratelimit-remaining', -1)
         error = GithubError(response)
         error.process()
 
         return response
 
+        return response
+
 class Github(GithubCore):
-    pass
+    """ Library enter """
+
+    def __init__(self, *args):
+        super(Github, self).__init__()
+        self.authenticated = False
+        auth = len(args)
+        if auth == 2:  # Basic auth
+            self.session.auth = tuple(map(str, args))
+            self.authenticated = True
+        elif auth == 1:  # Token oauth
+            raise NotImplementedError
+        elif auth > 2:
+            raise TypeError("user, password or token")
+
+    @property
+    def users(self):
+        if self.authenticated:
+            return users.AuthUser(self)
+        else:
+            return users.User(self)
+
+    @property
+    def gists(self):
+        if self.authenticated:
+            return gists.AuthGist(self)
+        else:
+            return gists.Gist(self)

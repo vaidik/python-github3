@@ -1,10 +1,25 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-#
-# author: David Medina
 
 from .base import BaseResource
 from .user import User
+
+
+class GistComment(BaseResource):
+    """ Gist comment """
+
+    @classmethod
+    def idl(self):
+        return {
+            'strs': ['url', 'body', 'body_text', 'body_html'],
+            'ints': ['id'],
+            'maps': {'user': User},
+            'dates': ['created_at'],
+        }
+
+    def __repr__(self):
+        return '<GistComment %s>' % self.user.login
+
 
 class File(BaseResource):
     """ File model """
@@ -18,6 +33,7 @@ class File(BaseResource):
 
     def __repr__(self):
         return '<File gist> %s' % self.filename
+
 
 class GistFork(BaseResource):
     """ GistFork model """
@@ -33,6 +49,7 @@ class GistFork(BaseResource):
     def __repr__(self):
         return '<Gist fork> %s>' % self.user.login
 
+
 class ChangeStatus(BaseResource):
     """ ChangeStatus model """
 
@@ -44,6 +61,7 @@ class ChangeStatus(BaseResource):
 
     def __repr__(self):
         return '<Gist history> change_status>'
+
 
 class GistHistory(BaseResource):
     """ """
@@ -59,18 +77,21 @@ class GistHistory(BaseResource):
     def __repr__(self):
         return '<GistHistory %s/%s>' % (self.user, self.committed_at)
 
+
 class Gist(BaseResource):
     """ """
 
     @classmethod
     def idl(self):
         return {
-            'strs': ['url', 'description', 'html_url', 'git_pull_url', 'git_push_url'],
+            'strs': ['url', 'description', 'html_url', 'git_pull_url',
+                     'git_push_url'],
             'ints': ['id', 'comments'],
             'bools': ['public'],
             'dates': ['created_at'],
             'maps': {'user': User},
-            'collection_maps': {'files': File, 'forks': GistFork, 'history': GistHistory},
+            'collection_maps': {'files': File, 'forks': GistFork,
+                                'history': GistHistory},
         }
 
     def __repr__(self):

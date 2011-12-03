@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-#
-# author: David Medina
+
 from .core import Converter
+
 
 class Rawlizer(Converter):
     """ Raw converter """
@@ -15,6 +15,7 @@ class Rawlizer(Converter):
 
     def dumps(self):
         pass
+
 
 class Json(Converter):
     """ Json converter """
@@ -31,6 +32,7 @@ class Json(Converter):
 
     def dumps(self):
         pass
+
 
 class Modelizer(Converter):
     """ Own model converter """
@@ -52,17 +54,18 @@ class Modelizer(Converter):
         self.model = model
 
     def _parse_map(self, model, raw_resource):
-        return Modelizer(model).loads(raw_resource)
+        if hasattr(raw_resource, 'items'):
+            return Modelizer(model).loads(raw_resource)
 
     def _parse_collection_map(self, model, raw_resources):
         # Dict of resources (Ex: Gist file)
-        if getattr(raw_resources, 'items', False):
+        if hasattr(raw_resources, 'items'):
             dict_map = {}
             for key, raw_resource in raw_resources.items():
                 dict_map[key] = Modelizer(model).loads(raw_resource)
             return dict_map
         # list of resources
-        else:
+        elif hasattr(raw_resources, '__iter__'):
             return [Modelizer(model).loads(raw_resource)
                     for raw_resource in raw_resources]
 
@@ -73,25 +76,25 @@ class Modelizer(Converter):
                 self.__class__.__name__)
         idl = self.model.idl()
         attrs.update(
-            {attr: raw_resource[attr] for attr in idl.get('strs',())
-             if raw_resource.get(attr)})
+            {attr: raw_resource[attr] for attr in idl.get('strs', ())
+             if attr in raw_resource})
         attrs.update(
-            {attr: raw_resource[attr] for attr in idl.get('ints',())
-             if raw_resource.get(attr)})
+            {attr: raw_resource[attr] for attr in idl.get('ints', ())
+             if attr in raw_resource})
         attrs.update(
             {attr: self._parse_date(raw_resource[attr])
-             for attr in idl.get('dates',()) if raw_resource.get(attr)})
+             for attr in idl.get('dates', ()) if attr in raw_resource})
         attrs.update(
-            {attr: raw_resource[attr] for attr in idl.get('bools',())
-             if raw_resource.get(attr)})
+            {attr: raw_resource[attr] for attr in idl.get('bools', ())
+             if attr in raw_resource})
         attrs.update(
             {attr: self._parse_map(model, raw_resource[attr])
-             for attr, model in idl.get('maps',{}).items()
-             if raw_resource.get(attr)})
+             for attr, model in idl.get('maps', {}).items()
+             if attr in raw_resource})
         attrs.update(
             {attr: self._parse_collection_map(model, raw_resource[attr])
-             for attr, model in idl.get('collection_maps',{}).items()
-             if raw_resource.get(attr)})
+             for attr, model in idl.get('collection_maps', {}).items()
+             if attr in raw_resource})
 
         return self.model(attrs)
 

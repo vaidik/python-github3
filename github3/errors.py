@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-#
-# author: David Medina
 
 import json
 import github3.exceptions as exceptions
+
 
 class GithubError(object):
     """ Handler for API errors """
@@ -14,11 +13,14 @@ class GithubError(object):
         self.status_code = response.status_code
         try:
             self.debug = self._parser.loads(response.content)
-        except ValueError:
+        except (ValueError, TypeError):
             self.debug = {'message': response.content}
 
     def error_400(self):
         return exceptions.BadRequest("400 - %s" % self.debug.get('message'))
+
+    def error_401(self):
+        return exceptions.Unauthorized("401 - %s" % self.debug.get('message'))
 
     def error_404(self):
         return exceptions.NotFound("404 - %s" % self.debug.get('message'))
