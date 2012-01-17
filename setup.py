@@ -26,7 +26,7 @@ setup(
     name='github3',
     version='0.0.1',
     description='Python wrapper for the github v3 api!',
-    long_description=open('README.rst').read(),
+    long_description=open('README.md').read(),
     author='Kenneth Reitz',
     author_email='me@kennethreitz.com',
     url='https://github.com/kennethreitz/python-github3',
