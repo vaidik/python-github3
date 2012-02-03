@@ -1,2 +1,5 @@
-*.py?
+*.py[co]
 *.swp
+*.DS_STORE
+*.rope*
+MANIFEST
