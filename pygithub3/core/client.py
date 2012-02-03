@@ -64,8 +64,10 @@ class Client(object):
 
         def wrapper(self, verb, resource, **kwargs):
             diffs = kwargs.viewkeys() - VALID_REQUEST_ARGS
-            new_params = kwargs.get('params') or {}
-            new_params.update({key: kwargs[key] for key in diffs})
+            new_params = kwargs.get('params', {})
+            for key in diffs:  # Put each key in new_params and delete it
+                new_params[key] = kwargs[key]
+                del kwargs[key]
             kwargs['params'] = new_params
             return func(self, verb, resource, **kwargs)
         return wrapper
