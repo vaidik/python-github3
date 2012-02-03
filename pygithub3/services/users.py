@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from base import Base
-from core.resources import Factory
+from .base import Base
+from pygithub3.core.resources import Factory
 
 
 class Keys(Base):
@@ -14,23 +14,20 @@ class Keys(Base):
 class Followers(Base):
 
     def list(self, user):
-        user = user or self.client.user
-        if user:
-            return self.get_resource('users/%s/followers' % user)
-        else:
-            return self.get_resource('user/followers')
+        pass
 
 
 class Emails(Base):
 
     def list(self):
-        return self.get_resource('user/emails')
+        pass
 
     def add(self):
         pass
 
     def delete(self):
         pass
+
 
 class User(Base):
 
@@ -42,7 +39,7 @@ class User(Base):
 
     def get(self, user):
         resource = Factory(user=user or self.client.user)
-        return self._get_result(resource('user.Get'))
+        return self._get_result(resource('users.get'))
 
     def update(self):
         pass

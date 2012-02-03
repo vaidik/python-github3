@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from base import Model
+from .base import Model
+
+__all__ = ('Plan', 'User')
 
 
 class Plan(Model):

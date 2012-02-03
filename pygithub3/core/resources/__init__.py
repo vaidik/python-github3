@@ -3,6 +3,9 @@
 
 import re
 
+ABS_IMPORT_PREFIX = 'pygithub3.core.resources'
+
+
 class UriNotFound(Exception):
     pass
 
@@ -41,6 +44,7 @@ class Resource(object):
 
 class Factory(object):
     """ """
+
     import_pattern = re.compile(r'^(\w+\.)+\w+$')
 
     def __init__(self, **kwargs):
@@ -59,11 +63,13 @@ class Factory(object):
         """ """
 
         from importlib import import_module
+
         def wrapper(self, resource_path):
             module_chunk, s, uri_chunk = resource_path.rpartition('.')
             try:
                 #  TODO: CamelCase and under_score support, now only Class Name
-                module = import_module('core.resources.%s' % module_chunk)
+                module = import_module('%s.%s'
+                                        % (ABS_IMPORT_PREFIX, module_chunk))
                 uri = getattr(module, uri_chunk.capitalize())
             except ImportError:
                 raise UriNotFound("'%s' module does not exists" % module_chunk)
@@ -78,4 +84,4 @@ class Factory(object):
     def __call__(self, resource_class=''):
         resource = resource_class(self.args)
         assert isinstance(resource, Resource)
-        return resource 
+        return resource

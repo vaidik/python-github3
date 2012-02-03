@@ -2,8 +2,8 @@
 # -*- encoding: utf-8 -*-
 
 import requests
-from errors import GithubError
 
+from .errors import GithubError
 
 VALID_REQUEST_ARGS = set((
     'params', 'data', 'headers', 'cookies', 'files', 'auth', 'timeout',
@@ -65,7 +65,7 @@ class Client(object):
         def wrapper(self, verb, resource, **kwargs):
             diffs = kwargs.viewkeys() - VALID_REQUEST_ARGS
             new_params = kwargs.get('params') or {}
-            new_params.update({key:kwargs[key] for key in diffs})
+            new_params.update({key: kwargs[key] for key in diffs})
             kwargs['params'] = new_params
             return func(self, verb, resource, **kwargs)
         return wrapper

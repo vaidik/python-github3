@@ -2,9 +2,10 @@
 # -*- encoding: utf-8 -*-
 
 from . import Resource
-from models.user import User
+from pygithub3.models.users import User
 
 __all__ = ('Get', 'Update')
+
 
 class Get(Resource):
 
@@ -18,6 +19,7 @@ class Get(Resource):
             return 'users/%s' % self.user
         else:
             return 'user'
+
 
 class Update(Resource):
     pass

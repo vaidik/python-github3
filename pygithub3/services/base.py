@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from core.client import Client
+from pygithub3.core.client import Client
+
 
 class Base(object):
 
@@ -23,11 +24,12 @@ class Base(object):
     def _get_result(self, resource, **kwargs):
         return Result(self.client.get, resource, **kwargs)
 
+
 class Result(object):  # move
 
     def __init__(self, method, resource, **kwargs):
         self.method = method
-        self.resource= resource
+        self.resource = resource
         self.args = kwargs
 
     def __repr__(self):
