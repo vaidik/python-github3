@@ -15,8 +15,8 @@ class Plan(Model):
 class User(Model):
     """ """
 
-    maps = {'plan': Plan}
-    dates = ('created_at', )
+    _maps = {'plan': Plan}
+    _dates = ('created_at', )
 
     def __str__(self):
         return '<User (%s)>' % getattr(self, 'login', '')

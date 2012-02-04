@@ -2,8 +2,15 @@
 # -*- encoding: utf-8 -*-
 
 from . import Resource
-#from pygithub3.models.
+from pygithub3.models.base import Raw
 
 
 class List(Resource):
-    pass
+
+    model = Raw
+
+    def validate(self):
+        pass
+
+    def set_uri(self):
+        return 'user/emails'
