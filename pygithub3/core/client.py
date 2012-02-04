@@ -62,37 +62,37 @@ class Client(object):
     def __parse_kwargs(func):
         """ Decorator to put extra args into requests.params """
 
-        def wrapper(self, verb, resource, **kwargs):
+        def wrapper(self, verb, request, **kwargs):
             diffs = kwargs.viewkeys() - VALID_REQUEST_ARGS
             new_params = kwargs.get('params', {})
             for key in diffs:  # Put each key in new_params and delete it
                 new_params[key] = kwargs[key]
                 del kwargs[key]
             kwargs['params'] = new_params
-            return func(self, verb, resource, **kwargs)
+            return func(self, verb, request, **kwargs)
         return wrapper
 
     @__parse_kwargs
-    def request(self, verb, resource, **kwargs):
-        resource = "%s%s" % (self.config['base_url'], resource)
-        response = self.requester.request(verb, resource, **kwargs)
+    def request(self, verb, request, **kwargs):
+        request = "%s%s" % (self.config['base_url'], request)
+        response = self.requester.request(verb, request, **kwargs)
         GithubError(response).process()
         return response
 
-    def get(self, resource, **kwargs):
-        return self.request('get', resource, **kwargs)
+    def get(self, request, **kwargs):
+        return self.request('get', request, **kwargs)
 
-    def post(self, resource, **kwargs):
-        return self.request('post', resource, **kwargs)
+    def post(self, request, **kwargs):
+        return self.request('post', request, **kwargs)
 
-    def patch(self, resource, **kwargs):
-        return self.request('patch', resource, **kwargs)
+    def patch(self, request, **kwargs):
+        return self.request('patch', request, **kwargs)
 
-    def put(self, resource, **kwargs):
-        return self.request('put', resource, **kwargs)
+    def put(self, request, **kwargs):
+        return self.request('put', request, **kwargs)
 
-    def delete(self, resource, **kwargs):
-        return self.request('delete', resource, **kwargs)
+    def delete(self, request, **kwargs):
+        return self.request('delete', request, **kwargs)
 
-    def head(self, resource, **kwargs):
-        return self.request('head', resource, **kwargs)
+    def head(self, request, **kwargs):
+        return self.request('head', request, **kwargs)

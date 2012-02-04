@@ -8,9 +8,9 @@ from .third_libs.link_header import parse_link_value
 
 class Method(object):
 
-    def __init__(self, method, resource, **method_args):
+    def __init__(self, method, request, **method_args):
         self.method = method
-        self.resource = resource
+        self.request = request
         self.args = method_args
         self.cache = {}
 
@@ -47,10 +47,10 @@ class Method(object):
     def __call__(self, page=1):
         all_args = self.args.copy()
         all_args.update(page=page)
-        response = self.method(self.resource, **all_args)
+        response = self.method(self.request, **all_args)
         self.__set_last_page_from(response)
-        model = self.resource.get_model()
-        self.cache[str(page)] = model.loads(response.content)
+        resource = self.request.get_resource()
+        self.cache[str(page)] = resource.loads(response.content)
         return self.cache[str(page)]
 
     @property
@@ -137,9 +137,9 @@ class Page(object):
 class Result(object):
     """ """
 
-    def __init__(self, client, resource, **kwargs):
+    def __init__(self, client, request, **kwargs):
         """ """
-        self.getter = Method(client.get, resource, **kwargs)
+        self.getter = Method(client.get, request, **kwargs)
         self.page = Page(self.getter)
 
     def __iter__(self):

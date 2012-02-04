@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from .base import Model
+from .base import Resource
 
 __all__ = ('Plan', 'User')
 
 
-class Plan(Model):
+class Plan(Resource):
 
     def __str__(self):
         return '<Plan (%s)>' % getattr(self, 'name', '')
 
 
-class User(Model):
+class User(Resource):
     """ """
 
     _maps = {'plan': Plan}

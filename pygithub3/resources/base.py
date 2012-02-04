@@ -7,7 +7,7 @@ except ImportError:
     import json
 
 
-class Model(object):
+class Resource(object):
 
     _dates = ()
     _maps = {}
@@ -41,37 +41,37 @@ class Model(object):
                 date = None
             return date
 
-        def parse_map(model, raw_resource):
+        def parse_map(resource, raw_resource):
             if hasattr(raw_resource, 'items'):
-                return model.__load(raw_resource)
+                return resource.__load(raw_resource)
 
-        def parse_collection_map(model, raw_resources):
+        def parse_collection_map(resource, raw_resources):
             # Dict of resources (Ex: Gist file)
             if hasattr(raw_resources, 'items'):
                 dict_map = {}
                 for key, raw_resource in raw_resources.items():
-                    dict_map[key] = model.__load(raw_resource)
+                    dict_map[key] = resource.__load(raw_resource)
                 return dict_map
             # list of resources
             elif hasattr(raw_resources, '__iter__'):
-                return [model.__load(raw_resource)
+                return [resource.__load(raw_resource)
                         for raw_resource in raw_resources]
         raw_resource.update(
             {attr: parse_date(raw_resource[attr])
              for attr in self._dates if attr in raw_resource})
         raw_resource.update(
-            {attr: parse_map(model, raw_resource[attr])
-             for attr, model in self._maps.items()
+            {attr: parse_map(resource , raw_resource[attr])
+             for attr, resource in self._maps.items()
              if attr in raw_resource})
         raw_resource.update(
-            {attr: parse_collection_map(model, raw_resource[attr])
-             for attr, model in self._collection_maps.items()
+            {attr: parse_collection_map(resource, raw_resource[attr])
+             for attr, resource in self._collection_maps.items()
              if attr in raw_resource})
 
         return self(raw_resource)
 
 
-class Raw(Model):
+class Raw(Resource):
 
     @classmethod
     def loads(self, json_content):

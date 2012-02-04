@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from . import Resource
-from pygithub3.models.users import User
+from . import Request
+from pygithub3.resources.users import User
 
 __all__ = ('Get', 'Update')
 
 
-class Get(Resource):
+class Get(Request):
 
-    model = User
+    resource = User
 
     def validate(self):
         pass
@@ -21,5 +21,5 @@ class Get(Resource):
             return 'user'
 
 
-class Update(Resource):
+class Update(Request):
     pass

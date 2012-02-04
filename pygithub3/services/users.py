@@ -2,7 +2,6 @@
 # -*- encoding: utf-8 -*-
 
 from .base import Base
-from pygithub3.core.resources import Factory
 
 
 class Keys(Base):
@@ -13,20 +12,30 @@ class Keys(Base):
 
 class Followers(Base):
 
-    def list(self, user):
-        pass
+    def list(self, user=None):
+        self.config_request(user=user or self.client.user)
+        return self._get_result('users.followers.list')
 
+    def list_following(self, user=None):
+        self.config_request(user=user or self.client.user)
+        return self._get_result('users.followers.listfollowing')
+
+    def unfollow(self, user):
+        self.config_request(user=user)
+        self._delete('users.followers.unfollow')
 
 class Emails(Base):
 
     def list(self):
-        pass
+        return self._get_result('users.emails.list')
 
-    def add(self):
-        pass
+    def add(self, *args):
+        self.config_request(emails=args)
+        return self._post('users.emails.add')
 
-    def delete(self):
-        pass
+    def delete(self, *args):
+        self.config_request(emails=args)
+        self._delete('users.emails.delete')
 
 
 class User(Base):
@@ -37,9 +46,9 @@ class User(Base):
         self.followers = Followers(**kwargs)
         super(User, self).__init__(**kwargs)
 
-    def get(self, user):
-        resource = Factory(user=user or self.client.user)
-        return self._get_result(resource('users.get'))
+    def get(self, user=None):
+        self.config_request(user=user or self.client.user)
+        return self._get('users.get')
 
     def update(self):
         pass
