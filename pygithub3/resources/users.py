@@ -6,6 +6,12 @@ from .base import Resource
 __all__ = ('Plan', 'User')
 
 
+class Key(Resource):
+
+    def __str__(self):
+        return '<Key (%s)>' % getattr(self, 'title', '')
+
+
 class Plan(Resource):
 
     def __str__(self):

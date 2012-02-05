@@ -15,9 +15,10 @@ class List(Request):
     def set_uri(self):
         return 'user/emails'
 
+
 class Add(Request):
 
-    resource  = Raw
+    resource = Raw
 
     def validate(self):
         pass
@@ -27,6 +28,7 @@ class Add(Request):
 
     def set_uri(self):
         return 'user/emails'
+
 
 class Delete(Request):
 

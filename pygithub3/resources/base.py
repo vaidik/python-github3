@@ -60,7 +60,7 @@ class Resource(object):
             {attr: parse_date(raw_resource[attr])
              for attr in self._dates if attr in raw_resource})
         raw_resource.update(
-            {attr: parse_map(resource , raw_resource[attr])
+            {attr: parse_map(resource, raw_resource[attr])
              for attr, resource in self._maps.items()
              if attr in raw_resource})
         raw_resource.update(

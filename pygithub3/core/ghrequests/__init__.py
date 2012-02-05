@@ -60,7 +60,7 @@ class Request(object):
         update_params = {
                 valid_key: to_parse[valid_key]
                 for valid_key in self.valid
-                if to_parse.has_key(valid_key)}
+                if valid_key in to_parse}
         return update_params
 
 
@@ -71,7 +71,7 @@ class Factory(object):
 
     def __init__(self):
         """ """
-        self.args = {} 
+        self.args = {}
 
     def config_with(self, **kwargs):
         self.args = kwargs

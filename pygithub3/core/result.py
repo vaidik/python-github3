@@ -16,7 +16,7 @@ class Method(object):
 
     def cached(func):
         def wrapper(self, page=1):
-            if self.cache.has_key(str(page)):
+            if str(page) in self.cache:
                 return self.cache[str(page)]
             return func(self, page)
         return wrapper
@@ -34,6 +34,7 @@ class Method(object):
     @if_needs_lastpage
     def __set_last_page_from(self, response):
         link_parsed = parse_link_value(response.headers['link'])
+
         def get_last(url):
             url_rels = link_parsed[url]
             return (url_rels.get('rel') == 'last')
@@ -56,6 +57,7 @@ class Method(object):
         if not hasattr(self, 'last_page'):
             self()
         return self.last_page
+
 
 class Page(object):
     """ """

@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from . import Request
+from . import Request, RequestValidationError
 from pygithub3.resources.users import User
-
-__all__ = ('List',)
+from pygithub3.resources.base import Raw
 
 
 class List(Request):
@@ -34,13 +33,44 @@ class Listfollowing(Request):
         else:
             return 'user/following'
 
+
+class Isfollowing(Request):
+
+    resource = Raw
+
+    def validate(self):
+        if not self.user:
+            raise RequestValidationError(
+                "'%s' request needs a user" % self.__class__.__name__)
+
+    def set_uri(self):
+        return 'user/following/%s' % self.user
+
+
+class Follow(Request):
+
+    resource = Raw
+
+    def validate(self):
+        if not self.user:
+            raise RequestValidationError(
+                "'%s' request needs a user" % self.__class__.__name__)
+
+    def set_uri(self):
+        return 'user/following/%s' % self.user
+
+
 class Unfollow(Request):
 
     resource = User
 
     def validate(self):
         if not self.user:
-            raise Exception('unfollow ened user')  # TODO: validate exception
+            raise RequestValidationError(
+                "'%s' request needs a user" % self.__class__.__name__)
 
     def set_uri(self):
         return 'user/following/%s' % self.user
+
+    def get_data(self):
+        pass
