@@ -23,7 +23,6 @@ class Method(object):
 
     def if_needs_lastpage(func):
         def wrapper(self, response):
-            #import ipdb; ipdb.set_trace()
             has_link = response.headers.get('link')
             has_last_page = hasattr(self, 'last_page')
             if not has_last_page and has_link:
@@ -34,7 +33,6 @@ class Method(object):
 
     @if_needs_lastpage
     def __set_last_page_from(self, response):
-        #import ipdb; ipdb.set_trace()
         link_parsed = parse_link_value(response.headers['link'])
         def get_last(url):
             url_rels = link_parsed[url]
@@ -165,7 +163,10 @@ class Result(object):
             return Page(self.getter, page)
         return None
 
-    def all(self):
+    def iterator(self):
         for page in self:
             for resource in page:
                 yield resource
+
+    def all(self):
+        return list(self.iterator())

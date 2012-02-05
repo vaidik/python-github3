@@ -19,6 +19,10 @@ class RequestUriInvalid(Exception):
     pass
 
 
+class RequestValidationError(Exception):
+    pass
+
+
 class Request(object):
     """ """
 
@@ -28,10 +32,13 @@ class Request(object):
         self.validate()
         self.uri = self.set_uri()
 
-    def validate(self, args):
+    def validate(self):
         raise NotImplementedError
 
     def set_uri(self):
+        raise NotImplementedError
+
+    def get_data(self):
         raise NotImplementedError
 
     def get_uri(self):
@@ -45,6 +52,16 @@ class Request(object):
 
     def __str__(self):
         return self.get_uri()
+
+    def _parse_simple_dict(self, to_parse):
+        if not hasattr(to_parse, 'items'):
+            raise RequestValidationError("'%s' needs a data dictionary"
+                                         % self.__class__.__name__)
+        update_params = {
+                valid_key: to_parse[valid_key]
+                for valid_key in self.valid
+                if to_parse.has_key(valid_key)}
+        return update_params
 
 
 class Factory(object):
@@ -95,5 +112,6 @@ class Factory(object):
     @__dispatch
     def __call__(self, request=''):
         request = request(self.args)
+        self.clear_config()
         assert isinstance(request, Request)
         return request
