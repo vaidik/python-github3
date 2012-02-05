@@ -12,6 +12,10 @@ class UnprocessableEntity(Exception):
     pass
 
 
+class NotFound(Exception):
+    pass
+
+
 class GithubError(object):
     """ Handler for API errors """
 
@@ -23,15 +27,18 @@ class GithubError(object):
         except (ValueError, TypeError):
             self.debug = {'message': response.content}
 
+    def error_404(self):
+        raise NotFound("404 - %s" % self.debug.get('message'))
+
     def error_400(self):
-        return BadRequest("400 - %s" % self.debug.get('message'))
+        raise BadRequest("400 - %s" % self.debug.get('message'))
 
     def error_422(self):
         errors = self.debug.get('errors')
-        if errors:
-            errors = ['{resource}: {code} => {field}'.format(**error)
-                      for error in errors]
-        return UnprocessableEntity(
+        errors = ['Resource: {resource}: {field} => {message} ({code})'.format(
+                    **error)
+                 for error in errors]
+        raise UnprocessableEntity(
             '422 - %s %s' % (self.debug.get('message'), errors))
 
     def process(self):

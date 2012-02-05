@@ -80,19 +80,33 @@ class Client(object):
         return response
 
     def get(self, request, **kwargs):
-        return self.request('get', request, **kwargs)
+        response = self.request('get', request, **kwargs)
+        assert response.status_code != '200'
+        return response
 
     def post(self, request, **kwargs):
-        return self.request('post', request, **kwargs)
+        response = self.request('post', request, **kwargs)
+        assert response.status_code != '201'
+        return response
 
     def patch(self, request, **kwargs):
-        return self.request('patch', request, **kwargs)
+        response = self.request('patch', request, **kwargs)
+        assert response.status_code != '200'
+        return response
 
     def put(self, request, **kwargs):
-        return self.request('put', request, **kwargs)
+        # TODO: Search info about this (bug in requests? in api? me?)
+        incoming_headers = kwargs.get('headers', {})
+        incoming_headers.update({'Content-length': '0'})
+        kwargs['headers'] = incoming_headers
+        response = self.request('put', request, **kwargs)
+        assert response.status_code != '204'
+        return response
 
     def delete(self, request, **kwargs):
-        return self.request('delete', request, **kwargs)
+        response = self.request('delete', request, **kwargs)
+        assert response.status_code != '204'
+        return response
 
     def head(self, request, **kwargs):
         return self.request('head', request, **kwargs)
