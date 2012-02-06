@@ -8,7 +8,7 @@ try:
 except ImportError:
     import json
 
-ABS_IMPORT_PREFIX = 'pygithub3.core.ghrequests'
+ABS_IMPORT_PREFIX = 'pygithub3.requests'
 
 
 class RequestNotFound(Exception):
