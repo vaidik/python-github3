@@ -45,7 +45,27 @@ class Base(object):
 
     def _put(self, request_uri, **kwargs):
         request = self.get_request(request_uri)
-        self.client.put(request, **kwargs)
+        resource = request.get_resource()
+        """ Bug in Github API? requests library?
+
+        I must send data as empty string when the specifications' of some PUT
+        request are 'Not send input data'. If I don't do that and send data as
+        None, the requests library doesn't send 'Content-length' header and the
+        server returns 411 - Required Content length (at least 0)
+
+        For instance:
+            - follow-user request doesn't send input data
+            - merge-pull request send data
+
+        For that reason I must do a conditional because I don't want to return
+        an empty string on follow-user request because it could be confused
+
+        Related: ht
+        """
+        input_data = request.get_data() or ''
+        response = self.client.put(request, data=input_data, **kwargs)
+        if response.status_code != '204':  # != NO_CONTENT
+            return resource.loads(response.content)
 
     def _delete(self, request_uri, **kwargs):
         request = self.get_request(request_uri)

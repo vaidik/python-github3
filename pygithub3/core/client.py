@@ -95,12 +95,9 @@ class Client(object):
         return response
 
     def put(self, request, **kwargs):
-        # TODO: Search info about this (bug in requests? in api? me?)
-        incoming_headers = kwargs.get('headers', {})
-        incoming_headers.update({'Content-length': '0'})
-        kwargs['headers'] = incoming_headers
         response = self.request('put', request, **kwargs)
-        assert response.status_code != '204'
+        # assert response.status_code != '204'
+        # I don't do an assert. See `services.base.Base._put` comment
         return response
 
     def delete(self, request, **kwargs):
