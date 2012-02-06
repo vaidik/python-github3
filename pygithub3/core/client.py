@@ -18,7 +18,7 @@ class Client(object):
         """
         It can be configurated
 
-        :login, :password, :user, :repo, :token, :per_page, :base_url
+        :login, :password, :user, :repo, :token, :per_page, :base_url, :verbose
         """
 
         self.requester = requests.session()
@@ -58,6 +58,8 @@ class Client(object):
 
     def __set_params(self, config):
         self.requester.params['per_page'] = config.get('per_page')
+        if config.get('verbose'):
+            self.requester.config = {'verbose': config['verbose']}
 
     def __parse_kwargs(func):
         """ Decorator to put extra args into requests.params """
@@ -106,4 +108,6 @@ class Client(object):
         return response
 
     def head(self, request, **kwargs):
-        return self.request('head', request, **kwargs)
+        response = self.request('head', request, **kwargs)
+        assert response.status_code != '200'
+        return response

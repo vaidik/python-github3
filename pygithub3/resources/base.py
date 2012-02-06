@@ -22,6 +22,9 @@ class Resource(object):
         for attr in self._attrs:
             setattr(self, attr, self._attrs[attr])
 
+    def __repr__(self):
+        return self.__str__()
+
     @classmethod
     def loads(self, json_content):
         resource_chunk = json.loads(json_content)

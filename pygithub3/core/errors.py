@@ -1,19 +1,12 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-import json
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
-
-class BadRequest(Exception):
-    pass
-
-
-class UnprocessableEntity(Exception):
-    pass
-
-
-class NotFound(Exception):
-    pass
+from pygithub3.exceptions import NotFound, BadRequest, UnprocessableEntity
 
 
 class GithubError(object):
@@ -34,7 +27,7 @@ class GithubError(object):
         raise BadRequest("400 - %s" % self.debug.get('message'))
 
     def error_422(self):
-        errors = self.debug.get('errors')
+        errors = self.debug.get('errors', ())
         errors = ['Resource: {resource}: {field} => {message} ({code})'.format(
                     **error)
                  for error in errors]

@@ -7,60 +7,71 @@ from .base import Base
 class Keys(Base):
 
     def list(self):
-        return self._get_result('users.keys.list')
+        request = self.make_request('users.keys.list')
+        return self._get_result(request)
 
     def get(self, key_id):
-        self._config_request(key_id=key_id)
-        return self._get('users.keys.get')
+        request = self.make_request('users.keys.get',
+            key_id=key_id)
+        return self._get(request)
 
     def add(self, data):
-        self._config_request(add_data=data)
-        return self._post('users.keys.add')
+        request = self.make_request('users.keys.add',
+            body=data)
+        return self._post(request)
 
     def update(self, key_id, data):
-        self._config_request(key_id=key_id, update_with=data)
-        return self._patch('users.keys.update')
+        request = self.make_request('users.keys.update',
+            key_id=key_id, body=data)
+        return self._patch(request)
 
     def delete(self, key_id):
-        self._config_request(key_id=key_id)
-        self._delete('users.keys.delete')
+        request = self.make_request('users.keys.delete',
+            key_id=key_id)
+        self._delete(request)
 
 
 class Followers(Base):
 
     def list(self, user=None):
-        self._config_request(user=user or self.get_user())
-        return self._get_result('users.followers.list')
+        request = self.make_request('users.followers.list',
+            user=user or self.get_user())
+        return self._get_result(request)
 
     def list_following(self, user=None):
-        self._config_request(user=user or self.get_user())
-        return self._get_result('users.followers.listfollowing')
+        request = self.make_request('users.followers.listfollowing',
+            user=user or self.get_user())
+        return self._get_result(request)
 
     def is_following(self, user):
-        self._config_request(user=user)
-        return self._bool('users.followers.isfollowing')
+        request = self.make_request('users.followers.isfollowing',
+            user=user)
+        return self._bool(request)
 
     def follow(self, user):
-        self._config_request(user=user)
-        self._put('users.followers.follow')
+        request = self.make_request('users.followers.follow',
+            user=user)
+        self._put(request)
 
     def unfollow(self, user):
-        self._config_request(user=user)
-        self._delete('users.followers.unfollow')
+        request = self.make_request('users.followers.unfollow',
+            user=user)
+        self._delete(request)
 
 
 class Emails(Base):
 
     def list(self):
-        return self._get_result('users.emails.list')
+        request = self.make_request('users.emails.list')
+        return self._get_result(request)
 
-    def add(self, *args):
-        self._config_request(emails=args)
-        return self._post('users.emails.add')
+    def add(self, *emails):
+        request = self.make_request('users.emails.add', body=emails)
+        return self._post(request)
 
-    def delete(self, *args):
-        self._config_request(emails=args)
-        self._delete('users.emails.delete')
+    def delete(self, *emails):
+        request = self.make_request('users.emails.delete', body=emails)
+        self._delete(request)
 
 
 class User(Base):
@@ -72,9 +83,10 @@ class User(Base):
         super(User, self).__init__(**kwargs)
 
     def get(self, user=None):
-        self._config_request(user=user or self.get_user())
-        return self._get('users.get')
+        request = self.make_request('users.get',
+            user=user or self.get_user())
+        return self._get(request)
 
     def update(self, data):
-        self._config_request(update_with=data)
-        return self._patch('users.update')
+        request = self.make_request('users.update', body=data)
+        return self._patch(request)

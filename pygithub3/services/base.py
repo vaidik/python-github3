@@ -10,42 +10,40 @@ from pygithub3.core.errors import NotFound
 class Base(object):
 
     def __init__(self, **config):
-        self.client = Client(**config)
-        self.get_request = Factory()
+        self._client = Client(**config)
+        self.make_request = Factory()
 
     def get_user(self):
-        return self.client.user
+        return self._client.user
 
     def set_user(self, user):
-        self.client.user = user
+        self._client.user = user
 
     def get_repo(self):
-        return self.client.repo
+        return self._client.repo
 
     def set_repo(self, repo):
-        self.client.repo = repo
+        self._client.repo = repo
 
-    def _config_request(self, **kwargs):
-        self.get_request.config_with(**kwargs)
+    def set_credentials(self, login, password):
+        self._client.set_credentials(login, password)
 
-    def _bool(self, request_uri, **kwargs):
-        request = self.get_request(request_uri)
+    def set_token(self, token):
+        self._client.set_token(token)
+
+    def _bool(self, request, **kwargs):
         try:
-            self.client.head(request, **kwargs)
+            self._client.head(request, **kwargs)
             return True
         except NotFound:
             return False
 
-    def _patch(self, request_uri, **kwargs):
-        request = self.get_request(request_uri)
-        resource = request.get_resource()
-        input_data = request.get_data()
-        response = self.client.patch(request, data=input_data, **kwargs)
-        return resource.loads(response.content)
+    def _patch(self, request, **kwargs):
+        input_data = request.get_body()
+        response = self._client.patch(request, data=input_data, **kwargs)
+        return request.resource.loads(response.content)
 
-    def _put(self, request_uri, **kwargs):
-        request = self.get_request(request_uri)
-        resource = request.get_resource()
+    def _put(self, request, **kwargs):
         """ Bug in Github API? requests library?
 
         I must send data as empty string when the specifications' of some PUT
@@ -60,31 +58,25 @@ class Base(object):
         For that reason I must do a conditional because I don't want to return
         an empty string on follow-user request because it could be confused
 
-        Related: ht
+        Related: https://github.com/github/developer.github.com/pull/52
         """
-        input_data = request.get_data() or ''
-        response = self.client.put(request, data=input_data, **kwargs)
+        input_data = request.get_body() or ''
+        response = self._client.put(request, data=input_data, **kwargs)
         if response.status_code != '204':  # != NO_CONTENT
-            return resource.loads(response.content)
+            return request.resource.loads(response.content)
 
-    def _delete(self, request_uri, **kwargs):
-        request = self.get_request(request_uri)
-        input_data = request.get_data()
-        self.client.delete(request, data=input_data, **kwargs)
+    def _delete(self, request, **kwargs):
+        input_data = request.get_body()
+        self._client.delete(request, data=input_data, **kwargs)
 
-    def _post(self, request_uri, **kwargs):
-        request = self.get_request(request_uri)
-        resource = request.get_resource()
-        input_data = request.get_data()
-        response = self.client.post(request, data=input_data, **kwargs)
-        return resource.loads(response.content)
+    def _post(self, request, **kwargs):
+        input_data = request.get_body()
+        response = self._client.post(request, data=input_data, **kwargs)
+        return request.resource.loads(response.content)
 
-    def _get(self, request_uri, **kwargs):
-        request = self.get_request(request_uri)
-        resource = request.get_resource()
-        response = self.client.get(request, **kwargs)
-        return resource.loads(response.content)
+    def _get(self, request, **kwargs):
+        response = self._client.get(request, **kwargs)
+        return request.resource.loads(response.content)
 
-    def _get_result(self, request_uri, **kwargs):
-        request = self.get_request(request_uri)
-        return Result(self.client, request, **kwargs)
+    def _get_result(self, request, **kwargs):
+        return Result(self._client, request, **kwargs)

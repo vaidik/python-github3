@@ -1,44 +1,28 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from . import Request, json
-from pygithub3.resources.base import Raw
+import re
+
+from . import Request
 
 
 class List(Request):
 
-    resource = Raw
-
-    def validate(self):
-        pass
-
-    def set_uri(self):
-        return 'user/emails'
+    uri = 'users/emails'
 
 
 class Add(Request):
 
-    resource = Raw
+    uri = 'user/emails'
 
-    def validate(self):
-        pass
+    def clean_body(self):
 
-    def get_data(self):
-        return json.dumps(self.emails)
+        def is_email(email):
+            return re.match(r'.*', email)  # TODO: email regex ;)
 
-    def set_uri(self):
-        return 'user/emails'
+        return filter(is_email, self.body)
 
 
 class Delete(Request):
 
-    resource = Raw
-
-    def validate(self):
-        pass
-
-    def get_data(self):
-        return json.dumps(self.emails)
-
-    def set_uri(self):
-        return 'user/emails'
+    uri = 'user/emails'

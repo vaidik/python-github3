@@ -48,7 +48,7 @@ class Method(object):
         all_args.update(page=page)
         response = self.method(self.request, **all_args)
         self.__set_last_page_from(response)
-        resource = self.request.get_resource()
+        resource = self.request.resource
         self.cache[str(page)] = resource.loads(response.content)
         return self.cache[str(page)]
 
