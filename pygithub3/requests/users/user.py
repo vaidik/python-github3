@@ -22,4 +22,11 @@ class Update(Request):
     resource = User
     uri = 'user'
     body_schema = (
-        'name', 'email', 'blog', 'company', 'location','hireable', 'bio')
+        'name', 'email', 'blog', 'company', 'location', 'hireable', 'bio')
+
+    def clean_body(self):
+        if not self.body:
+            raise ValidationError("'%s' request needs data. You can use "
+                                  "'%s' keys" % (self.__class__.__name__,
+                                  self.body_schema))
+        return self.body

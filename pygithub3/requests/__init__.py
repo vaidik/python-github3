@@ -58,10 +58,6 @@ class Request(object):
     def clean_uri(self):
         return None
 
-    @property
-    def resource(self):
-        return self.resource
-
     def __getattr__(self, name):
         return self.args.get(name)
 

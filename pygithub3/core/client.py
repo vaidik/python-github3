@@ -37,7 +37,7 @@ class Client(object):
         return self.config.get('user')
 
     @user.setter
-    def set_user(self, user):
+    def user(self, user):
         self.config['user'] = user
 
     @property
@@ -45,7 +45,7 @@ class Client(object):
         return self.config.get('repo')
 
     @repo.setter
-    def set_repo(self, repo):
+    def repo(self, repo):
         self.config['repo'] = repo
 
     def set_credentials(self, login, password):
