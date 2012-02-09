@@ -7,10 +7,11 @@ from mock import Mock
 from pygithub3.requests import Factory, Body, json, Request
 from pygithub3.exceptions import UriInvalid, DoesNotExists, ValidationError
 from pygithub3.tests.utils.requests import (
-    RequestWithArgs, RequestCleanedUri, RequestBodyWithSchema, mock_json_dumps,
+    RequestWithArgs, RequestCleanedUri, RequestBodyWithSchema, mock_json,
     DummyRequest, RequestCleanedBody)
 
-json.dumps = Mock(side_effect=mock_json_dumps)
+json.dumps = Mock(side_effect=mock_json)
+json.loads = Mock(side_effect=mock_json)
 
 
 class TestFactory(TestCase):

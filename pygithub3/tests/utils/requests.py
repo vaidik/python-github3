@@ -31,5 +31,5 @@ class RequestCleanedBody(Request):
     def clean_body(self):
         raise ValidationError('test')
 
-def mock_json_dumps(content):
+def mock_json(content):
     return content

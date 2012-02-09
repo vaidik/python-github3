@@ -86,4 +86,5 @@ class TestClientRaises(TestCase):
 
     def test_raise_UnprocessableEntity(self, request_method):
         request_method.return_value.status_code = 422
+        request_method.return_value.content = {}
         self.assertRaises(UnprocessableEntity, *self.callback)
