@@ -22,6 +22,9 @@ class Resource(object):
         for attr in self._attrs:
             setattr(self, attr, self._attrs[attr])
 
+    def __str__(self):
+        return "<%s>" % self.__class__.__name__
+
     def __repr__(self):
         return self.__str__()
 
@@ -59,19 +62,21 @@ class Resource(object):
             elif hasattr(raw_resources, '__iter__'):
                 return [resource.__load(raw_resource)
                         for raw_resource in raw_resources]
-        raw_resource.update(
+
+        new_resource = raw_resource.copy()
+        new_resource.update(
             {attr: parse_date(raw_resource[attr])
              for attr in self._dates if attr in raw_resource})
-        raw_resource.update(
+        new_resource.update(
             {attr: parse_map(resource, raw_resource[attr])
              for attr, resource in self._maps.items()
              if attr in raw_resource})
-        raw_resource.update(
+        new_resource.update(
             {attr: parse_collection_map(resource, raw_resource[attr])
              for attr, resource in self._collection_maps.items()
              if attr in raw_resource})
 
-        return self(raw_resource)
+        return self(new_resource)
 
 
 class Raw(Resource):
