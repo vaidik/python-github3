@@ -7,8 +7,8 @@ from mock import Mock
 
 from pygithub3.core.client import Client
 from pygithub3.core.result import Result, Page
-from .utils import (mock_paginate_github_in_GET,
-                    mock_no_paginate_github_in_GET, request)
+from pygithub3.tests.utils.core import (mock_paginate_github_in_GET, request,
+                                        mock_no_paginate_github_in_GET)
 
 
 class ResultInitMixin(object):

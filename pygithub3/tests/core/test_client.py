@@ -5,7 +5,7 @@ from unittest import TestCase
 
 import requests
 from pygithub3.core.client import Client
-from pygithub3.exceptions import *
+from pygithub3.exceptions import NotFound, BadRequest, UnprocessableEntity
 from mock import patch
 
 
