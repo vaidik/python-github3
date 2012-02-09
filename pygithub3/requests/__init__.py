@@ -42,10 +42,10 @@ class Request(object):
     resource = Raw
     body_schema = ()
 
-    def __init__(self, args):
+    def __init__(self, **kwargs):
         """ """
-        self.body = args.pop('body', None)
-        self.args = args
+        self.body = kwargs.pop('body', None)
+        self.args = kwargs
         self.clean()
 
     def clean(self):
@@ -114,6 +114,6 @@ class Factory(object):
     @__validate
     @__dispatch
     def __call__(self, request='', **kwargs):
-        request = request(kwargs)
+        request = request(**kwargs)
         assert isinstance(request, Request)
         return request
