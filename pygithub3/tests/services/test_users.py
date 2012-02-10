@@ -8,6 +8,7 @@ from mock import patch, Mock
 
 from pygithub3.services.users import User
 from pygithub3.resources.base import json
+from pygithub3.tests.utils.base import mock_response
 from pygithub3.tests.utils.services import _, mock_json
 
 json.dumps = Mock(side_effect=mock_json)
@@ -20,8 +21,6 @@ class TestUserService(TestCase):
         self.us = User()
 
     def test_GET_without_user(self, request_method):
-        response = Mock(name='response')
-        response.content = {'dummy': 'dummy'}
-        request_method.return_value = response
+        request_method.return_value = mock_response()
         self.us.get()
         request_method.assert_called_with('get', _('user'), params={})
