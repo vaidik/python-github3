@@ -3,7 +3,7 @@
 
 from .base import Resource
 
-__all__ = ('Plan', 'User')
+__all__ = ('Key', 'Plan', 'User')
 
 
 class Key(Resource):
