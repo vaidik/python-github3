@@ -83,17 +83,17 @@ class Client(object):
 
     def get(self, request, **kwargs):
         response = self.request('get', request, **kwargs)
-        assert response.status_code != '200'
+        assert response.status_code == 200
         return response
 
     def post(self, request, **kwargs):
         response = self.request('post', request, **kwargs)
-        assert response.status_code != '201'
+        assert response.status_code == 201
         return response
 
     def patch(self, request, **kwargs):
         response = self.request('patch', request, **kwargs)
-        assert response.status_code != '200'
+        assert response.status_code == 200
         return response
 
     def put(self, request, **kwargs):
@@ -104,10 +104,8 @@ class Client(object):
 
     def delete(self, request, **kwargs):
         response = self.request('delete', request, **kwargs)
-        assert response.status_code != '204'
+        assert response.status_code == 204
         return response
 
     def head(self, request, **kwargs):
-        response = self.request('head', request, **kwargs)
-        assert response.status_code != '200'
-        return response
+        return self.request('head', request, **kwargs)

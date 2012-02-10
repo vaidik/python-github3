@@ -4,9 +4,11 @@
 from unittest import TestCase
 
 import requests
+from mock import patch
+
 from pygithub3.core.client import Client
 from pygithub3.exceptions import NotFound, BadRequest, UnprocessableEntity
-from mock import patch
+from pygithub3.tests.utils.base import mock_response
 
 
 class TestClient(TestCase):
@@ -55,16 +57,25 @@ class TestClient(TestCase):
 
     @patch.object(Client, 'request')
     def test_DELEGATES_methods(self, request_method):
+        request_method.return_value = mock_response()
         self.c.get('')
         request_method.assert_called_with('get', '')
+
+        request_method.return_value = mock_response(201)
         self.c.post('')
         request_method.assert_called_with('post', '')
+
+        request_method.return_value = mock_response(200)
         self.c.patch('')
         request_method.assert_called_with('patch', '')
+
         self.c.put('')
         request_method.assert_called_with('put', '')
+
+        request_method.return_value = mock_response(204)
         self.c.delete('')
         request_method.assert_called_with('delete', '')
+
         self.c.head('')
         request_method.assert_called_with('head', '')
 

@@ -8,7 +8,7 @@ import requests
 
 from pygithub3.services.base import Base
 from pygithub3.core.result import Result
-from pygithub3.tests.utils.base import DummyRequest
+from pygithub3.tests.utils.base import DummyRequest, mock_response
 from .utils import _
 
 
@@ -32,16 +32,19 @@ class TestServiceCalls(TestCase):
                                           data=data, params=self.args)
 
     def test_DELETE(self, request_method):
+        request_method.return_value = mock_response(204)
         self.s._delete(self.r, **self.args)
         request_method.assert_called_with('delete', _('dummyrequest'),
                                           data=None, params=self.args)
 
     def test_POST(self, request_method):
+        request_method.return_value = mock_response(201)
         self.s._post(self.r, **self.args)
         request_method.assert_called_with('post', _('dummyrequest'),
                                           data=None, params=self.args)
 
     def test_GET(self, request_method):
+        request_method.return_value = mock_response()
         self.s._get(self.r, **self.args)
         request_method.assert_called_with('get', _('dummyrequest'),
                                           params=self.args)
