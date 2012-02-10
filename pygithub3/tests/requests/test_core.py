@@ -34,6 +34,7 @@ class TestFactory(TestCase):
         request = self.f('users.get')
         self.assertIsInstance(request, Request)
 
+
 class TestRequestUri(TestCase):
 
     def test_SIMPLE_with_correct_args(self):
@@ -80,12 +81,17 @@ class TestRequestBody(TestCase):
 
 class TestBodyParsers(TestCase):
 
-    def setUp(self):
-        self.b = Body(
+    def test_only_valid_keys(self):
+        body = Body(
             dict(arg1='arg1', arg2='arg2', arg3='arg3', arg4='arg4'),
             ('arg1', 'arg3', 'arg4'))
-
-    def test_RETURN_only_valid_keys(self):
-        get_body_returns = self.b.parse()
-        self.assertEqual(get_body_returns, dict(arg1='arg1', arg3='arg3',
+        self.assertEqual(body.parse(), dict(arg1='arg1', arg3='arg3',
             arg4='arg4'))
+
+    def test_none(self):
+        body = Body({}, ('arg1', 'arg2'))
+        self.assertEqual(body.parse(), {})
+
+    def test_invalid_content(self):
+        body = Body('invalid', ('arg1',))
+        self.assertRaises(ValidationError, body.parse)

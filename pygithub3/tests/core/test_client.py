@@ -61,18 +61,18 @@ class TestClient(TestCase):
         self.c.get('')
         request_method.assert_called_with('get', '')
 
-        request_method.return_value = mock_response(201)
+        request_method.return_value = mock_response('post')
         self.c.post('')
         request_method.assert_called_with('post', '')
 
-        request_method.return_value = mock_response(200)
+        request_method.return_value = mock_response('patch')
         self.c.patch('')
         request_method.assert_called_with('patch', '')
 
         self.c.put('')
         request_method.assert_called_with('put', '')
 
-        request_method.return_value = mock_response(204)
+        request_method.return_value = mock_response('delete')
         self.c.delete('')
         request_method.assert_called_with('delete', '')
 

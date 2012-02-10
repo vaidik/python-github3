@@ -11,11 +11,19 @@ def mock_json(content):
     return content
 
 
-def mock_response(status_code=200, content={}):
+def mock_response(status_code='get', content={}):
+    CODES = dict(get=200, patch=200, post=201, delete=204)
     response = Mock(name='response')
-    response.status_code = status_code
+    response.status_code = CODES[str(status_code).lower()] or status_code
     response.content = content
     return response
+
+
+def mock_response_result(status_code='get'):
+    response = mock_response(status_code, content=[{}, {}])
+    response.headers = {'link': ''}
+    return response
+
 
 class DummyResource(Resource):
     pass

@@ -6,13 +6,16 @@ from unittest import TestCase
 import requests
 from mock import patch, Mock
 
-from pygithub3.services.users import User
+from pygithub3.core.client import Client
+from pygithub3.services.users import User, Emails, Followers, Keys
+from pygithub3.exceptions import ValidationError
 from pygithub3.resources.base import json
-from pygithub3.tests.utils.base import mock_response
+from pygithub3.tests.utils.base import mock_response, mock_response_result
 from pygithub3.tests.utils.services import _, mock_json
 
 json.dumps = Mock(side_effect=mock_json)
 json.loads = Mock(side_effect=mock_json)
+
 
 @patch.object(requests.sessions.Session, 'request')
 class TestUserService(TestCase):
@@ -23,4 +26,145 @@ class TestUserService(TestCase):
     def test_GET_without_user(self, request_method):
         request_method.return_value = mock_response()
         self.us.get()
-        request_method.assert_called_with('get', _('user'), params={})
+        self.assertEqual(request_method.call_args[0], ('get', _('user')))
+
+    def test_GET_with_user_in_arg(self, request_method):
+        request_method.return_value = mock_response()
+        self.us.get('octocat')
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('users/octocat')))
+
+    def test_GET_with_user_in_service(self, request_method):
+        request_method.return_value = mock_response()
+        self.us.set_user('octocat_service')
+        self.us.get()
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('users/octocat_service')))
+
+    def test_UPDATE_with_valid_data(self, request_method):
+        request_method.return_value = mock_response('patch')
+        self.us.update({'name': 'dummy'})
+        self.assertEqual(request_method.call_args[0], ('patch', _('user')))
+
+    def test_UPDATE_without_data(self, request_method):
+        self.assertRaises(ValidationError, self.us.update, {})
+
+
+@patch.object(requests.sessions.Session, 'request')
+class TestEmailsService(TestCase):
+
+    def setUp(self):
+        self.es = Emails()
+
+    def test_LIST(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.es.list().all()
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('user/emails')))
+
+    def test_ADD_without_emails(self, request_method):
+        self.assertRaises(ValidationError, self.es.add)
+        self.assertFalse(request_method.called)
+
+    def test_ADD_with_emails(self, request_method):
+        request_method.return_value = mock_response('post')
+        self.es.add('test@example.com', 'test2@example.com')
+        self.assertEqual(request_method.call_args[0],
+                         ('post', _('user/emails')))
+
+    @patch.object(Client, 'request')
+    def test_ADD_filter_emails(self, client_request, dummy):
+        client_request.return_value = mock_response('post')
+        self.es.add('invalidemail.com', 'inva@lid@xam.com', 'test@xample.com')
+        self.assertEqual(client_request.call_args[1],
+                         dict(data=('test@xample.com', )))
+
+    def test_DELETE(self, request_method):
+        request_method.return_value = mock_response('delete')
+        self.es.delete('email_must_be_founded')  # or 404 raises
+        self.assertEqual(request_method.call_args[0],
+                         ('delete', _('user/emails')))
+
+
+@patch.object(requests.sessions.Session, 'request')
+class TestFollowersService(TestCase):
+
+    def setUp(self):
+        self.fs = Followers()
+
+    def test_LIST_without_user(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.fs.list().all()
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('user/followers')))
+
+    def test_LIST_with_user_in_arg(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.fs.list('octocat').all()
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('users/octocat/followers')))
+
+    def test_LIST_with_user_in_service(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.fs.set_user('octocat_service')
+        self.fs.list().all()
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('users/octocat_service/followers')))
+
+    def test_LIST_FOLLOWING_without_user(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.fs.list_following().all()
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('user/following')))
+
+    def test_LIST_FOLLOWING_with_user_in_arg(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.fs.list_following('octocat').all()
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('users/octocat/following')))
+
+    def test_LIST_FOLLOWING_with_user_in_service(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.fs.set_user('octocat_service')
+        self.fs.list_following().all()
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('users/octocat_service/following')))
+
+    def test_IS_FOLLOWING(self, request_method):
+        self.fs.is_following('octocat')
+        self.assertEqual(request_method.call_args[0],
+                         ('head', _('user/following/octocat')))
+
+    def test_FOLLOW(self, request_method):
+        #request_method.return_value = mock_response('put')
+        self.fs.follow('octocat')
+        self.assertEqual(request_method.call_args[0],
+                         ('put', _('user/following/octocat')))
+
+    def test_UNFOLLOW(self, request_method):
+        request_method.return_value = mock_response('delete')
+        self.fs.unfollow('octocat')
+        self.assertEqual(request_method.call_args[0],
+                         ('delete', _('user/following/octocat')))
+
+
+@patch.object(requests.sessions.Session, 'request')
+class TestKeysService(TestCase):
+
+    def setUp(self):
+        self.ks = Keys()
+
+    def test_LIST(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.ks.list().all()
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('user/key')))
+
+    def test_GET(self, request_method):
+        request_method.return_value = mock_response()
+        self.ks.get(1)
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('user/keys/1')))
+
+    def test_ADD(self, request_method):
+        request_method.return_value = mock_response('post')
