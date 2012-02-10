@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from .base import Request, DummyResource, DummyRequest
+from .base import Request, DummyResource, DummyRequest, mock_json
 from pygithub3.exceptions import ValidationError
 
 
@@ -30,6 +30,3 @@ class RequestCleanedBody(Request):
 
     def clean_body(self):
         raise ValidationError('test')
-
-def mock_json(content):
-    return content
