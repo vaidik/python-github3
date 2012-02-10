@@ -32,13 +32,13 @@ class TestServiceCalls(TestCase):
                                           data=data, params=self.args)
 
     def test_DELETE(self, request_method):
-        request_method.return_value = mock_response(204)
+        request_method.return_value = mock_response('delete')
         self.s._delete(self.r, **self.args)
         request_method.assert_called_with('delete', _('dummyrequest'),
                                           data=None, params=self.args)
 
     def test_POST(self, request_method):
-        request_method.return_value = mock_response(201)
+        request_method.return_value = mock_response('post')
         self.s._post(self.r, **self.args)
         request_method.assert_called_with('post', _('dummyrequest'),
                                           data=None, params=self.args)
