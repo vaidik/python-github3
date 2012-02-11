@@ -59,6 +59,7 @@ Contribute
 1. Fork the `repository <https://github.com/copitux/python-github3>`_
 2. Write a test to cover new feature or to reproduce bug
 3. Code with `pep8 <http://www.python.org/dev/peps/pep-0008/>`_ rules
-3. Push to ``develop`` branch
+4. Add you to ``AUTHORS``
+5. Push to ``develop`` branch
 
 **Note**: I use `nose <http://readthedocs.org/docs/nose/en/latest/>`_ test environment. ``pip install nose``
