@@ -23,12 +23,12 @@ class Body(object):
         self.required = required
 
     def dumps(self):
-        if not self.content:
-            return None
+        if not self.schema:
+            return self.content or None
         return json.dumps(self.parse())
 
     def parse(self):
-        if self.schema and not hasattr(self.content, 'items'):
+        if not hasattr(self.content, 'items'):
             raise ValidationError("'%s' needs a content dictionary"
                                    % self.__class__.__name__)
         parsed = {key: self.content[key] for key in self.schema
@@ -40,7 +40,7 @@ class Body(object):
             if not parsed[attr_required]:
                 raise ValidationError("'%s' attribute can't be empty" %
                                       attr_required)
-        return parsed or self.content
+        return parsed
 
 
 class Request(object):

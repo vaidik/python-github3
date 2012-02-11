@@ -79,11 +79,14 @@ class TestEmailsService(TestCase):
         self.assertEqual(client_request.call_args[1],
                          dict(data=('test@xample.com', )))
 
-    def test_DELETE(self, request_method):
+    def test_DELETE_with_emails(self, request_method):
         request_method.return_value = mock_response('delete')
         self.es.delete('email_must_be_founded')  # or 404 raises
         self.assertEqual(request_method.call_args[0],
                          ('delete', _('user/emails')))
+
+    def test_DELETE_without_emails(self, request_method):
+        self.assertRaises(ValidationError, self.es.delete)
 
 
 @patch.object(requests.sessions.Session, 'request')
@@ -166,5 +169,25 @@ class TestKeysService(TestCase):
         self.assertEqual(request_method.call_args[0],
                          ('get', _('user/keys/1')))
 
-    def test_ADD(self, request_method):
+    def test_ADD_with_required(self, request_method):
         request_method.return_value = mock_response('post')
+        self.ks.add({'key': 'ssh-rsa ...', 'title': 'test'})
+        self.assertEqual(request_method.call_args[0], ('post', _('user/keys')))
+
+    def test_ADD_without_required(self, request_method):
+        self.assertRaises(ValidationError, self.ks.add, {})
+
+    def test_UPDATE_with_required(self, request_method):
+        request_method.return_value = mock_response('patch')
+        self.ks.update(1, {'key': 'ssh-rsa ...', 'title': 'test'})
+        self.assertEqual(request_method.call_args[0],
+                         ('patch', _('user/keys/1')))
+
+    def test_UPDATE_without_required(self, request_method):
+        self.assertRaises(ValidationError, self.ks.update, 1, {})
+
+    def test_DELETE(self, request_method):
+        request_method.return_value = mock_response('delete')
+        self.ks.delete(1)
+        self.assertEqual(request_method.call_args[0],
+                         ('delete', _('user/keys/1')))

@@ -70,11 +70,16 @@ class TestRequest(TestCase):
         self.assertIsNone(request.get_body())
 
 
-class TestRequestBody(TestCase):
+class TestRequestBodyWithSchema(TestCase):
 
     def setUp(self):
         valid_body = dict(schema=('arg1', 'arg2'), required=('arg1', ))
         self.b = Body({}, **valid_body)
+
+    def test_with_body_empty_and_schema_permissive(self):
+        self.b.schema = ('arg1', 'arg2', '...')
+        self.b.required = ()
+        self.assertEqual(self.b.dumps(), {})
 
     def test_with_required(self):
         self.b.content = dict(arg1='arg1')
@@ -88,9 +93,9 @@ class TestRequestBody(TestCase):
         self.b.content = 'invalid'
         self.assertRaises(ValidationError, self.b.dumps)
 
-    def test_without_body(self):
+    def test_with_body_as_None(self):
         self.b.content = None
-        self.assertIsNone(self.b.dumps())
+        self.assertRaises(ValidationError, self.b.dumps)
 
     def test_only_valid_keys(self):
         self.b.content = dict(arg1='arg1', arg2='arg2', fake='test')
