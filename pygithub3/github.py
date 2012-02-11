@@ -4,7 +4,7 @@
 from pygithub3.services.users import User
 
 
-class GitHub(object):
+class Github(object):
     """ Main entrance """
 
     def __init__(self, **config):

@@ -1,20 +1,64 @@
-Python github3 wrapper
-=======================
+Pygithub3
+==========
+
+Pygithub3 is a wrapper to the `Github API v3 <http://developer.github.com/v3/>`_,
+written in Python.
+
+It has been developed with extensibility in mind, because the ``API`` is in a
+beta state, trying to achieve a very loosly coupled software.
+
+It should be very easy to extend to support new ``requests`` and ``resources``,
+because each is managed by itself.
+
+
+Fast install
+-------------
+::
+
+    pip install pygithub3
+
+Fast example
+-------------
+::
+
+    from pygithub3.github import Github
+
+    gh = Github()
+    copitux = gh.users.get('copitux')
+    copitux_followers = gh.users.followers.list('copitux')
+    copitux_followers.all()  # lazy iterator that must be consumed
+
+    gh.users.set_credentials(login='github_user', password='github_password')
+    # or: gh.users.set_token('token_code')
+    github_user = gh.users.get()
+    gh.users.followers.set_credentials(login='another_user', password='another_password')
+    another_user_followers = gh.users.followers.list().all()
+    """ Continue...
+    gh.users.emails.set_credentials( ...
+    github_user_emails = gh.users.emails.list()
+
+    Each service (users, emails, followers ...) is isolated from the rest. Maybe in
+    future releases the behaviour of Github component changes to share configuration
+    """
 
 Achievements
 -------------
 
-- The hard part (Client, Service[s], Request[s], ResultIterator, Resource[s]). Now I have to join this pieces :P
+- The core
+- `User service <http://developer.github.com/v3/users/>`_
 
-TODO (in order as far as possible)
-------------------------------------
+TODO
+-----
 
-- Tests
-- Doc (Sphinx?)
-- Continue developing services (it must be now easy and fast)
-- ...
+- `Repo service <http://developer.github.com/v3/repos/>`_
+- Docs
 
-Install
-----------
+Contribute
+-----------
 
-$ pip install -e git+https://github.com/copitux/python-github3
+1. Fork the `repository <https://github.com/copitux/python-github3>`_
+2. Write a test to cover new feature or to reproduce bug
+3. Code with `pep8 <http://www.python.org/dev/peps/pep-0008/>`_ rules
+3. Push to ``develop`` branch
+
+**Note**: I use `nose <http://readthedocs.org/docs/nose/en/latest/>`_ test environment. ``pip install nose``
