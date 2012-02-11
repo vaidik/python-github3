@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from .base import Request, DummyResource, DummyRequest, mock_json
+from .base import Request, DummyResource, DummyRequest
 from pygithub3.exceptions import ValidationError
 
 
@@ -19,9 +19,14 @@ class RequestCleanedUri(Request):
             return 'URI'
 
 
-class RequestBodyWithSchema(Request):
+class RequestBodyInvalidSchema(Request):
+    """ It's invalid because body_schema[required] isn't a subset of
+    body_schema[schema] """
     uri = 'URI'
-    body_schema = ('arg1', 'arg2')
+    body_schema = {
+        'schema': ('arg1', 'arg2'),
+        'required': ('arg3', )
+    }
 
 
 class RequestCleanedBody(Request):

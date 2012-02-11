@@ -2,6 +2,12 @@
 # -*- encoding: utf-8 -*-
 
 
+class InvalidBodySchema(Exception):
+    """ Raised when the 'valids_body' attribute of Resource isn't in a
+    valid form (required.issubsetof(schema))"""
+    pass
+
+
 class DoesNotExists(Exception):
     """ Raised when `Request` factory can't find the subclass """
     pass

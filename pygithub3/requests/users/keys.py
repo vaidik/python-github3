@@ -21,13 +21,19 @@ class Add(Request):
 
     resource = Key
     uri = 'user/keys'
-    body_schema = ('title', 'key')
+    body_schema = {
+        'schema': ('title', 'key'),
+        'required': ('title', 'key')
+    }
 
 
 class Update(Request):
 
     resource = Key
-    body_schema = ('title', 'key')
+    body_schema = {
+        'schema': ('title', 'key'),
+        'required': ('title', 'key')
+    }
     uri = 'user/keys/{key_id}'
 
 

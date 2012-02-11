@@ -5,10 +5,12 @@ from unittest import TestCase
 from mock import Mock
 
 from pygithub3.requests import Factory, Body, json, Request
-from pygithub3.exceptions import UriInvalid, DoesNotExists, ValidationError
+from pygithub3.exceptions import (UriInvalid, DoesNotExists, ValidationError,
+                                  InvalidBodySchema)
+from pygithub3.tests.utils.base import mock_json
 from pygithub3.tests.utils.requests import (
-    RequestWithArgs, RequestCleanedUri, RequestBodyWithSchema, mock_json,
-    DummyRequest, RequestCleanedBody)
+    RequestWithArgs, RequestCleanedUri, RequestBodyInvalidSchema, DummyRequest,
+    RequestCleanedBody)
 
 json.dumps = Mock(side_effect=mock_json)
 json.loads = Mock(side_effect=mock_json)
@@ -35,7 +37,7 @@ class TestFactory(TestCase):
         self.assertIsInstance(request, Request)
 
 
-class TestRequestUri(TestCase):
+class TestRequest(TestCase):
 
     def test_SIMPLE_with_correct_args(self):
         request = RequestWithArgs(arg1='arg1', arg2='arg2')
@@ -51,47 +53,45 @@ class TestRequestUri(TestCase):
         request = RequestCleanedUri(notmatters='test')
         self.assertEqual(str(request), 'URI')
 
+    def test_with_cleaned_body(self):
+        self.assertRaises(ValidationError, RequestCleanedBody)
 
-class TestRequestBody(TestCase):
+    def test_with_invalid_schema(self):
+        self.assertRaises(InvalidBodySchema, RequestBodyInvalidSchema)
 
-    def test_with_schema_with_valid(self):
-        request = RequestBodyWithSchema(body=dict(
-            arg1='only', fake='t', fake1='t'))
-        self.assertEqual(request.get_body(), dict(arg1='only'))
-
-    def test_with_schema_with_invalid(self):
-        request = RequestBodyWithSchema(body='invalid_data')
-        self.assertRaises(ValidationError, request.get_body)
-
-    def test_with_schema_without_body(self):
-        request = RequestBodyWithSchema()
-        self.assertIsNone(request.get_body())
-
-    def test_without_schema(self):
+    def test_body_without_schema(self):
         request = DummyRequest(body=dict(arg1='test'))
         self.assertEqual(request.get_body(), dict(arg1='test'))
+        self.assertEqual(request.body.schema, set(()))
+        self.assertEqual(request.body.required, set(()))
 
-    def test_without_schema_without_body(self):
+    def test_without_body_and_without_schema(self):
         request = DummyRequest()
         self.assertIsNone(request.get_body())
 
-    def test_with_clean_body(self):
-        self.assertRaises(ValidationError, RequestCleanedBody)
 
+class TestRequestBody(TestCase):
 
-class TestBodyParsers(TestCase):
+    def setUp(self):
+        valid_body = dict(schema=('arg1', 'arg2'), required=('arg1', ))
+        self.b = Body({}, **valid_body)
+
+    def test_with_required(self):
+        self.b.content = dict(arg1='arg1')
+        self.assertEqual(self.b.dumps(), dict(arg1='arg1'))
+
+    def test_without_required(self):
+        self.b.content = dict(arg2='arg2')
+        self.assertRaises(ValidationError, self.b.dumps)
+
+    def test_with_invalid(self):
+        self.b.content = 'invalid'
+        self.assertRaises(ValidationError, self.b.dumps)
+
+    def test_without_body(self):
+        self.b.content = None
+        self.assertIsNone(self.b.dumps())
 
     def test_only_valid_keys(self):
-        body = Body(
-            dict(arg1='arg1', arg2='arg2', arg3='arg3', arg4='arg4'),
-            ('arg1', 'arg3', 'arg4'))
-        self.assertEqual(body.parse(), dict(arg1='arg1', arg3='arg3',
-            arg4='arg4'))
-
-    def test_none(self):
-        body = Body({}, ('arg1', 'arg2'))
-        self.assertEqual(body.parse(), {})
-
-    def test_invalid_content(self):
-        body = Body('invalid', ('arg1',))
-        self.assertRaises(ValidationError, body.parse)
+        self.b.content = dict(arg1='arg1', arg2='arg2', fake='test')
+        self.assertEqual(self.b.dumps(), dict(arg1='arg1', arg2='arg2'))
