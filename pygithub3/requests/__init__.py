@@ -8,7 +8,8 @@ try:
 except ImportError:
     import json
 
-from pygithub3.exceptions import DoesNotExists, UriInvalid, ValidationError
+from pygithub3.exceptions import (DoesNotExists, UriInvalid, ValidationError,
+                                  InvalidBodySchema)
 from pygithub3.resources.base import Raw
 
 ABS_IMPORT_PREFIX = 'pygithub3.requests'
@@ -16,9 +17,10 @@ ABS_IMPORT_PREFIX = 'pygithub3.requests'
 
 class Body(object):
 
-    def __init__(self, content, schema):
+    def __init__(self, content, schema, required):
         self.content = content
         self.schema = schema
+        self.required = required
 
     def dumps(self):
         if not self.content:
@@ -26,13 +28,19 @@ class Body(object):
         return json.dumps(self.parse())
 
     def parse(self):
-        if not self.schema:
-            return self.content
-        if not hasattr(self.content, 'items'):
+        if self.schema and not hasattr(self.content, 'items'):
             raise ValidationError("'%s' needs a content dictionary"
                                    % self.__class__.__name__)
-        return {key: self.content[key] for key in self.schema
+        parsed = {key: self.content[key] for key in self.schema
                 if key in self.content}
+        for attr_required in self.required:
+            if attr_required not in parsed:
+                raise ValidationError("'%s' attribute is required" %
+                                      attr_required)
+            if not parsed[attr_required]:
+                raise ValidationError("'%s' attribute can't be empty" %
+                                      attr_required)
+        return parsed or self.content
 
 
 class Request(object):
@@ -40,7 +48,7 @@ class Request(object):
 
     uri = ''
     resource = Raw
-    body_schema = ()
+    body_schema = {}
 
     def __init__(self, **kwargs):
         """ """
@@ -50,13 +58,23 @@ class Request(object):
 
     def clean(self):
         self.uri = self.clean_uri() or self.uri
-        self.body = Body(self.clean_body(), self.body_schema)
+        self.body = Body(self.clean_body(), **self.clean_valid_body())
 
     def clean_body(self):
         return self.body
 
     def clean_uri(self):
         return None
+
+    def clean_valid_body(self):
+        schema = set(self.body_schema.get('schema', ()))
+        required = set(self.body_schema.get('required', ()))
+        if not required.issubset(schema):
+            raise InvalidBodySchema(
+                "'%s:valid_body' attribute is invalid. "
+                "'%s required' isn't a subset of '%s schema'" % (
+                self.__class__.__name__, required, schema))
+        return dict(schema=schema, required=required)
 
     def __getattr__(self, name):
         return self.args.get(name)

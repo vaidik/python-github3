@@ -21,8 +21,11 @@ class Update(Request):
 
     resource = User
     uri = 'user'
-    body_schema = (
-        'name', 'email', 'blog', 'company', 'location', 'hireable', 'bio')
+    body_schema = {
+        'schema': ('name', 'email', 'blog', 'company', 'location', 'hireable',
+                   'bio'),
+        'required': (),
+    }
 
     def clean_body(self):
         if not self.body:
