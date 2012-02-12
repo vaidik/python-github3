@@ -4,7 +4,7 @@
 from unittest import TestCase
 from datetime import datetime
 
-from pygithub3.resources.base import Resource, Raw, json
+from pygithub3.resources.base import Raw
 from pygithub3.tests.utils.resources import Nested, Simple, HasSimple
 
 simple_resource = dict(type='simple')
@@ -16,7 +16,9 @@ github_return = dict(
     simple=simple_resource,
     list_collection=[has_simple] * 2,
     items_collections=dict(arg1=has_simple, arg2=has_simple)
-    )
+)
+github_return_nested = github_return.copy()
+github_return.update({'self_nested': github_return_nested})
 
 
 class TestResourceMapping(TestCase):
@@ -45,6 +47,11 @@ class TestResourceMapping(TestCase):
         self.assertEqual(arg1_has_simple.type, 'has_simple')
         self.assertEqual(arg1_has_simple.simple.type, 'simple')
 
+    def test_SELF_nested(self):
+        self.assertIsInstance(self.r.self_nested, Nested)
+        self.assertIsInstance(self.r.self_nested.simple, Simple)
+        self.assertIsInstance(self.r.list_collection[0], HasSimple)
+        self.assertIsInstance(self.r.items_collections['arg1'], HasSimple)
 
 class TestRawResource(TestCase):
     """ Litle obvious :P """

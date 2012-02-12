@@ -14,7 +14,7 @@ class HasSimple(Resource):
 
 class Nested(Resource):
     _dates = ('date', )
-    _maps = {'simple': Simple}
+    _maps = {'simple': Simple, 'self_nested': 'self'}
     _collection_maps = {
         'list_collection': HasSimple,
         'items_collections': HasSimple

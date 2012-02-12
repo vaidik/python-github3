@@ -48,6 +48,8 @@ class Resource(object):
             return date
 
         def parse_map(resource, raw_resource):
+            if resource == 'self':
+                return self.__load(raw_resource)
             if hasattr(raw_resource, 'items'):
                 return resource.__load(raw_resource)
 
