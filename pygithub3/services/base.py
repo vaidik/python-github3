@@ -62,7 +62,7 @@ class Base(object):
         """
         input_data = request.get_body() or ''
         response = self._client.put(request, data=input_data, **kwargs)
-        if response.status_code != '204':  # != NO_CONTENT
+        if response.status_code != 204:  # != NO_CONTENT
             return request.resource.loads(response.content)
 
     def _delete(self, request, **kwargs):
