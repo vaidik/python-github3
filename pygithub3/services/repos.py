@@ -4,9 +4,40 @@
 from .base import Base
 
 
+class Collaborator(Base):
+
+    def list(self, user=None, repo=None):
+        request = self.make_request('repos.collaborators.list',
+            user=user or self.get_user(),
+            repo=repo or self.get_repo())
+        return self._get_result(request)
+
+    def add(self, collaborator, user=None, repo=None):
+        request = self.make_request('repos.collaborators.add',
+            collaborator=collaborator,
+            user=user or self.get_user(),
+            repo=repo or self.get_repo())
+        return self._put(request)
+
+    def is_collaborator(self, collaborator, user=None, repo=None):
+        request = self.make_request('repos.collaborators.is_collaborator',
+            collaborator=collaborator,
+            user=user or self.get_user(),
+            repo=repo or self.get_repo())
+        return self._bool(request)
+
+    def delete(self, collaborator, user=None, repo=None):
+        request = self.make_request('repos.collaborators.delete',
+            collaborator=collaborator,
+            user=user or self.get_user(),
+            repo=repo or self.get_repo())
+        self._delete(request)
+
+
 class Repo(Base):
 
     def __init__(self, **config):
+        self.collaborators = Collaborator(**config)
         super(Repo, self).__init__(**config)
 
     def list(self, user=None, type='all'):

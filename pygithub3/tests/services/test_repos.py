@@ -6,7 +6,7 @@ from unittest import TestCase
 import requests
 from mock import patch, Mock
 
-from pygithub3.services.repos import Repo
+from pygithub3.services.repos import Repo, Collaborator
 from pygithub3.resources.base import json
 from pygithub3.tests.utils.base import mock_response, mock_response_result
 from pygithub3.tests.utils.services import _, mock_json
@@ -99,7 +99,7 @@ class TestRepoService(TestCase):
         self.assertEqual(request_method.call_args[0],
                          ('patch', _('repos/octocat/octocat_repo')))
 
-    """ From here I stop to do '*in_args' and '*filter' tests, I consider 
+    """ From here I stop to do '*in_args' and '*filter' tests, I consider
     that I tested it enough... """
 
     def test_LIST_contributors(self, request_method):
@@ -138,3 +138,35 @@ class TestRepoService(TestCase):
         self.rs.list_branches().all()
         self.assertEqual(request_method.call_args[0],
                          ('get', _('repos/octocat/octocat_repo/branches')))
+
+
+@patch.object(requests.sessions.Session, 'request')
+class TestCollaboratorsService(TestCase):
+
+    def setUp(self):
+        self.cs = Collaborator()
+        self.cs.set_user('octocat')
+        self.cs.set_repo('oc_repo')
+
+    def test_LIST(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.cs.list().all()
+        self.assertEqual(request_method.call_args[0],
+            ('get', _('repos/octocat/oc_repo/collaborators')))
+
+    def test_IS_colaborator(self, request_method):
+        request_method.return_value = mock_response()
+        self.cs.is_collaborator('user')
+        self.assertEqual(request_method.call_args[0],
+            ('head', _('repos/octocat/oc_repo/collaborators/user')))
+
+    def test_ADD(self, request_method):
+        self.cs.add('user')
+        self.assertEqual(request_method.call_args[0],
+            ('put', _('repos/octocat/oc_repo/collaborators/user')))
+
+    def test_DELETE(self, request_method):
+        request_method.return_value = mock_response('delete')
+        self.cs.delete('user')
+        self.assertEqual(request_method.call_args[0],
+            ('delete', _('repos/octocat/oc_repo/collaborators/user')))
