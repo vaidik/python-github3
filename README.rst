@@ -59,6 +59,7 @@ Contribute
 2. Write a test to cover new feature or to reproduce bug
 3. Code with `pep8 <http://www.python.org/dev/peps/pep-0008/>`_ rules
 4. Add you to ``AUTHORS``
-5. Push to ``develop`` branch
+5. Pull request it
 
-**Note**: I use `nose <http://readthedocs.org/docs/nose/en/latest/>`_ test environment. ``pip install nose``
+**Note**: I use `nose <http://readthedocs.org/docs/nose/en/latest/>`_ test environment,
+with `mock <http://www.voidspace.org.uk/python/mock/>`_ ``pip install nose mock``

@@ -11,7 +11,7 @@ class Service(object):
 
     def __init__(self, **config):
         self._client = Client(**config)
-        self.make_request = Factory()
+        self.request_builder = Factory()
 
     def get_user(self):
         return self._client.user
@@ -30,6 +30,13 @@ class Service(object):
 
     def set_token(self, token):
         self._client.set_token(token)
+
+    def make_request(self, request, **kwargs):
+        if 'user' in kwargs:
+            kwargs['user'] = kwargs['user'] or self.get_user()
+        if 'repo' in kwargs:
+            kwargs['repo'] = kwargs['repo'] or self.get_repo()
+        return self.request_builder(request, **kwargs)
 
     def _bool(self, request, **kwargs):
         try:

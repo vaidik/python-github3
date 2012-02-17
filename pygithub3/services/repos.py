@@ -8,29 +8,22 @@ class Collaborator(Service):
 
     def list(self, user=None, repo=None):
         request = self.make_request('repos.collaborators.list',
-            user=user or self.get_user(),
-            repo=repo or self.get_repo())
+            user=user, repo=repo)
         return self._get_result(request)
 
     def add(self, collaborator, user=None, repo=None):
         request = self.make_request('repos.collaborators.add',
-            collaborator=collaborator,
-            user=user or self.get_user(),
-            repo=repo or self.get_repo())
+            collaborator=collaborator, user=user, repo=repo)
         return self._put(request)
 
     def is_collaborator(self, collaborator, user=None, repo=None):
         request = self.make_request('repos.collaborators.is_collaborator',
-            collaborator=collaborator,
-            user=user or self.get_user(),
-            repo=repo or self.get_repo())
+            collaborator=collaborator, user=user, repo=repo)
         return self._bool(request)
 
     def delete(self, collaborator, user=None, repo=None):
         request = self.make_request('repos.collaborators.delete',
-            collaborator=collaborator,
-            user=user or self.get_user(),
-            repo=repo or self.get_repo())
+            collaborator=collaborator, user=user, repo=repo)
         self._delete(request)
 
 
@@ -41,8 +34,7 @@ class Repo(Service):
         super(Repo, self).__init__(**config)
 
     def list(self, user=None, type='all'):
-        request = self.make_request('repos.list',
-                user=user or self.get_user())
+        request = self.make_request('repos.list', user=user)
         return self._get_result(request, type=type)
 
     def list_by_org(self, org, type='all'):
@@ -54,22 +46,17 @@ class Repo(Service):
         return self._post(request)
 
     def get(self, user=None, repo=None):
-        request = self.make_request('repos.get',
-            user=user or self.get_user(),
-            repo=repo or self.get_repo())
+        request = self.make_request('repos.get', user=user, repo=repo)
         return self._get(request)
 
     def update(self, data, user=None, repo=None):
-        request = self.make_request('repos.update',
-            body=data,
-            user=user or self.get_user(),
-            repo=repo or self.get_repo())
+        request = self.make_request('repos.update', body=data,
+            user=user, repo=repo)
         return self._patch(request)
 
     def __list_contributors(self, user=None, repo=None, **kwargs):
         request = self.make_request('repos.list_contributors',
-            user=user or self.get_user(),
-            repo=repo or self.get_repo())
+            user=user, repo=repo)
         return self._get_result(request, **kwargs)
 
     def list_contributors(self, user=None, repo=None):
@@ -80,24 +67,18 @@ class Repo(Service):
 
     def list_languages(self, user=None, repo=None):
         request = self.make_request('repos.list_languages',
-            user=user or self.get_user(),
-            repo=repo or self.get_repo())
+            user=user, repo=repo)
         return self._get(request)
 
     def list_teams(self, user=None, repo=None):
-        request = self.make_request('repos.list_teams',
-            user=user or self.get_user(),
-            repo=repo or self.get_repo())
+        request = self.make_request('repos.list_teams', user=user, repo=repo)
         return self._get_result(request)
 
     def list_tags(self, user=None, repo=None):
-        request = self.make_request('repos.list_tags',
-            user=user or self.get_user(),
-            repo=repo or self.get_repo())
+        request = self.make_request('repos.list_tags', user=user, repo=repo)
         return self._get_result(request)
 
     def list_branches(self, user=None, repo=None):
         request = self.make_request('repos.list_branches',
-            user=user or self.get_user(),
-            repo=repo or self.get_repo())
+            user=user, repo=repo)
         return self._get_result(request)

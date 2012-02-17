@@ -34,28 +34,23 @@ class Keys(Service):
 class Followers(Service):
 
     def list(self, user=None):
-        request = self.make_request('users.followers.list',
-            user=user or self.get_user())
+        request = self.make_request('users.followers.list', user=user)
         return self._get_result(request)
 
     def list_following(self, user=None):
-        request = self.make_request('users.followers.listfollowing',
-            user=user or self.get_user())
+        request = self.make_request('users.followers.listfollowing', user=user)
         return self._get_result(request)
 
     def is_following(self, user):
-        request = self.make_request('users.followers.isfollowing',
-            user=user)
+        request = self.make_request('users.followers.isfollowing', user=user)
         return self._bool(request)
 
     def follow(self, user):
-        request = self.make_request('users.followers.follow',
-            user=user)
+        request = self.make_request('users.followers.follow', user=user)
         self._put(request)
 
     def unfollow(self, user):
-        request = self.make_request('users.followers.unfollow',
-            user=user)
+        request = self.make_request('users.followers.unfollow', user=user)
         self._delete(request)
 
 
@@ -76,15 +71,14 @@ class Emails(Service):
 
 class User(Service):
 
-    def __init__(self, **kwargs):
-        self.keys = Keys(**kwargs)
-        self.emails = Emails(**kwargs)
-        self.followers = Followers(**kwargs)
-        super(User, self).__init__(**kwargs)
+    def __init__(self, **config):
+        self.keys = Keys(**config)
+        self.emails = Emails(**config)
+        self.followers = Followers(**config)
+        super(User, self).__init__(**config)
 
     def get(self, user=None):
-        request = self.make_request('users.get',
-            user=user or self.get_user())
+        request = self.make_request('users.get', user=user)
         return self._get(request)
 
     def update(self, data):
