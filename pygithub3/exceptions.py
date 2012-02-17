@@ -37,6 +37,6 @@ class UnprocessableEntity(Exception):
 class NotFound(Exception):
     """ Raised when server response is 404
 
-    Catched with a pygithub3-exception to `services.base.Base._bool` method
+    Catched with a pygithub3-exception to `services.base.Service._bool` method
     """
     pass

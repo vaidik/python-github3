@@ -6,7 +6,7 @@ from mock import patch
 
 import requests
 
-from pygithub3.services.base import Base
+from pygithub3.services.base import Service
 from pygithub3.core.result import Result
 from pygithub3.tests.utils.base import DummyRequest, mock_response
 from .utils import _
@@ -16,7 +16,7 @@ from .utils import _
 class TestServiceCalls(TestCase):
 
     def setUp(self):
-        self.s = Base()
+        self.s = Service()
         self.r = DummyRequest()
         self.args = dict(arg1='arg1', arg2='arg2')
 

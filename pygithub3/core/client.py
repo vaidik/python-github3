@@ -99,7 +99,7 @@ class Client(object):
     def put(self, request, **kwargs):
         response = self.request('put', request, **kwargs)
         # assert response.status_code != '204'
-        # I don't do an assert. See `services.base.Base._put` comment
+        # I don't do an assert. See `services.base.Service._put` comment
         return response
 
     def delete(self, request, **kwargs):

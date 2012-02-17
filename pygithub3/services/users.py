@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from .base import Base
+from .base import Service
 
 
-class Keys(Base):
+class Keys(Service):
 
     def list(self):
         request = self.make_request('users.keys.list')
@@ -31,7 +31,7 @@ class Keys(Base):
         self._delete(request)
 
 
-class Followers(Base):
+class Followers(Service):
 
     def list(self, user=None):
         request = self.make_request('users.followers.list',
@@ -59,7 +59,7 @@ class Followers(Base):
         self._delete(request)
 
 
-class Emails(Base):
+class Emails(Service):
 
     def list(self):
         request = self.make_request('users.emails.list')
@@ -74,7 +74,7 @@ class Emails(Base):
         self._delete(request)
 
 
-class User(Base):
+class User(Service):
 
     def __init__(self, **kwargs):
         self.keys = Keys(**kwargs)

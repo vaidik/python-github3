@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from .base import Base
+from .base import Service
 
 
-class Collaborator(Base):
+class Collaborator(Service):
 
     def list(self, user=None, repo=None):
         request = self.make_request('repos.collaborators.list',
@@ -34,7 +34,7 @@ class Collaborator(Base):
         self._delete(request)
 
 
-class Repo(Base):
+class Repo(Service):
 
     def __init__(self, **config):
         self.collaborators = Collaborator(**config)

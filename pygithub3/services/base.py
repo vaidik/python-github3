@@ -7,7 +7,7 @@ from pygithub3.requests import Factory
 from pygithub3.core.errors import NotFound
 
 
-class Base(object):
+class Service(object):
 
     def __init__(self, **config):
         self._client = Client(**config)
