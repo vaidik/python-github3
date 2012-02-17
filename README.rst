@@ -8,8 +8,7 @@ It has been developed with extensibility in mind, because the ``API`` is in a
 beta state, trying to achieve a very loosly coupled software.
 
 It should be very easy to extend to support new ``requests`` and ``resources``,
-because each is managed by itself.
-
+because each of them are managed by itself.
 
 Fast install
 -------------
