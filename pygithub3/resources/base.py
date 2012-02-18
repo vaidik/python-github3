@@ -39,6 +39,13 @@ class Resource(object):
 
     @classmethod
     def __load(self, raw_resource):
+        def self_resource(func):
+            def wrapper(resource, raw_resource):
+                if resource == 'self':
+                    resource = self
+                return func(resource, raw_resource)
+            return wrapper
+
         def parse_date(string_date):
             from datetime import datetime
             try:
@@ -47,12 +54,12 @@ class Resource(object):
                 date = None
             return date
 
+        @self_resource
         def parse_map(resource, raw_resource):
-            if resource == 'self':
-                return self.__load(raw_resource)
             if hasattr(raw_resource, 'items'):
                 return resource.__load(raw_resource)
 
+        @self_resource
         def parse_collection_map(resource, raw_resources):
             # Dict of resources (Ex: Gist file)
             if hasattr(raw_resources, 'items'):

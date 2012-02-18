@@ -19,6 +19,8 @@ github_return = dict(
 )
 github_return_nested = github_return.copy()
 github_return.update({'self_nested': github_return_nested})
+github_return.update({'self_nested_list': [github_return_nested] * 2})
+github_return.update({'self_nested_dict': dict(arg1=github_return_nested)})
 
 
 class TestResourceMapping(TestCase):
@@ -52,6 +54,11 @@ class TestResourceMapping(TestCase):
         self.assertIsInstance(self.r.self_nested.simple, Simple)
         self.assertIsInstance(self.r.list_collection[0], HasSimple)
         self.assertIsInstance(self.r.items_collections['arg1'], HasSimple)
+
+    def test_SELF_nested_in_collections(self):
+        self.assertIsInstance(self.r.self_nested_list[0], Nested)
+        self.assertIsInstance(self.r.self_nested_dict['arg1'], Nested)
+
 
 class TestRawResource(TestCase):
     """ Litle obvious :P """

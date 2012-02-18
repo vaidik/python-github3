@@ -17,5 +17,7 @@ class Nested(Resource):
     _maps = {'simple': Simple, 'self_nested': 'self'}
     _collection_maps = {
         'list_collection': HasSimple,
-        'items_collections': HasSimple
+        'items_collections': HasSimple,
+        'self_nested_list': 'self',
+        'self_nested_dict': 'self',
     }
