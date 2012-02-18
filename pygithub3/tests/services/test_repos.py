@@ -6,7 +6,7 @@ from unittest import TestCase
 import requests
 from mock import patch, Mock
 
-from pygithub3.services.repos import Repo, Collaborator
+from pygithub3.services.repos import Repo, Collaborator, Commits
 from pygithub3.resources.base import json
 from pygithub3.tests.utils.base import mock_response, mock_response_result
 from pygithub3.tests.utils.services import _, mock_json
@@ -170,3 +170,68 @@ class TestCollaboratorsService(TestCase):
         self.cs.delete('user')
         self.assertEqual(request_method.call_args[0],
             ('delete', _('repos/octocat/oc_repo/collaborators/user')))
+
+
+@patch.object(requests.sessions.Session, 'request')
+class TestCommitsService(TestCase):
+
+    def setUp(self):
+        self.cs = Commits(user='oct', repo='re_oct')
+
+    """
+    def test_LIST(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.cs.list().all()
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('repos/oct/re_oct/commits')))
+    """
+
+    def test_GET(self, request_method):
+        request_method.return_value = mock_response()
+        self.cs.get('e3bc')
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('repos/oct/re_oct/commits/e3bc')))
+
+    def test_LIST_comments(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.cs.list_comments().all()
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('repos/oct/re_oct/comments')))
+
+    def test_LIST_comments_for_commit(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.cs.list_comments(sha='e3bc').all()
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('repos/oct/re_oct/commits/e3bc/comments')))
+
+    def test_CREATE_comment(self, request_method):
+        request_method.return_value = mock_response('post')
+        data = dict(body='some', commit_id='e2bc',
+                    line=1, path='some.txt', position=1)
+        self.cs.create_comment(data, 'e3bc')
+        self.assertEqual(request_method.call_args[0],
+                         ('post', _('repos/oct/re_oct/commits/e3bc/comments')))
+
+    def test_GET_comment(self, request_method):
+        request_method.return_value = mock_response()
+        self.cs.get_comment(1)
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('repos/oct/re_oct/comments/1')))
+
+    def test_UPDATE_comment(self, request_method):
+        request_method.return_value = mock_response('patch')
+        self.cs.update_comment({'body': 'changed'}, 1)
+        self.assertEqual(request_method.call_args[0],
+                         ('patch', _('repos/oct/re_oct/comments/1')))
+
+    def test_COMPARE(self, request_method):
+        request_method.return_value = mock_response()
+        self.cs.compare('develop', 'master')
+        self.assertEqual(request_method.call_args[0],
+                ('get', _('repos/oct/re_oct/compare/develop...master')))
+
+    def test_DELETE_comment(self, request_method):
+        request_method.return_value = mock_response('delete')
+        self.cs.delete_comment(1)
+        self.assertEqual(request_method.call_args[0],
+                         ('delete', _('repos/oct/re_oct/comments/1')))

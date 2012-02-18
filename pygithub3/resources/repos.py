@@ -5,8 +5,6 @@ from .base import Resource
 from .users import User
 from .orgs import Org
 
-__all__ = ('Repo', )
-
 
 class Repo(Resource):
 
@@ -24,17 +22,73 @@ class Team(Resource):
         return '<Team (%s)>' % getattr(self, 'name', '')
 
 
-class Commit(Resource):
+class Author(Resource):
+
+    _dates = ('date')
 
     def __str__(self):
-        return '<Commit (%s:%s)>' % (
-            getattr(self, 'sha', ''),
-            getattr(self, 'message', ''))
+        return '<Author (%s)>' % getattr(self, 'name', '')
+
+
+class Committer(Resource):
+
+    _dates = ('date')
+
+    def __str__(self):
+        return '<Committer (%s)>' % getattr(self, 'name', '')
+
+
+class GitCommit(Resource):
+
+    _maps = {'author': Author, 'committer': Committer, 'tree': 'self'}
+    _collection_maps = {'parents': 'self'}
+
+    def __str__(self):
+        return '<GitCommit (%s:%s)>' % (getattr(self, 'sha', ''),
+                                        getattr(self, 'message', ''))
+
+
+class Stats(Resource):
+    pass
+
+
+class File(Resource):
+
+    def __str__(self):
+        return '<File (%s)>' % getattr(self, 'filename', '')
+
+
+class Commit(Resource):
+
+    _maps = {'commit': GitCommit, 'author': User, 'committer': User,
+             'stats': Stats}
+    _collection_maps = {'parents': GitCommit, 'files': File}
+
+    def __str__(self):
+        return '<Commit (%s)>' % getattr(self, 'author', '')
+
+
+class Comment(Resource):
+
+    _dates = ('created_at', 'updated_at')
+    _maps = {'user': User}
+
+    def __str__(self):
+        return '<Comment (%s)>' % getattr(self, 'user', '')
+
+
+class Diff(Resource):
+
+    _maps = {'base_commit': Commit}
+    _collection_maps = {'commits': Commit, 'files': File}
+
+    def __str__(self):
+        return '<Diff (%s)>' % getattr(self, 'status', '')
 
 
 class Tag(Resource):
 
-    _maps = {'commit': Commit}
+    _maps = {'commit': GitCommit}
 
     def __str__(self):
         return '<Tag (%s)>' % getattr(self, 'name', '')
@@ -42,7 +96,7 @@ class Tag(Resource):
 
 class Branch(Resource):
 
-    _maps = {'commit': Commit}
+    _maps = {'commit': GitCommit}
 
     def __str__(self):
         return '<Branch (%s)>' % getattr(self, 'name', '')

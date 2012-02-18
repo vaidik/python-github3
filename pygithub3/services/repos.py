@@ -4,6 +4,49 @@
 from .base import Service
 
 
+class Commits(Service):
+
+    """ TODO: Pagination structure differs from usual
+    def list(self, user=None, repo=None, sha='', path=''):
+        request = self.make_request('repos.commits.list', user=user, repo=repo)
+        return self._get_result(request, sha=sha, path=path)
+    """
+
+    def get(self, sha, user=None, repo=None):
+        request = self.make_request('repos.commits.get',
+            sha=sha, user=user, repo=repo)
+        return self._get(request)
+
+    def list_comments(self, sha=None, user=None, repo=None):
+        request = self.make_request('repos.commits.list_comments',
+            sha=sha, user=user, repo=repo)
+        return self._get_result(request)
+
+    def create_comment(self, data, sha, user=None, repo=None):
+        request = self.make_request('repos.commits.create_comment',
+            sha=sha, user=user, repo=repo, body=data)
+        return self._post(request)
+
+    def get_comment(self, cid, user=None, repo=None):
+        request = self.make_request('repos.commits.get_comment',
+            comment_id=cid, user=user, repo=repo)
+        return self._get(request)
+
+    def update_comment(self, data, cid, user=None, repo=None):
+        request = self.make_request('repos.commits.update_comment',
+            comment_id=cid, user=user, repo=repo, body=data)
+        return self._patch(request)
+
+    def compare(self, base, head, user=None, repo=None):
+        request = self.make_request('repos.commits.compare',
+            base=base, head=head, user=user, repo=repo)
+        return self._get(request)
+
+    def delete_comment(self, cid, user=None, repo=None):
+        request = self.make_request('repos.commits.delete_comment',
+            comment_id=cid, user=user, repo=repo)
+        self._delete(request)
+
 class Collaborator(Service):
 
     def list(self, user=None, repo=None):
