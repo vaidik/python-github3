@@ -53,3 +53,24 @@ class TestServiceCalls(TestCase):
         result = self.s._get_result(self.r, **self.args)
         self.assertFalse(request_method.called)
         self.assertIsInstance(result, Result)
+
+
+@patch.object(requests.sessions.Session, 'request')
+class TestMimeType(TestCase):
+
+    def setUp(self):
+        self.ms = DummyService()
+
+    def test_WITHOUT_mimetype(self, request_method):
+        request_method.return_value = mock_response()
+        self.ms.dummy_request()
+        request_method.assert_called_with('get', _('dummyrequest'), params={})
+
+    def test_WITH_mimetype(self, request_method):
+        request_method.return_value = mock_response()
+        self.ms.set_html_mimetype()
+        self.ms.dummy_request()
+        request_method.assert_called_with('get', _('dummyrequest'),
+            headers={'Accept': 'application/vnd.github.%s.html+json' %
+                                MimeTypeMixin.VERSION},
+            params={})

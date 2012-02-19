@@ -87,3 +87,30 @@ class Service(object):
 
     def _get_result(self, request, **kwargs):
         return Result(self._client, request, **kwargs)
+
+
+class MimeTypeMixin(object):
+
+    VERSION = 'beta'
+
+    def __set_mimetype(self, mimetype):
+        self.mimetype = 'application/vnd.github.%s.%s+json' % (
+            self.VERSION, mimetype)
+
+    def set_raw_mimetype(self):
+        self.__set_mimetype('raw')
+
+    def set_text_mimetype(self):
+        self.__set_mimetype('text')
+
+    def set_html_mimetype(self):
+        self.__set_mimetype('html')
+
+    def set_full_mimetype(self):
+        self.__set_mimetype('full')
+
+    def _get_mimetype_as_header(self):
+        try:
+            return {'headers': {'Accept': self.mimetype}}
+        except AttributeError:
+            return {}
