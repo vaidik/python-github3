@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from .base import Request, DummyResource, DummyRequest
+from .base import Request
 from pygithub3.exceptions import ValidationError
 
 

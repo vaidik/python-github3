@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from pygithub3.resources.base import Resource
+from .base import Resource
 
 
 class Simple(Resource):

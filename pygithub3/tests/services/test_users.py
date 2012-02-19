@@ -10,8 +10,9 @@ from pygithub3.core.client import Client
 from pygithub3.services.users import User, Emails, Followers, Keys
 from pygithub3.exceptions import ValidationError
 from pygithub3.resources.base import json
-from pygithub3.tests.utils.base import mock_response, mock_response_result
-from pygithub3.tests.utils.services import _, mock_json
+from pygithub3.tests.utils.base import (mock_response, mock_response_result,
+                                        mock_json)
+from pygithub3.tests.utils.services import _
 
 json.dumps = Mock(side_effect=mock_json)
 json.loads = Mock(side_effect=mock_json)

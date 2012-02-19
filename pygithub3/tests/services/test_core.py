@@ -6,10 +6,10 @@ from mock import patch
 
 import requests
 
-from pygithub3.services.base import Service
+from pygithub3.services.base import Service, MimeTypeMixin
 from pygithub3.core.result import Result
 from pygithub3.tests.utils.base import DummyRequest, mock_response
-from .utils import _
+from pygithub3.tests.utils.services import _, DummyService
 
 
 @patch.object(requests.sessions.Session, 'request')
