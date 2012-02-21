@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
+from collections import OrderedDict
+
 from .base import Resource
 from .users import User
 from .orgs import Org
@@ -100,3 +102,13 @@ class Branch(Resource):
 
     def __str__(self):
         return '<Branch (%s)>' % getattr(self, 'name', '')
+
+
+class Download(Resource):
+
+    def ball_to_upload(self):
+        return OrderedDict({
+            'key': self.path, 'acl': self.acl, 'success_action_status': '201',
+            'Filename': self.name, 'AWSAccessKeyId': self.accesskeyid,
+            'Policy': self.policy, 'Signature': self.signature,
+            'Content-Type': self.mime_type})

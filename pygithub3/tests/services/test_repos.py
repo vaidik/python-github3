@@ -6,7 +6,7 @@ from unittest import TestCase
 import requests
 from mock import patch, Mock
 
-from pygithub3.services.repos import Repo, Collaborator, Commits
+from pygithub3.services.repos import Repo, Collaborator, Commits, Downloads
 from pygithub3.resources.base import json
 from pygithub3.tests.utils.base import (mock_response, mock_response_result,
                                         mock_json)
@@ -236,3 +236,35 @@ class TestCommitsService(TestCase):
         self.cs.delete_comment(1)
         self.assertEqual(request_method.call_args[0],
                          ('delete', _('repos/oct/re_oct/comments/1')))
+
+
+@patch.object(requests.sessions.Session, 'request')
+class TestDownloadsService(TestCase):
+
+    def setUp(self):
+        self.ds = Downloads(user='oct', repo='re_oct')
+
+    def test_LIST(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.ds.list().all()
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('repos/oct/re_oct/downloads')))
+
+    def test_GET(self, request_method):
+        request_method.return_value = mock_response()
+        self.ds.get(1)
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('repos/oct/re_oct/downloads/1')))
+
+    def test_DELETE(self, request_method):
+        request_method.return_value = mock_response('delete')
+        self.ds.delete(1)
+        self.assertEqual(request_method.call_args[0],
+                         ('delete', _('repos/oct/re_oct/downloads/1')))
+
+    def test_CREATE(self, request_method):
+        request_method.return_value = mock_response('post')
+        download = self.ds.create({'name': 'some', 'size': 100})
+        self.assertEqual(request_method.call_args[0],
+                         ('post', _('repos/oct/re_oct/downloads')))
+        self.assertTrue(hasattr(download, 'upload'))
