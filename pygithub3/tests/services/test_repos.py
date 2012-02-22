@@ -7,7 +7,7 @@ import requests
 from mock import patch, Mock
 
 from pygithub3.services.repos import (Repo, Collaborator, Commits, Downloads,
-                                      Forks)
+                                      Forks, Keys)
 from pygithub3.resources.base import json
 from pygithub3.tests.utils.base import (mock_response, mock_response_result,
                                         mock_json)
@@ -288,3 +288,40 @@ class TestForksService(TestCase):
         self.fs.create()
         self.assertEqual(request_method.call_args[0],
                          ('post', _('repos/oct/re_oct/forks')))
+
+
+@patch.object(requests.sessions.Session, 'request')
+class TestKeysService(TestCase):
+
+    def setUp(self):
+        self.ks = Keys(user='oct', repo='re_oct')
+
+    def test_LIST(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.ks.list().all()
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('repos/oct/re_oct/keys')))
+
+    def test_GET(self, request_method):
+        request_method.return_value = mock_response()
+        self.ks.get(1)
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('repos/oct/re_oct/keys/1')))
+
+    def test_CREATE(self, request_method):
+        request_method.return_value = mock_response('post')
+        self.ks.create({'title': 'test', 'key': 'ssh-rsa AAA'})
+        self.assertEqual(request_method.call_args[0],
+                         ('post', _('repos/oct/re_oct/keys')))
+
+    def test_UPDATE(self, request_method):
+        request_method.return_value = mock_response('patch')
+        self.ks.update(1, {'title': 'test', 'key': 'ssh-rsa AAA'})
+        self.assertEqual(request_method.call_args[0],
+                         ('patch', _('repos/oct/re_oct/keys/1')))
+
+    def test_DELETE(self, request_method):
+        request_method.return_value = mock_response('delete')
+        self.ks.delete(1)
+        self.assertEqual(request_method.call_args[0],
+                         ('delete', _('repos/oct/re_oct/keys/1')))
