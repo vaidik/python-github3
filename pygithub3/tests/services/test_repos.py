@@ -7,7 +7,7 @@ import requests
 from mock import patch, Mock
 
 from pygithub3.services.repos import (Repo, Collaborator, Commits, Downloads,
-                                      Forks, Keys)
+                                      Forks, Keys, Watchers)
 from pygithub3.resources.base import json
 from pygithub3.tests.utils.base import (mock_response, mock_response_result,
                                         mock_json)
@@ -325,3 +325,46 @@ class TestKeysService(TestCase):
         self.ks.delete(1)
         self.assertEqual(request_method.call_args[0],
                          ('delete', _('repos/oct/re_oct/keys/1')))
+
+
+@patch.object(requests.sessions.Session, 'request')
+class TestWatchersService(TestCase):
+
+    def setUp(self):
+        self.ws = Watchers(user='oct', repo='re_oct')
+
+    def test_LIST(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.ws.list().all()
+        self.assertEqual(request_method.call_args[0],
+            ('get', _('repos/oct/re_oct/watchers')))
+
+    def test_LIST_repos(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.ws.list_repos().all()
+        self.assertEqual(request_method.call_args[0],
+            ('get', _('users/oct/watched')))
+
+    def test_LIST_repos_without_user(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.ws.set_user(None)
+        self.ws.list_repos().all()
+        self.assertEqual(request_method.call_args[0],
+            ('get', _('user/watched')))
+
+    def test_IS_watching(self, request_method):
+        request_method.return_value = mock_response()
+        self.assertTrue(self.ws.is_watching())
+        self.assertEqual(request_method.call_args[0],
+            ('head', _('user/watched/oct/re_oct')))
+
+    def test_WATCH(self, request_method):
+        self.ws.watch()
+        self.assertEqual(request_method.call_args[0],
+            ('put', _('user/watched/oct/re_oct')))
+
+    def test_UNWATCH(self, request_method):
+        request_method.return_value = mock_response('delete')
+        self.ws.unwatch()
+        self.assertEqual(request_method.call_args[0],
+            ('delete', _('user/watched/oct/re_oct')))
