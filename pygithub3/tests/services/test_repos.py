@@ -6,7 +6,8 @@ from unittest import TestCase
 import requests
 from mock import patch, Mock
 
-from pygithub3.services.repos import Repo, Collaborator, Commits, Downloads
+from pygithub3.services.repos import (Repo, Collaborator, Commits, Downloads,
+                                      Forks)
 from pygithub3.resources.base import json
 from pygithub3.tests.utils.base import (mock_response, mock_response_result,
                                         mock_json)
@@ -268,3 +269,22 @@ class TestDownloadsService(TestCase):
         self.assertEqual(request_method.call_args[0],
                          ('post', _('repos/oct/re_oct/downloads')))
         self.assertTrue(hasattr(download, 'upload'))
+
+
+@patch.object(requests.sessions.Session, 'request')
+class TestForksService(TestCase):
+
+    def setUp(self):
+        self.fs = Forks(user='oct', repo='re_oct')
+
+    def test_LIST(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.fs.list().all()
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('repos/oct/re_oct/forks')))
+
+    def test_CREATE(self, request_method):
+        request_method.return_value = mock_response('post')
+        self.fs.create()
+        self.assertEqual(request_method.call_args[0],
+                         ('post', _('repos/oct/re_oct/forks')))

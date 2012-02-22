@@ -6,6 +6,18 @@ import requests
 from .base import Service, MimeTypeMixin
 
 
+class Forks(Service):
+
+    def list(self, user=None, repo=None, sort='newest'):
+        request = self.make_request('repos.forks.list', user=user, repo=repo)
+        return self._get_result(request, sort=sort)
+
+    def create(self, user=None, repo=None, org=None):
+        request = self.make_request('repos.forks.create', user=user, repo=repo)
+        org = {'org': org} if org else {}
+        return self._post(request, **org)
+
+
 class Downloads(Service):
 
     def list(self, user=None, repo=None):
@@ -111,6 +123,7 @@ class Repo(Service):
         self.collaborators = Collaborator(**config)
         self.commits = Commits(**config)
         self.downloads = Downloads(**config)
+        self.forks = Forks(**config)
         super(Repo, self).__init__(**config)
 
     def list(self, user=None, type='all'):

@@ -106,6 +106,9 @@ class Branch(Resource):
 
 class Download(Resource):
 
+    def __str__(self):
+        return '<Download (%s)>' % getattr(self, 'name', '')
+
     def ball_to_upload(self):
         return OrderedDict({
             'key': self.path, 'acl': self.acl, 'success_action_status': '201',
