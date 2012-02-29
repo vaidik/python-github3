@@ -135,10 +135,11 @@ class Page(object):
 
 
 class Result(object):
-    """ """
+    """
+    Result is a very lazy paginator. It only do a real request when is needed
+    """
 
     def __init__(self, client, request, **kwargs):
-        """ """
         self.getter = Method(client.get, request, **kwargs)
         self.page = Page(self.getter)
 
@@ -158,9 +159,14 @@ class Result(object):
 
     @property
     def pages(self):
+        """ Total number of pages in request """
         return self.getter.last
 
     def get_page(self, page):
+        """ Get ``Page`` of resources
+
+        :param int page: Page number
+        """
         if page in xrange(1, self.pages + 1):
             return Page(self.getter, page)
         return None

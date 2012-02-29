@@ -148,7 +148,7 @@ class Commits(Service, MimeTypeMixin):
         self._delete(request)
 
 
-class Collaborator(Service):
+class Collaborators(Service):
 
     def list(self, user=None, repo=None):
         request = self.make_request('repos.collaborators.list',
@@ -172,9 +172,10 @@ class Collaborator(Service):
 
 
 class Repo(Service):
+    """ Consume `Repos API <http://developer.github.com/v3/repos>`_ """
 
     def __init__(self, **config):
-        self.collaborators = Collaborator(**config)
+        self.collaborators = Collaborators(**config)
         self.commits = Commits(**config)
         self.downloads = Downloads(**config)
         self.forks = Forks(**config)

@@ -6,7 +6,7 @@ from unittest import TestCase
 import requests
 from mock import patch, Mock
 
-from pygithub3.services.repos import (Repo, Collaborator, Commits, Downloads,
+from pygithub3.services.repos import (Repo, Collaborators, Commits, Downloads,
                                       Forks, Keys, Watchers)
 from pygithub3.resources.base import json
 from pygithub3.tests.utils.base import (mock_response, mock_response_result,
@@ -146,7 +146,7 @@ class TestRepoService(TestCase):
 class TestCollaboratorsService(TestCase):
 
     def setUp(self):
-        self.cs = Collaborator()
+        self.cs = Collaborators()
         self.cs.set_user('octocat')
         self.cs.set_repo('oc_repo')
 

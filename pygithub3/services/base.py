@@ -8,6 +8,34 @@ from pygithub3.core.errors import NotFound
 
 
 class Service(object):
+    """
+    You can configure each service with this keyword variables:
+
+    :param str login: Username to authenticate
+    :param str password: Username to authenticate
+    :param str user: Default username in requests
+    :param str repo: Default repository in requests
+    :param str token: Token to OAuth
+    :param int per_page: Items in each page of multiple returns
+    :param str base_url: To support another github-related API (untested)
+    :param stream verbose: Stream to write debug logs
+
+    You can configure the **authentication** with BasicAuthentication (login
+    and password) and with `OAuth <http://developer.github.com/v3/oauth/>`_ (
+    token).
+    If you include ``login``, ``password`` and ``token`` in config; Oauth has
+    precedence
+
+    Some API requests need ``user`` and/or ``repo`` arguments (e.g repos
+    service).
+    You can configure the default value here to avoid repeating
+
+    Some API requests return multiple resources with pagination. You can
+    configure how many items has each page.
+
+    You can configure ``verbose`` logging like `requests library <http://docs.
+    python-requests.org/en/v0.10.6/user/advanced/#verbose-logging>`_
+    """
 
     def __init__(self, **config):
         self._client = Client(**config)
@@ -17,18 +45,35 @@ class Service(object):
         return self._client.user
 
     def set_user(self, user):
+        """ Set user
+
+        :param str user: Default username in requests
+        """
         self._client.user = user
 
     def get_repo(self):
         return self._client.repo
 
     def set_repo(self, repo):
+        """ Set repository
+
+        :param str repo: Default repository in requests
+        """
         self._client.repo = repo
 
     def set_credentials(self, login, password):
+        """ Set Basic Authentication
+
+        :param str login: Username to authenticate
+        :param str password: Username to authenticate
+        """
         self._client.set_credentials(login, password)
 
     def set_token(self, token):
+        """ Set OAuth token
+
+        :param str token: Token to OAuth
+        """
         self._client.set_token(token)
 
     def make_request(self, request, **kwargs):
@@ -90,6 +135,16 @@ class Service(object):
 
 
 class MimeTypeMixin(object):
+    """
+    Mimetype support to Services that inherit this Mixin
+
+    Adds 4 public functions to service:
+
+        1. set_raw_mimetype
+        2. set_text_mimetype
+        3. set_html_mimetype
+        4. set_full_mimetype
+    """
 
     VERSION = 'beta'
 

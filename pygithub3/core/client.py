@@ -15,12 +15,6 @@ class Client(object):
     """ Client to send configurated requests"""
 
     def __init__(self, **kwargs):
-        """
-        It can be configurated
-
-        :login, :password, :user, :repo, :token, :per_page, :base_url, :verbose
-        """
-
         self.requester = requests.session()
         self.config = {
             'per_page': 100,
