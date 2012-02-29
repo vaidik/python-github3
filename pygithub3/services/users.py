@@ -15,7 +15,7 @@ class Keys(Service):
     def list(self):
         """ Get public keys
 
-        It returns a :doc:`result`
+        :returns: A :doc:`result`
         """
         request = self.make_request('users.keys.list')
         return self._get_result(request)
@@ -24,10 +24,6 @@ class Keys(Service):
         """ Get a public key
 
         :param int key_id: Key id
-
-        ::
-
-            key_service.get(42)
         """
         request = self.make_request('users.keys.get',
             key_id=key_id)
@@ -64,10 +60,6 @@ class Keys(Service):
         """ Delete a public key
 
         :param int key_id: Key id
-
-        ::
-
-            key_service.delete(42)
         """
         request = self.make_request('users.keys.delete',
             key_id=key_id)
@@ -83,8 +75,7 @@ class Followers(Service):
         """ Get user's followers
 
         :param str user: Username
-
-        It returns a :doc:`result`
+        :returns: A :doc:`result`
 
         If you call it without user and you are authenticated, get the
         authenticated user's followers
@@ -105,8 +96,7 @@ class Followers(Service):
         """ Get who a user is following
 
         :param str user: Username
-
-        It returns a :doc:`result`
+        :returns: A :doc:`result`
 
         If you call it without user and you are authenticated, get the
         authenticated user's followings
@@ -127,10 +117,6 @@ class Followers(Service):
         """ Check if you are following a user
 
         :param str user: Username
-
-        ::
-
-            followers_service.is_following('octocat')
         """
         request = self.make_request('users.followers.isfollowing', user=user)
         return self._bool(request)
@@ -143,10 +129,6 @@ class Followers(Service):
         .. warning::
 
             You must be authenticated
-
-        ::
-
-            followers_service.follow('octocat')
         """
         request = self.make_request('users.followers.follow', user=user)
         self._put(request)
@@ -159,10 +141,6 @@ class Followers(Service):
         .. warning::
 
             You must be authenticated
-
-        ::
-
-            followers_service.unfollow('octocat')
         """
         request = self.make_request('users.followers.unfollow', user=user)
         self._delete(request)
@@ -179,7 +157,7 @@ class Emails(Service):
     def list(self):
         """ Get user's emails
 
-        It returns a :doc:`result`
+        :returns: A :doc:`result`
         """
         request = self.make_request('users.emails.list')
         return self._get_result(request)
@@ -191,7 +169,7 @@ class Emails(Service):
 
         .. note::
 
-            It reject non-valid emails
+            It rejects non-valid emails
 
         ::
 

@@ -22,8 +22,10 @@ For example: ::
         commits => services.repos.commits
         ....
 
-Each service has the functions to throw the API requests and is isolated
-from the rest.
+Each service has the functions to throw the API requests and **is isolated
+from the rest**.
+
+.. _config each service:
 
 Config each service
 .....................................

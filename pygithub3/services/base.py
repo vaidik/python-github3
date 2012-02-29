@@ -26,8 +26,8 @@ class Service(object):
     If you include ``login``, ``password`` and ``token`` in config; Oauth has
     precedence
 
-    Some API requests need ``user`` and/or ``repo`` arguments (e.g repos
-    service).
+    Some API requests need ``user`` and/or ``repo`` arguments (e.g
+    :ref:`repos service <config precedence>`).
     You can configure the default value here to avoid repeating
 
     Some API requests return multiple resources with pagination. You can
