@@ -5,7 +5,6 @@ Development Lead
 =================
 
 - David Medina <davidmedina9@gmail.com>
-- Francisco Marcos <fmarcos83@gmail.com>
 
 Forked and redesign from Kenneth Reitz's repo
 ----------------------------------------------
@@ -21,3 +20,4 @@ Patches and Suggestions
 - Mahdi Yusuf
 - Rok Garbas
 - Antti Kaihola <akaihol+github@ambitone.com>
+- Francisco Marcos <fmarcos83@gmail.com>

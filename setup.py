@@ -23,7 +23,7 @@ setup(
         'Programming Language :: Python :: 2.7',
         'License :: OSI Approved :: ISC License (ISCL)',
         'Operating System :: OS Independent',
-        'Development Status :: 1 - Planning',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
     ),
 )

@@ -1,7 +1,7 @@
 Pygithub3
 ==========
 
-Pygithub3 is a wrapper to the `Github API v3 <http://developer.github.com/v3/>`_,
+Pygithub3 is a wrapper to the **Github API v3**,
 written in Python.
 
 It has been developed with extensibility in mind, because the ``API`` is in a
@@ -9,6 +9,10 @@ beta state, trying to achieve a very loosly coupled software.
 
 It should be very easy to extend to support new ``requests`` and ``resources``,
 because each of them are managed by itself.
+
+`Pygithub3 docs <http://pygithub3.rtfd.org>`_
+
+`Github API v3 docs <http://developer.github.com/v3/>`_
 
 Fast install
 -------------
@@ -20,25 +24,15 @@ Fast example
 -------------
 ::
 
-    from pygithub3.github import Github
+    from pygithub3 import Github
 
-    gh = Github()
-    copitux = gh.users.get('copitux')
-    copitux_followers = gh.users.followers.list('copitux')
-    copitux_followers.all()  # lazy iterator that must be consumed
+    gh = Github(login='copitux', password='password')
 
-    gh.users.set_credentials(login='github_user', password='github_password')
-    # or: gh.users.set_token('token_code')
-    github_user = gh.users.get()
-    gh.users.followers.set_credentials(login='another_user', password='another_password')
-    another_user_followers = gh.users.followers.list().all()
-    """ Continue...
-    gh.users.emails.set_credentials( ...
-    github_user_emails = gh.users.emails.list()
+    copitux = gh.users.get()
+    kennethreitz = gh.users.get('kennethreitz')
 
-    Each service (users, emails, followers ...) is isolated from the rest. Maybe in
-    future releases the behaviour of Github component changes to share configuration
-    """
+    copitux_repos = gh.repos.list().all()
+    kennethreitz_repos = gh.repos.list('kennethreitz').all()
 
 Achievements
 -------------
@@ -50,7 +44,6 @@ TODO
 -----
 
 - `Repo service <http://developer.github.com/v3/repos/>`_
-- Docs
 
 Contribute
 -----------
