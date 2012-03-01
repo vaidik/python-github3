@@ -4,6 +4,7 @@
 from . import Request
 from pygithub3.resources.users import User
 
+
 class List(Request):
 
     uri = 'repos/{user}/{repo}/collaborators'

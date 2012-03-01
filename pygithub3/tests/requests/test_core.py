@@ -4,7 +4,7 @@
 from unittest import TestCase
 from mock import Mock
 
-from pygithub3.requests import Factory, Body, json, Request
+from pygithub3.requests.base import Factory, Body, json, Request
 from pygithub3.exceptions import (UriInvalid, DoesNotExists, ValidationError,
                                   InvalidBodySchema)
 from pygithub3.tests.utils.base import mock_json, DummyRequest

@@ -135,10 +135,43 @@ class Page(object):
 
 
 class Result(object):
-    """ """
+    """
+    Result is a very lazy paginator. It only do a real request when is needed
+
+    You have several ways to consume it
+
+    #. Iterating over the result::
+
+        result = some_request()
+        for page in result:
+            for resource in page:
+                print resource
+
+    #. With a generator::
+
+        result = some_request()
+        for resource in result.iterator():
+            print resource
+
+    #. As a list::
+
+        result = some_request()
+        print result.all()
+
+    #. Also you can request some page manually
+
+        .. autoattribute:: pygithub3.core.result.Result.pages
+        .. automethod:: pygithub3.core.result.Result.get_page
+
+        Each ``Page`` is an iterator and contains resources::
+
+            result = some_request()
+            assert result.pages > 3
+            page3 = result.get_page(3)
+            page3_resources = list(page3)
+    """
 
     def __init__(self, client, request, **kwargs):
-        """ """
         self.getter = Method(client.get, request, **kwargs)
         self.page = Page(self.getter)
 
@@ -158,9 +191,14 @@ class Result(object):
 
     @property
     def pages(self):
+        """ Total number of pages in request """
         return self.getter.last
 
     def get_page(self, page):
+        """ Get ``Page`` of resources
+
+        :param int page: Page number
+        """
         if page in xrange(1, self.pages + 1):
             return Page(self.getter, page)
         return None
