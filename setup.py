@@ -16,7 +16,6 @@ setup(
     packages=find_packages(exclude=['*tests*']),
     install_requires=map(str.strip, open('requirements.txt')),
     include_package_data = True,
-    package_data={'': ['README.rst', 'AUTHORS.rst', 'LICENSE']},
     classifiers=(
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
