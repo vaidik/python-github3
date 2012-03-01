@@ -82,6 +82,7 @@ Collaborators
 --------------
 
 .. autoclass:: pygithub3.services.repos.Collaborators
+    :members:
 
 .. _Commits service:
 
@@ -89,6 +90,7 @@ Commits
 ----------
 
 .. autoclass:: pygithub3.services.repos.Commits
+    :members:
 
 .. _Downloads service:
 
@@ -96,6 +98,7 @@ Downloads
 ------------
 
 .. autoclass:: pygithub3.services.repos.Downloads
+    :members:
 
 
 .. _Forks service:
@@ -104,6 +107,7 @@ Forks
 ---------
 
 .. autoclass:: pygithub3.services.repos.Forks
+    :members:
 
 
 .. _RepoKeys service:
@@ -112,6 +116,7 @@ Keys
 ----------
 
 .. autoclass:: pygithub3.services.repos.Keys
+    :members:
 
 
 .. _Watchers service:
@@ -120,5 +125,12 @@ Watchers
 ---------
 
 .. autoclass:: pygithub3.services.repos.Watchers
+    :members:
 
-.. _github repo doc: http://developer.github.com/v3/repos
+.. _github repos doc: http://developer.github.com/v3/repos
+.. _github collaborators doc: http://developer.github.com/v3/repos
+.. _github commits doc: http://developer.github.com/v3/repos
+.. _github downloads doc: http://developer.github.com/v3/repos
+.. _github forks doc: http://developer.github.com/v3/repos
+.. _github watching doc: http://developer.github.com/v3/repos
+.. _github hooks doc: http://developer.github.com/v3/repos

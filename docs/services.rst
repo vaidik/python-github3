@@ -5,7 +5,7 @@ Services
 start
 
 Overview
-..........
+----------
 
 You can access to the API requests through the different services.
 
@@ -28,7 +28,7 @@ from the rest**.
 .. _config each service:
 
 Config each service
-.....................................
+----------------------
 
 Each service can be configurated with some variables (behind the scenes, each
 service has her client which is configurated with this variables).
@@ -40,8 +40,16 @@ service has her client which is configurated with this variables).
 .. autoclass:: pygithub3.services.base.Service
     :members:
 
+.. _mimetypes:
+
+MimeTypes
+----------
+
+.. autoclass:: pygithub3.services.base.MimeTypeMixin
+    :members:
+
 List of services
-..................
+-------------------
 
 .. toctree::
     :maxdepth: 2

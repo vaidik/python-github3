@@ -26,7 +26,7 @@ class Repos(Service):
         """ Get user's repositories
 
         :param str user: Username
-        :param str type: Filter by type (optional). See `github repo doc`_
+        :param str type: Filter by type (optional). See `github repos doc`_
         :returns: A :doc:`result`
 
         If you call it without user and you are authenticated, get the
@@ -48,7 +48,7 @@ class Repos(Service):
         """ Get organization's repositories
 
         :param str org: Organization name
-        :param str type: Filter by type (optional). See `github repo doc`_
+        :param str type: Filter by type (optional). See `github repos doc`_
         :returns: A :doc:`result`
 
         ::
@@ -61,7 +61,7 @@ class Repos(Service):
     def create(self, data, in_org=None):
         """ Create a new repository
 
-        :param dict data: Input. See `github repo doc`_
+        :param dict data: Input. See `github repos doc`_
         :param str in_org: Organization where create the repository (optional)
 
         .. warning::
@@ -96,7 +96,7 @@ class Repos(Service):
     def update(self, data, user=None, repo=None):
         """ Update a single repository
 
-        :param dict data: Input. See `github repo doc`_
+        :param dict data: Input. See `github repos doc`_
         :param str user: Username
         :param str repo: Repository
 
