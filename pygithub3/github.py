@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 from pygithub3.services.users import User
-from pygithub3.services.repos import Repo
+from pygithub3.services.repos import Repos
 
 
 class Github(object):
@@ -17,7 +17,7 @@ class Github(object):
 
     def __init__(self, **config):
         self._users = User(**config)
-        self._repos = Repo(**config)
+        self._repos = Repos(**config)
 
     @property
     def users(self):

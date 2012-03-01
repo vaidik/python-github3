@@ -3,7 +3,7 @@
 
 from pygithub3.core.client import Client
 from pygithub3.core.result import Result
-from pygithub3.requests import Factory
+from pygithub3.requests.base import Factory
 from pygithub3.core.errors import NotFound
 
 

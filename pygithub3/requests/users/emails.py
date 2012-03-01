@@ -25,7 +25,7 @@ class Add(Request):
 
     def clean_body(self):
         def is_email(email):
-            return bool(email_re.match(email))  # TODO: email regex ;)
+            return bool(email_re.match(email))
         if not self.body:
             raise ValidationError("'%s' request needs emails"
                                   % (self.__class__.__name__))

@@ -4,7 +4,7 @@
 from mock import Mock
 
 from pygithub3.resources.base import Resource
-from pygithub3.requests import Request
+from pygithub3.requests.base import Request
 
 
 def mock_json(content):

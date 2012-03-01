@@ -49,7 +49,7 @@ You can see it better with an example: ::
 Repo
 -------
 
-.. autoclass:: pygithub3.services.repos.Repo
+.. autoclass:: pygithub3.services.repos.Repos
     :members:
 
     .. attribute:: collaborators
@@ -81,16 +81,21 @@ Repo
 Collaborators
 --------------
 
+.. autoclass:: pygithub3.services.repos.Collaborators
 
 .. _Commits service:
 
 Commits
 ----------
 
+.. autoclass:: pygithub3.services.repos.Commits
+
 .. _Downloads service:
 
 Downloads
 ------------
+
+.. autoclass:: pygithub3.services.repos.Downloads
 
 
 .. _Forks service:
@@ -98,16 +103,22 @@ Downloads
 Forks
 ---------
 
+.. autoclass:: pygithub3.services.repos.Forks
+
 
 .. _RepoKeys service:
 
 Keys
 ----------
 
+.. autoclass:: pygithub3.services.repos.Keys
+
 
 .. _Watchers service:
 
 Watchers
 ---------
+
+.. autoclass:: pygithub3.services.repos.Watchers
 
 .. _github repo doc: http://developer.github.com/v3/repos
