@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from unittest import TestCase
-from mock import patch
-
 import requests
 
+from mock import patch
+
+from pygithub3.tests.utils.core import TestCase
 from pygithub3.services.base import Service, MimeTypeMixin
 from pygithub3.core.result import Result
 from pygithub3.tests.utils.base import DummyRequest, mock_response
@@ -68,7 +68,7 @@ class TestMimeType(TestCase):
 
     def test_WITH_mimetype(self, request_method):
         request_method.return_value = mock_response()
-        self.ms.set_html_mimetype()
+        self.ms.set_html()
         self.ms.dummy_request()
         request_method.assert_called_with('get', _('dummyrequest'),
             headers={'Accept': 'application/vnd.github.%s.html+json' %

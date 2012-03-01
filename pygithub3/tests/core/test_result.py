@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from unittest import TestCase
-
 from mock import Mock
 
+from pygithub3.tests.utils.core import TestCase
 from pygithub3.core.client import Client
 from pygithub3.core.result import Result, Page
 from pygithub3.tests.utils.core import (mock_paginate_github_in_GET, request,

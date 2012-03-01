@@ -2,7 +2,6 @@
 # -*- encoding: utf-8 -*-
 
 import re
-from importlib import import_module
 try:
     import simplejson as json
 except ImportError:
@@ -11,6 +10,7 @@ except ImportError:
 from pygithub3.exceptions import (DoesNotExists, UriInvalid, ValidationError,
                                   InvalidBodySchema)
 from pygithub3.resources.base import Raw
+from pygithub3.core.utils import import_module
 
 ABS_IMPORT_PREFIX = 'pygithub3.requests'
 
@@ -31,8 +31,8 @@ class Body(object):
         if not hasattr(self.content, 'items'):
             raise ValidationError("'%s' needs a content dictionary"
                                    % self.__class__.__name__)
-        parsed = {key: self.content[key] for key in self.schema
-                if key in self.content}
+        parsed = dict([(key, self.content[key]) for key in self.schema
+                      if key in self.content])
         for attr_required in self.required:
             if attr_required not in parsed:
                 raise ValidationError("'%s' attribute is required" %
@@ -96,12 +96,13 @@ class Request(object):
 
 
 class Factory(object):
-    """ """
+    """ Request builder """
 
     import_pattern = re.compile(r'^(\w+\.)+\w+$')
 
     def validate(func):
-        """ """
+        """ Decorator to check if request_uri
+        has valid format: 'from.path.module.class' """
 
         def wrapper(self, request_uri, **kwargs):
             if not Factory.import_pattern.match(request_uri):
@@ -110,22 +111,21 @@ class Factory(object):
         return wrapper
 
     def dispatch(func):
-        """ """
-
         def wrapper(self, request_uri, **kwargs):
             module_chunk, s, request_chunk = request_uri.rpartition('.')
+            request_chunk = request_chunk.capitalize()
             try:
                 #  TODO: CamelCase and under_score support, now only Class Name
                 module = import_module('%s.%s'
                                         % (ABS_IMPORT_PREFIX, module_chunk))
-                request = getattr(module, request_chunk.capitalize())
+                request = getattr(module, request_chunk)
             except ImportError:
                 raise DoesNotExists("'%s' module does not exists"
                                        % module_chunk)
             except AttributeError:
                 raise DoesNotExists(
                     "'%s' request doesn't exists into '%s' module"
-                    % (request_chunk.capitalize(), module_chunk))
+                    % (request_chunk, module_chunk))
             return func(self, request, **kwargs)
         return wrapper
 

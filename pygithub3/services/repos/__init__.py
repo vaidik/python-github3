@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from ..base import Service, MimeTypeMixin
+from pygithub3.services.base import Service, MimeTypeMixin
 from .collaborators import Collaborators
 from .commits import Commits
 from .downloads import Downloads

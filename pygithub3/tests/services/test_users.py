@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from unittest import TestCase
-
 import requests
 from mock import patch, Mock
 
+from pygithub3.tests.utils.core import TestCase
 from pygithub3.core.client import Client
 from pygithub3.services.users import User, Emails, Followers, Keys
 from pygithub3.exceptions import ValidationError

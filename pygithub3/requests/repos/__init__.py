@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 
-from ..base import Request, ValidationError
+from pygithub3.requests.base import Request, ValidationError
 from pygithub3.resources.users import User
 from pygithub3.resources.repos import Repo, Team, Tag, Branch
 

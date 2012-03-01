@@ -73,17 +73,17 @@ class Resource(object):
                         for raw_resource in raw_resources]
 
         new_resource = raw_resource.copy()
-        new_resource.update(
-            {attr: parse_date(raw_resource[attr])
-             for attr in self._dates if attr in raw_resource})
-        new_resource.update(
-            {attr: parse_map(resource, raw_resource[attr])
+        new_resource.update(dict([
+            (attr, parse_date(raw_resource[attr]))
+             for attr in self._dates if attr in raw_resource]))
+        new_resource.update(dict([
+            (attr, parse_map(resource, raw_resource[attr]))
              for attr, resource in self._maps.items()
-             if attr in raw_resource})
-        new_resource.update(
-            {attr: parse_collection_map(resource, raw_resource[attr])
+             if attr in raw_resource]))
+        new_resource.update(dict([
+            (attr, parse_collection_map(resource, raw_resource[attr]))
              for attr, resource in self._collection_maps.items()
-             if attr in raw_resource})
+             if attr in raw_resource]))
 
         return self(new_resource)
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from unittest import TestCase
 from datetime import datetime
 
+from pygithub3.tests.utils.core import TestCase
 from pygithub3.resources.base import Raw
 from pygithub3.tests.utils.resources import Nested, Simple, HasSimple
 

@@ -1,7 +1,14 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
+from mock import Mock
+
 from .base import Resource
+from pygithub3.resources.base import json
+from pygithub3.tests.utils.base import mock_json
+
+json.dumps = Mock(side_effect=mock_json)
+json.loads = Mock(side_effect=mock_json)
 
 
 class Simple(Resource):

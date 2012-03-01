@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
+try:
+    from unittest2 import TestCase  # Python 2.6
+except ImportError:
+    from unittest import TestCase  # Python >2.7
+
 from .base import Mock, DummyRequest
 
 request = DummyRequest()

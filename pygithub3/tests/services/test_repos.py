@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from unittest import TestCase
-
 import requests
 from mock import patch, Mock
 
+from pygithub3.tests.utils.core import TestCase
 from pygithub3.services.repos import (Repos, Collaborators, Commits, Downloads,
                                       Forks, Keys, Watchers)
 from pygithub3.resources.base import json

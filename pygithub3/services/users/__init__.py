@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from ..base import Service
+from pygithub3.services.base import Service
 from .keys import Keys
 from .emails import Emails
 from .followers import Followers

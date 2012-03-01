@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from unittest import TestCase
 from mock import Mock
 
+from pygithub3.tests.utils.core import TestCase
 from pygithub3.requests.base import Factory, Body, json, Request
 from pygithub3.exceptions import (UriInvalid, DoesNotExists, ValidationError,
                                   InvalidBodySchema)

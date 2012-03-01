@@ -59,7 +59,7 @@ class Client(object):
         """ Decorator to put extra args into requests.params """
 
         def wrapper(self, verb, request, **kwargs):
-            diffs = kwargs.viewkeys() - VALID_REQUEST_ARGS
+            diffs = set(kwargs.keys()) - VALID_REQUEST_ARGS
             new_params = kwargs.get('params', {})
             for key in diffs:  # Put each key in new_params and delete it
                 new_params[key] = kwargs[key]
