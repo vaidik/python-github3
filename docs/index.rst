@@ -38,7 +38,7 @@ You must apologize my English level. I'm trying to do my best
     installation
     github
     services
-    resources
     result
+    resources
 
 .. _Github API v3 documentation: http://developer.github.com

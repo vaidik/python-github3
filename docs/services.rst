@@ -40,10 +40,15 @@ service has her client which is configurated with this variables).
 .. autoclass:: pygithub3.services.base.Service
     :members:
 
-.. _mimetypes:
+.. _mimetypes-section:
 
 MimeTypes
 ----------
+
+Some services supports `mimetypes`_
+
+With them the :doc:`resources` will have ``body``, ``body_text``, ``body_html``
+attributes or all of them.
 
 .. autoclass:: pygithub3.services.base.MimeTypeMixin
     :members:
@@ -56,3 +61,5 @@ List of services
 
     users
     repos
+
+.. _mimetypes: http://developer.github.com/v3/mime

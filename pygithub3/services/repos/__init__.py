@@ -33,7 +33,6 @@ class Repos(Service):
         authenticated user's repositories
 
         .. warning::
-
             If you aren't authenticated and call without user, it returns 403
 
         ::
@@ -87,7 +86,6 @@ class Repos(Service):
         :param str repo: Repository
 
         .. note::
-
             Remember :ref:`config precedence`
         """
         request = self.make_request('repos.get', user=user, repo=repo)
@@ -101,11 +99,9 @@ class Repos(Service):
         :param str repo: Repository
 
         .. note::
-
             Remember :ref:`config precedence`
 
         .. warning::
-
             You must be authenticated
 
         ::
@@ -130,7 +126,6 @@ class Repos(Service):
         :returns: A :doc:`result`
 
         .. note::
-
             Remember :ref:`config precedence`
         """
         return self.__list_contributors(user, repo)
@@ -148,7 +143,6 @@ class Repos(Service):
         :returns: A :doc:`result`
 
         .. note::
-
             Remember :ref:`config precedence`
         """
         request = self.make_request('repos.list_languages',
@@ -163,7 +157,6 @@ class Repos(Service):
         :returns: A :doc:`result`
 
         .. note::
-
             Remember :ref:`config precedence`
         """
         request = self.make_request('repos.list_teams', user=user, repo=repo)
@@ -177,7 +170,6 @@ class Repos(Service):
         :returns: A :doc:`result`
 
         .. note::
-
             Remember :ref:`config precedence`
         """
         request = self.make_request('repos.list_tags', user=user, repo=repo)
@@ -191,7 +183,6 @@ class Repos(Service):
         :returns: A :doc:`result`
 
         .. note::
-
             Remember :ref:`config precedence`
         """
         request = self.make_request('repos.list_branches',

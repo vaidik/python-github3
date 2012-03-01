@@ -25,7 +25,6 @@ class User(Service):
         authenticated user.
 
         .. warning::
-
             If you aren't authenticated and call without user, it returns 403
 
         ::

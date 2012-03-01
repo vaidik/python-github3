@@ -8,7 +8,6 @@ class Keys(Service):
     """ Consume `Keys API <http://developer.github.com/v3/users/keys/>`_
 
     .. warning::
-
         You must be authenticated for all requests
     """
 

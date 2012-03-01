@@ -16,7 +16,6 @@ class Collaborators(Service):
         :returns: A :doc:`result`
 
         .. note::
-
             Remember :ref:`config precedence`
         """
         request = self.make_request('repos.collaborators.list',
@@ -31,11 +30,9 @@ class Collaborators(Service):
         :param str repo: Repository
 
         .. note::
-
             Remember :ref:`config precedence`
 
         .. warning::
-
             You must be authenticated and have perms in repository
         """
         request = self.make_request('repos.collaborators.add',
@@ -50,7 +47,6 @@ class Collaborators(Service):
         :param str repo: Repository
 
         .. note::
-
             Remember :ref:`config precedence`
         """
         request = self.make_request('repos.collaborators.is_collaborator',
@@ -65,11 +61,9 @@ class Collaborators(Service):
         :param str repo: Repository
 
         .. note::
-
             Remember :ref:`config precedence`
 
         .. warning::
-
             You must be authenticated and have perms in repository
         """
         request = self.make_request('repos.collaborators.delete',

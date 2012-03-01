@@ -136,14 +136,9 @@ class Service(object):
 
 class MimeTypeMixin(object):
     """
-    Mimetype support to Services that inherit this Mixin
+    Mimetype support to Services
 
     Adds 4 public functions to service:
-
-        1. set_raw_mimetype
-        2. set_text_mimetype
-        3. set_html_mimetype
-        4. set_full_mimetype
     """
 
     VERSION = 'beta'
@@ -152,16 +147,21 @@ class MimeTypeMixin(object):
         self.mimetype = 'application/vnd.github.%s.%s+json' % (
             self.VERSION, mimetype)
 
-    def set_raw_mimetype(self):
+    def set_raw(self):
+        """ Resource will have ``body`` attribute """
         self.__set_mimetype('raw')
 
-    def set_text_mimetype(self):
+    def set_text(self):
+        """ Resource will have ``body_text`` attribute """
         self.__set_mimetype('text')
 
-    def set_html_mimetype(self):
+    def set_html(self):
+        """ Resource will have ``body_html`` attribute """
         self.__set_mimetype('html')
 
-    def set_full_mimetype(self):
+    def set_full(self):
+        """ Resource will have ``body`` ``body_text`` and ``body_html``
+        attributes """
         self.__set_mimetype('full')
 
     def _get_mimetype_as_header(self):

@@ -19,7 +19,6 @@ class Followers(Service):
         authenticated user's followers
 
         .. warning::
-
             If you aren't authenticated and call without user, it returns 403
 
         ::
@@ -40,7 +39,6 @@ class Followers(Service):
         authenticated user's followings
 
         .. warning::
-
             If you aren't authenticated and call without user, it returns 403
 
         ::
@@ -65,7 +63,6 @@ class Followers(Service):
         :param str user: Username
 
         .. warning::
-
             You must be authenticated
         """
         request = self.make_request('users.followers.follow', user=user)
@@ -77,7 +74,6 @@ class Followers(Service):
         :param str user: Username
 
         .. warning::
-
             You must be authenticated
         """
         request = self.make_request('users.followers.unfollow', user=user)

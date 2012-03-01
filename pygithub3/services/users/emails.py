@@ -8,7 +8,6 @@ class Emails(Service):
     """ Consume `Emails API <http://developer.github.com/v3/users/emails/>`_
 
     .. warning::
-
         You must be authenticated for all requests
     """
 
@@ -26,7 +25,6 @@ class Emails(Service):
         :param list emails: Emails to add
 
         .. note::
-
             It rejects non-valid emails
 
         ::

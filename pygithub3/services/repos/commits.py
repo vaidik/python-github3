@@ -25,7 +25,6 @@ class Commits(Service, MimeTypeMixin):
         :param str repo: Repository
 
         .. note::
-
             Remember :ref:`config precedence`
         """
         request = self.make_request('repos.commits.get',
@@ -38,9 +37,9 @@ class Commits(Service, MimeTypeMixin):
         :param str sha: Commit's sha
         :param str user: Username
         :param str repo: Repository
+        :returns: A :doc:`result`
 
         .. note::
-
             Remember :ref:`config precedence`
 
         If you call it without ``sha``, get all commit's comments of a
@@ -64,8 +63,10 @@ class Commits(Service, MimeTypeMixin):
         :param str repo: Repository
 
         .. note::
-
             Remember :ref:`config precedence`
+
+        .. warning::
+            You must be authenticated
 
         ::
 
@@ -91,7 +92,6 @@ class Commits(Service, MimeTypeMixin):
         :param str repo: Repository
 
         .. note::
-
             Remember :ref:`config precedence`
         """
         request = self.make_request('repos.commits.get_comment',
@@ -107,8 +107,10 @@ class Commits(Service, MimeTypeMixin):
         :param str repo: Repository
 
         .. note::
-
             Remember :ref:`config precedence`
+
+        .. warning::
+            You must be authenticated
 
         ::
 
@@ -128,7 +130,6 @@ class Commits(Service, MimeTypeMixin):
         :param str repo: Repository
 
         .. note::
-
             Remember :ref:`config precedence`
 
         ::
@@ -148,7 +149,6 @@ class Commits(Service, MimeTypeMixin):
         :param str repo: Repository
 
         .. note::
-
             Remember :ref:`config precedence`
         """
         request = self.make_request('repos.commits.delete_comment',

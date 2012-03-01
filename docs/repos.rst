@@ -22,7 +22,8 @@ Some request always need ``user`` and ``repo`` parameters, both, to identify
 a `repository`. Because there are a lot of requests which need that parameters,
 you can :ref:`config each service` with ``user`` and ``repo`` globally.
 
-So several requests follow a simple precedence ``user_in_arg > user_in_config``
+So several requests follow a simple precedence
+``user_in_arg > user_in_config | repo_in_arg > repo_in_config``
 
 You can see it better with an example: ::
 
@@ -127,10 +128,16 @@ Watchers
 .. autoclass:: pygithub3.services.repos.Watchers
     :members:
 
+.. _Hooks service:
+
+Hooks
+---------
+
 .. _github repos doc: http://developer.github.com/v3/repos
-.. _github collaborators doc: http://developer.github.com/v3/repos
-.. _github commits doc: http://developer.github.com/v3/repos
-.. _github downloads doc: http://developer.github.com/v3/repos
-.. _github forks doc: http://developer.github.com/v3/repos
-.. _github watching doc: http://developer.github.com/v3/repos
-.. _github hooks doc: http://developer.github.com/v3/repos
+.. _github collaborators doc: http://developer.github.com/v3/repos/collaborators
+.. _github commits doc: http://developer.github.com/v3/repos/commits
+.. _github downloads doc: http://developer.github.com/v3/repos/downloads
+.. _github forks doc: http://developer.github.com/v3/repos/forks
+.. _github keys doc: http://developer.github.com/v3/repos/keys
+.. _github watching doc: http://developer.github.com/v3/repos/watching
+.. _github hooks doc: http://developer.github.com/v3/repos/hooks
