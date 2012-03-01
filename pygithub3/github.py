@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from pygithub3.services.users import User
-from pygithub3.services.repos import Repos
-
 
 class Github(object):
     """
@@ -16,6 +13,8 @@ class Github(object):
     """
 
     def __init__(self, **config):
+        from pygithub3.services.users import User
+        from pygithub3.services.repos import Repos
         self._users = User(**config)
         self._repos = Repos(**config)
 

@@ -160,7 +160,7 @@ class MimeTypeMixin(object):
         self.__set_mimetype('html')
 
     def set_full(self):
-        """ Resource will have ``body`` ``body_text`` and ``body_html``
+        """ Resource will have ``body``, ``body_text`` and ``body_html``
         attributes """
         self.__set_mimetype('full')
 
