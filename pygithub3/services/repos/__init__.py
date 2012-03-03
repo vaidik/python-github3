@@ -8,6 +8,7 @@ from .downloads import Downloads
 from .forks import Forks
 from .keys import Keys
 from .watchers import Watchers
+from .hooks import Hooks
 
 
 class Repos(Service):
@@ -20,6 +21,7 @@ class Repos(Service):
         self.forks = Forks(**config)
         self.keys = Keys(**config)
         self.watchers = Watchers(**config)
+        self.hooks = Hooks(**config)
         super(Repos, self).__init__(**config)
 
     def list(self, user=None, type='all'):

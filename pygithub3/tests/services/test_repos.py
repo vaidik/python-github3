@@ -6,7 +6,7 @@ from mock import patch, Mock
 
 from pygithub3.tests.utils.core import TestCase
 from pygithub3.services.repos import (Repos, Collaborators, Commits, Downloads,
-                                      Forks, Keys, Watchers)
+                                      Forks, Keys, Watchers, Hooks)
 from pygithub3.resources.base import json
 from pygithub3.tests.utils.base import (mock_response, mock_response_result,
                                         mock_json)
@@ -367,3 +367,46 @@ class TestWatchersService(TestCase):
         self.ws.unwatch()
         self.assertEqual(request_method.call_args[0],
             ('delete', _('user/watched/oct/re_oct')))
+
+
+@patch.object(requests.sessions.Session, 'request')
+class TestHooksService(TestCase):
+
+    def setUp(self):
+        self.hs = Hooks(user='oct', repo='re_oct')
+
+    def test_LIST(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.hs.list().all()
+        self.assertEqual(request_method.call_args[0],
+            ('get', _('repos/oct/re_oct/hooks')))
+
+    def test_GET(self, request_method):
+        request_method.return_value = mock_response()
+        self.hs.get(1)
+        self.assertEqual(request_method.call_args[0],
+            ('get', _('repos/oct/re_oct/hooks/1')))
+
+    def test_CREATE(self, request_method):
+        request_method.return_value = mock_response('post')
+        self.hs.create(dict(name='acunote', config={'usr': 'http...'}))
+        self.assertEqual(request_method.call_args[0],
+            ('post', _('repos/oct/re_oct/hooks')))
+
+    def test_UPDATE(self, request_method):
+        request_method.return_value = mock_response('patch')
+        self.hs.update(1, dict(events=['push']))
+        self.assertEqual(request_method.call_args[0],
+            ('patch', _('repos/oct/re_oct/hooks/1')))
+
+    def test_TEST(self, request_method):
+        request_method.return_value = mock_response('post')
+        self.hs.test(1)
+        self.assertEqual(request_method.call_args[0],
+            ('post', _('repos/oct/re_oct/hooks/1/test')))
+
+    def test_DELETE(self, request_method):
+        request_method.return_value = mock_response('delete')
+        self.hs.delete(1)
+        self.assertEqual(request_method.call_args[0],
+                ('delete', _('repos/oct/re_oct/hooks/1')))

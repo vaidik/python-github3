@@ -115,3 +115,10 @@ class Download(Resource):
             'Filename': self.name, 'AWSAccessKeyId': self.accesskeyid,
             'Policy': self.policy, 'Signature': self.signature,
             'Content-Type': self.mime_type})
+
+class Hook(Resource):
+
+    _dates = ('created_at', 'pushed_at')
+
+    def __str__(self):
+        return '<Hook (%s)>' % getattr(self, 'name', '')

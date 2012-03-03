@@ -83,6 +83,9 @@ class Service(object):
             kwargs['repo'] = kwargs['repo'] or self.get_repo()
         return self.request_builder(request, **kwargs)
 
+    def _request(self, verb, request, **kwargs):
+        self._client.request(verb, request, **kwargs)
+
     def _bool(self, request, **kwargs):
         try:
             self._client.head(request, **kwargs)

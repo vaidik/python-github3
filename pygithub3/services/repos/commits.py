@@ -9,7 +9,7 @@ class Commits(Service, MimeTypeMixin):
     <http://developer.github.com/v3/repos/commits>`_
 
     .. note::
-        This service support :ref:`mimetypes` configuration
+        This service support :ref:`mimetypes-section` configuration
     """
 
     #TODO: Pagination structure differs from usual

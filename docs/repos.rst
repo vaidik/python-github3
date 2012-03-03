@@ -133,6 +133,9 @@ Watchers
 Hooks
 ---------
 
+.. autoclass:: pygithub3.services.repos.Hooks
+    :members:
+
 .. _github repos doc: http://developer.github.com/v3/repos
 .. _github collaborators doc: http://developer.github.com/v3/repos/collaborators
 .. _github commits doc: http://developer.github.com/v3/repos/commits

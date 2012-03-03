@@ -15,7 +15,7 @@ setup(
     license='ISC',
     packages=find_packages(exclude=['*tests*']),
     install_requires=map(str.strip, open('requirements.txt')),
-    include_package_data = True,
+    include_package_data=True,
     classifiers=(
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
