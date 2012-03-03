@@ -19,6 +19,12 @@ class Github(object):
         self._repos = Repos(**config)
 
     @property
+    def remaining_requests(self):
+        """ Limit of Github API v3 """
+        from pygithub3.core.client import Client
+        return Client.remaining_requests
+
+    @property
     def users(self):
         """
         :ref:`User service <User service>`

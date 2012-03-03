@@ -14,6 +14,8 @@ VALID_REQUEST_ARGS = set((
 class Client(object):
     """ Client to send configurated requests"""
 
+    remaining_requests = '~'
+
     def __init__(self, **kwargs):
         self.requester = requests.session()
         self.config = {
@@ -72,6 +74,8 @@ class Client(object):
     def request(self, verb, request, **kwargs):
         request = "%s%s" % (self.config['base_url'], request)
         response = self.requester.request(verb, request, **kwargs)
+        Client.remaining_requests = response.headers.get(
+            'x-ratelimit-remaining', -1)
         GithubError(response).process()
         return response
 

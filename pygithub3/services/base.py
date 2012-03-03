@@ -41,6 +41,10 @@ class Service(object):
         self._client = Client(**config)
         self.request_builder = Factory()
 
+    @property
+    def remaining_requests(self):
+        return Client.remaining_requests
+
     def get_user(self):
         return self._client.user
 
