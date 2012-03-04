@@ -12,10 +12,35 @@ class Commits(Service, MimeTypeMixin):
         This service support :ref:`mimetypes-section` configuration
     """
 
-    #TODO: Pagination structure differs from usual
-    #def list(self, user=None, repo=None, sha='', path=''):
-        #request = self.make_request('repos.commits.list', user=user, repo=repo)
-        #return self._get_result(request, sha=sha, path=path)
+    def list(self, user=None, repo=None, sha=None, path=None):
+        """ Get repository's commits
+
+        :param str user: Username
+        :param str repo: Repository
+        :param str sha: Sha or branch to start listing commits from
+        :param str path: Only commits containing this file path will be returned
+        :returns: A :doc:`result`
+
+        .. note::
+            Remember :ref:`config precedence`
+
+        .. warning::
+            Usually a repository has thousand of commits, so be careful when
+            consume the result. You should filter with ``sha`` or directly
+            clone the repository
+
+        ::
+
+            commits_service.list(user='octocat', repo='oct_repo')
+            commits_service.list(user='octocat', repo='oct_repo', sha='dev')
+            commits_service.list(user='django', repo='django', sha='master',
+                path='django/db/utils.py')
+        """
+        request = self.make_request('repos.commits.list', user=user, repo=repo)
+        params = {}
+        params.update(sha and {'sha': sha} or {})
+        params.update(path and {'path': path} or {})
+        return self._get_normal_result(request, **params)
 
     def get(self, sha, user=None, repo=None):
         """ Get a single commit

@@ -40,14 +40,13 @@ class Committer(Resource):
         return '<Committer (%s)>' % getattr(self, 'name', '')
 
 
-class GitCommit(Resource):
+class Commit(Resource):
 
-    _maps = {'author': Author, 'committer': Committer, 'tree': 'self'}
-    _collection_maps = {'parents': 'self'}
+    _maps = {'author': Author, 'committer': Committer}
+    #_maps.update({'tree': GitCommit})
 
     def __str__(self):
-        return '<GitCommit (%s:%s)>' % (getattr(self, 'sha', ''),
-                                        getattr(self, 'message', ''))
+        return '<Commit (%s)>' % getattr(self, 'author', '')
 
 
 class Stats(Resource):
@@ -60,14 +59,14 @@ class File(Resource):
         return '<File (%s)>' % getattr(self, 'filename', '')
 
 
-class Commit(Resource):
+class GitCommit(Resource):
 
-    _maps = {'commit': GitCommit, 'author': User, 'committer': User,
+    _maps = {'author': User, 'committer': User, 'commit': Commit,
              'stats': Stats}
-    _collection_maps = {'parents': GitCommit, 'files': File}
+    _collection_maps = {'parents': 'self', 'files': File}
 
     def __str__(self):
-        return '<Commit (%s)>' % getattr(self, 'author', '')
+        return '<GitCommit (%s)>' % getattr(self, 'sha', '')
 
 
 class Comment(Resource):

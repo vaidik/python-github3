@@ -21,7 +21,7 @@ class Link(str):
                 for param, values in parse_qs(self.query).items()])
 
     def __init__(self, object_):
-        super(Link, self).__init__(object_)
+        str.__init__(object_)
         parsed = parse_link_value(self)
         for url in parsed:
             setattr(self, parsed[url]['rel'], Link.Url(url))

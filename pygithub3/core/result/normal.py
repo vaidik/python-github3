@@ -87,29 +87,29 @@ class Result(base.Result):
 
     def __init__(self, method):
         super(Result, self).__init__(method)
-        self.counter = 0
-        self.cached = False
+        self._counter = 0
+        self._cached = False
 
-    def get_cached(func):
+    def _get_cached(func):
         def wrapper(self):
-            if self.cached:
-                if str(self.counter) in self.getter.cache:
-                    page = Page(self.getter, self.counter)
-                    self.counter += 1
+            if self._cached:
+                if str(self._counter) in self.getter.cache:
+                    page = Page(self.getter, self._counter)
+                    self._counter += 1
                     return page
                 self._reset()
                 raise StopIteration
             return func(self)
         return wrapper
 
-    @get_cached
+    @_get_cached
     def __next__(self):
         if self.getter.next:
-            self.counter += 1
-            return Page(self.getter, self.counter)
+            self._counter += 1
+            return Page(self.getter, self._counter)
         self._reset()
         raise StopIteration
 
     def _reset(self):
-        self.counter = 1
-        self.cached = True
+        self._counter = 1
+        self._cached = True

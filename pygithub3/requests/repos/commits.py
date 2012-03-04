@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 from . import Request
-from pygithub3.resources.repos import Commit, GitCommit, Comment, Diff
+from pygithub3.resources.repos import GitCommit, Comment, Diff
 
 
 class List(Request):
@@ -14,7 +14,7 @@ class List(Request):
 class Get(Request):
 
     uri = 'repos/{user}/{repo}/commits/{sha}'
-    resource = Commit
+    resource = GitCommit
 
 
 class List_comments(Request):

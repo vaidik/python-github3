@@ -179,13 +179,11 @@ class TestCommitsService(TestCase):
     def setUp(self):
         self.cs = Commits(user='oct', repo='re_oct')
 
-    """
     def test_LIST(self, request_method):
         request_method.return_value = mock_response_result()
         self.cs.list().all()
         self.assertEqual(request_method.call_args[0],
                          ('get', _('repos/oct/re_oct/commits')))
-    """
 
     def test_GET(self, request_method):
         request_method.return_value = mock_response()
