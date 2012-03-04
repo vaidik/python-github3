@@ -28,8 +28,7 @@ class GithubError(object):
 
     def error_422(self):
         errors = self.debug.get('errors', ())
-        errors = ['Resource: {resource}: {field} => {message} ({code})'.format(
-                    **error)
+        errors = ['Resource: {resource}: {field} => {code}'.format(**error)
                  for error in errors]
         raise UnprocessableEntity(
             '422 - %s %s' % (self.debug.get('message'), errors))
