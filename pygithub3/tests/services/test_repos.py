@@ -30,17 +30,11 @@ class TestRepoService(TestCase):
         self.rs.list().all()
         self.assertEqual(request_method.call_args[0], ('get', _('user/repos')))
 
-    def test_LIST_with_user_in_args(self, request_method):
+    def test_LIST_with_user(self, request_method):
         request_method.return_value = mock_response_result()
         self.rs.list('octoc').all()
         self.assertEqual(request_method.call_args[0],
                          ('get', _('users/octoc/repos')))
-
-    def test_LIST_with_user_in_service(self, request_method):
-        request_method.return_value = mock_response_result()
-        self.rs.list().all()
-        self.assertEqual(request_method.call_args[0],
-                         ('get', _('users/octocat/repos')))
 
     def test_LIST_filters(self, request_method):
         request_method.return_value = mock_response_result()
@@ -340,14 +334,13 @@ class TestWatchersService(TestCase):
         request_method.return_value = mock_response_result()
         self.ws.list_repos().all()
         self.assertEqual(request_method.call_args[0],
-            ('get', _('users/oct/watched')))
-
-    def test_LIST_repos_without_user(self, request_method):
-        request_method.return_value = mock_response_result()
-        self.ws.set_user(None)
-        self.ws.list_repos().all()
-        self.assertEqual(request_method.call_args[0],
             ('get', _('user/watched')))
+
+    def test_LIST_repos_with_user(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.ws.list_repos('oct').all()
+        self.assertEqual(request_method.call_args[0],
+            ('get', _('users/oct/watched')))
 
     def test_IS_watching(self, request_method):
         request_method.return_value = mock_response()

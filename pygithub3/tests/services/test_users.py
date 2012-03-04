@@ -28,18 +28,11 @@ class TestUserService(TestCase):
         self.us.get()
         self.assertEqual(request_method.call_args[0], ('get', _('user')))
 
-    def test_GET_with_user_in_arg(self, request_method):
+    def test_GET_with_user(self, request_method):
         request_method.return_value = mock_response()
         self.us.get('octocat')
         self.assertEqual(request_method.call_args[0],
                          ('get', _('users/octocat')))
-
-    def test_GET_with_user_in_service(self, request_method):
-        request_method.return_value = mock_response()
-        self.us.set_user('octocat_service')
-        self.us.get()
-        self.assertEqual(request_method.call_args[0],
-                         ('get', _('users/octocat_service')))
 
     def test_UPDATE_with_valid_data(self, request_method):
         request_method.return_value = mock_response('patch')
@@ -101,18 +94,11 @@ class TestFollowersService(TestCase):
         self.assertEqual(request_method.call_args[0],
                          ('get', _('user/followers')))
 
-    def test_LIST_with_user_in_arg(self, request_method):
+    def test_LIST_with_user(self, request_method):
         request_method.return_value = mock_response_result()
         self.fs.list('octocat').all()
         self.assertEqual(request_method.call_args[0],
                          ('get', _('users/octocat/followers')))
-
-    def test_LIST_with_user_in_service(self, request_method):
-        request_method.return_value = mock_response_result()
-        self.fs.set_user('octocat_service')
-        self.fs.list().all()
-        self.assertEqual(request_method.call_args[0],
-                         ('get', _('users/octocat_service/followers')))
 
     def test_LIST_FOLLOWING_without_user(self, request_method):
         request_method.return_value = mock_response_result()
@@ -120,18 +106,11 @@ class TestFollowersService(TestCase):
         self.assertEqual(request_method.call_args[0],
                          ('get', _('user/following')))
 
-    def test_LIST_FOLLOWING_with_user_in_arg(self, request_method):
+    def test_LIST_FOLLOWING_with_user(self, request_method):
         request_method.return_value = mock_response_result()
         self.fs.list_following('octocat').all()
         self.assertEqual(request_method.call_args[0],
                          ('get', _('users/octocat/following')))
-
-    def test_LIST_FOLLOWING_with_user_in_service(self, request_method):
-        request_method.return_value = mock_response_result()
-        self.fs.set_user('octocat_service')
-        self.fs.list_following().all()
-        self.assertEqual(request_method.call_args[0],
-                         ('get', _('users/octocat_service/following')))
 
     def test_IS_FOLLOWING(self, request_method):
         self.fs.is_following('octocat')

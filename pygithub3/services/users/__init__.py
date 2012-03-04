@@ -32,7 +32,7 @@ class User(Service):
             user_service.get('copitux')
             user_service.get()
         """
-        request = self.make_request('users.get', user=user)
+        request = self.request_builder('users.get', user=user)
         return self._get(request)
 
     def update(self, data):

@@ -45,7 +45,7 @@ class Forks(Service):
 
             forks_service.create(user='octocat', repo='oct_repo')
             forks_service.create(user='octocat', repo='oct_repo',
-                org='myorganization'
+                org='myorganization')
         """
         request = self.make_request('repos.forks.create', user=user, repo=repo)
         org = org and {'org': org} or {}

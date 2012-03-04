@@ -42,7 +42,7 @@ class Repos(Service):
             repo_service.list('copitux', type='owner')
             repo_service.list(type='private')
         """
-        request = self.make_request('repos.list', user=user)
+        request = self.request_builder('repos.list', user=user)
         return self._get_result(request, type=type)
 
     def list_by_org(self, org, type='all'):

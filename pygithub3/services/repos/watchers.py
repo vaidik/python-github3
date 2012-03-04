@@ -39,7 +39,7 @@ class Watchers(Service):
             watchers_service.list_repos('copitux')
             watchers_service.list_repos()
         """
-        request = self.make_request('repos.watchers.list_repos', user=user)
+        request = self.request_builder('repos.watchers.list_repos', user=user)
         return self._get_result(request)
 
     def is_watching(self, user=None, repo=None):

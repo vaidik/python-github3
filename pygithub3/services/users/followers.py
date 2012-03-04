@@ -26,7 +26,7 @@ class Followers(Service):
             followers_service.list()
             followers_service.list('octocat')
         """
-        request = self.make_request('users.followers.list', user=user)
+        request = self.request_builder('users.followers.list', user=user)
         return self._get_result(request)
 
     def list_following(self, user=None):
@@ -46,7 +46,8 @@ class Followers(Service):
             followers_service.list_following()
             followers_service.list_following('octocat')
         """
-        request = self.make_request('users.followers.listfollowing', user=user)
+        request = self.request_builder('users.followers.listfollowing',
+            user=user)
         return self._get_result(request)
 
     def is_following(self, user):
@@ -54,7 +55,8 @@ class Followers(Service):
 
         :param str user: Username
         """
-        request = self.make_request('users.followers.isfollowing', user=user)
+        request = self.request_builder('users.followers.isfollowing',
+            user=user)
         return self._bool(request)
 
     def follow(self, user):
@@ -65,7 +67,7 @@ class Followers(Service):
         .. warning::
             You must be authenticated
         """
-        request = self.make_request('users.followers.follow', user=user)
+        request = self.request_builder('users.followers.follow', user=user)
         self._put(request)
 
     def unfollow(self, user):
@@ -76,5 +78,5 @@ class Followers(Service):
         .. warning::
             You must be authenticated
         """
-        request = self.make_request('users.followers.unfollow', user=user)
+        request = self.request_builder('users.followers.unfollow', user=user)
         self._delete(request)
