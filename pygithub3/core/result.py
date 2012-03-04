@@ -3,10 +3,11 @@
 
 from urlparse import urlparse, parse_qs
 
-from .third_libs.link_header import parse_link_value
+from .link import Link
 
 
 class Method(object):
+    """ Lazy support """
 
     def __init__(self, method, request, **method_args):
         self.method = method
@@ -15,6 +16,7 @@ class Method(object):
         self.cache = {}
 
     def cached(func):
+        """ Decorator to don't do a request if it's cached """
         def wrapper(self, page=1):
             if str(page) in self.cache:
                 return self.cache[str(page)]
@@ -22,34 +24,28 @@ class Method(object):
         return wrapper
 
     def if_needs_lastpage(func):
-        def wrapper(self, response):
-            has_link = response.headers.get('link')
+        """ Decorator to set last page only if it can and it hasn't retrieved
+        before """
+        def wrapper(self, has_link):
             has_last_page = hasattr(self, 'last_page')
             if not has_last_page and has_link:
-                return func(self, response)
+                return func(self, has_link)
             elif not has_last_page and not has_link:
                 self.last_page = 1
         return wrapper
 
     @if_needs_lastpage
-    def __set_last_page_from(self, response):
-        link_parsed = parse_link_value(response.headers['link'])
-
-        def get_last(url):
-            url_rels = link_parsed[url]
-            return (url_rels.get('rel') == 'last')
-        url_last = filter(get_last, link_parsed)
-        query = urlparse(url_last.pop()).query
-        self.last_page = int(parse_qs(query).get('page').pop())
+    def __set_last_page_from(self, link_header):
+        """ Get and set last_page form link header """
+        link = Link(link_header)
+        self.last_page = int(link.last.params.get('page'))
 
     @cached
     def __call__(self, page=1):
-        all_args = self.args.copy()
-        all_args.update(page=page)
-        response = self.method(self.request, **all_args)
-        self.__set_last_page_from(response)
-        resource = self.request.resource
-        self.cache[str(page)] = resource.loads(response.content)
+        """ Call a real request """
+        response = self.method(page=page)
+        self.__set_last_page_from(response.headers.get('link'))
+        self.cache[str(page)] = self.resource.loads(response.content)
         return self.cache[str(page)]
 
     @property
@@ -60,10 +56,9 @@ class Method(object):
 
 
 class Page(object):
-    """ """
+    """ Iterator of resources """
 
     def __init__(self, getter, page=1):
-        """ """
         self.getter = getter
         self.page = page
 
@@ -136,7 +131,8 @@ class Page(object):
 
 class Result(object):
     """
-    Result is a very lazy paginator. It only do a real request when is needed
+    Result is a very **lazy** paginator beacuse only do a real request when is
+    needed, besides it's **cached**, so never repeats a request.
 
     You have several ways to consume it
 
