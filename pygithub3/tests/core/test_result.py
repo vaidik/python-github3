@@ -5,9 +5,10 @@ from mock import Mock
 
 from pygithub3.tests.utils.core import TestCase
 from pygithub3.core.client import Client
-from pygithub3.core.result import Result, Page
+from pygithub3.core.result import smart, normal, base
 from pygithub3.tests.utils.core import (mock_paginate_github_in_GET, request,
-                                        mock_no_paginate_github_in_GET)
+                                        mock_no_paginate_github_in_GET,
+                                        MockPaginate)
 
 
 class ResultInitMixin(object):
@@ -17,12 +18,12 @@ class ResultInitMixin(object):
         self.get_request = Mock(side_effect=self.mock)
         self.resource_loads = request.resource.loads
         self.c.get = self.get_request
-        self.r = Result(self.c, request)
+        self.r = smart.Result(smart.Method(self.c.get, request))
 
     def tearDown(self):
         self.resource_loads.reset_mock()  # It mocks class method
 
-class TestResultWithPaginate(ResultInitMixin, TestCase):
+class TestSmartResultWithPaginate(ResultInitMixin, TestCase):
 
     @property
     def mock(self):
@@ -33,12 +34,12 @@ class TestResultWithPaginate(ResultInitMixin, TestCase):
         self.assertEqual(self.resource_loads.call_count, 0)
         list(self.r)
         self.get_request.assert_called_once_with(request, page=1)
+        self.assertEqual(self.resource_loads.call_count, 1)
 
     def test_consumed_are_Pages(self):
         pages_that_are_Pages = len(
-            filter(lambda page: isinstance(page, Page), list(self.r)))
+            filter(lambda page: isinstance(page, base.Page), list(self.r)))
         self.assertEqual(pages_that_are_Pages, 3, 'There are not 3 Pages objs')
-        self.assertEqual(self.resource_loads.call_count, 1)
 
     def test_all_iteration_CALLS(self):
         self.r.all()
@@ -58,7 +59,7 @@ class TestResultWithPaginate(ResultInitMixin, TestCase):
         self.assertEqual(self.resource_loads.call_count, 0)
 
 
-class TestResultWithoutPaginate(ResultInitMixin, TestCase):
+class TestSmartResultWithoutPaginate(ResultInitMixin, TestCase):
 
     @property
     def mock(self):
@@ -72,3 +73,28 @@ class TestResultWithoutPaginate(ResultInitMixin, TestCase):
         self.r.all()
         self.assertEqual(self.get_request.call_count, 1)
         self.assertEqual(self.resource_loads.call_count, 1)
+
+
+class TestNormalResult(TestSmartResultWithPaginate, TestCase):
+
+    @property
+    def mock(self):
+        return MockPaginate()
+
+    def setUp(self):
+        super(TestNormalResult, self).setUp()
+        self.r = normal.Result(normal.Method(self.c.get, request))
+
+    def test_iteration_CALLS(self):
+        self.assertEqual(self.get_request.call_count, 0)
+        self.assertEqual(self.resource_loads.call_count, 0)
+        list(self.r)
+        self.assertEqual(self.get_request.call_count, 3)
+        self.assertEqual(self.resource_loads.call_count, 3)
+
+    """ Inherit tests. They share behaviour
+        def test_consumed_are_Pages(self):
+        def test_all_iteration_CALLS(self):
+        def test_CACHE_with_renew_iterations(self):
+        def test_ITERATOR_calls(self):
+    """

@@ -3,7 +3,8 @@
 
 from urlparse import urlparse, parse_qs
 
-from .third_libs.link_header import parse_link_value
+from pygithub3.core.third_libs.link_header import parse_link_value
+
 
 class Link(str):
 

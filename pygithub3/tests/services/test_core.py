@@ -7,7 +7,7 @@ from mock import patch
 
 from pygithub3.tests.utils.core import TestCase
 from pygithub3.services.base import Service, MimeTypeMixin
-from pygithub3.core.result import Result
+from pygithub3.core.result import base
 from pygithub3.tests.utils.base import DummyRequest, mock_response
 from pygithub3.tests.utils.services import _, DummyService
 
@@ -52,7 +52,7 @@ class TestServiceCalls(TestCase):
     def test_GET_result(self, request_method):
         result = self.s._get_result(self.r, **self.args)
         self.assertFalse(request_method.called)
-        self.assertIsInstance(result, Result)
+        self.assertIsInstance(result, base.Result)
 
 
 @patch.object(requests.sessions.Session, 'request')

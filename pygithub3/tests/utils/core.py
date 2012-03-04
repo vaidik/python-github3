@@ -13,6 +13,8 @@ request = DummyRequest()
 json_content = [dict(name='dummy')]
 
 
+# To smart results
+
 def mock_paginate_github_in_GET(request, page):
     def header(page):
         return {'link': '<https://d.com/d?page=%s>; rel="last"' % page}
@@ -33,3 +35,27 @@ def mock_no_paginate_github_in_GET(request, page):
     response.headers = {}
     response.content = [json_content * 3]
     return response
+
+
+# To normal results
+class MockPaginate(object):
+
+    def __init__(self):
+        self.counter = 1
+
+    def content(self):
+        if self.counter >= 3:
+            return json_content
+        return json_content * 2
+
+    def header(self):
+        if self.counter >= 3:
+            return {}
+        return {'link': '<https://d.com/d?page=%s>; rel="next"' % self.counter}
+
+    def __call__(self, *args, **kwargs):
+        response = Mock()
+        response.headers = self.header()
+        response.content = self.content()
+        self.counter += 1
+        return response

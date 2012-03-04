@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 from pygithub3.core.client import Client
-from pygithub3.core.result import Result
+from pygithub3.core import result
 from pygithub3.requests.base import Factory
 from pygithub3.core.errors import NotFound
 
@@ -138,7 +138,8 @@ class Service(object):
         return request.resource.loads(response.content)
 
     def _get_result(self, request, **kwargs):
-        return Result(self._client, request, **kwargs)
+        method = result.smart.Method(self._client.get, request, **kwargs)
+        return result.smart.Result(method)
 
 
 class MimeTypeMixin(object):
