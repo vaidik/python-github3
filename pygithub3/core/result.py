@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from urlparse import urlparse, parse_qs
+import functools
 
 from .link import Link
 
@@ -10,9 +10,8 @@ class Method(object):
     """ Lazy support """
 
     def __init__(self, method, request, **method_args):
-        self.method = method
-        self.request = request
-        self.args = method_args
+        self.method = functools.partial(method, request, **method_args)
+        self.resource = request.resource
         self.cache = {}
 
     def cached(func):
