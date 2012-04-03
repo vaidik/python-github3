@@ -34,13 +34,13 @@ class TestGistService(TestCase):
 
     def test_LIST_public(self, request_method):
         request_method.return_value = mock_response_result()
-        self.gs.list_public().all()
+        self.gs.public().all()
         self.assertEqual(request_method.call_args[0],
             ('get', _('gists/public')))
 
     def test_LIST_starred(self, request_method):
         request_method.return_value = mock_response_result()
-        self.gs.list_starred.all()
+        self.gs.starred().all()
         self.assertEqual(request_method.call_args[0],
             ('get', _('gists/starred')))
 
@@ -78,7 +78,7 @@ class TestGistService(TestCase):
         request_method.return_value = mock_response()
         self.gs.is_starred(1)
         self.assertEqual(request_method.call_args[0],
-            ('get', _('gists/1/star')))
+            ('head', _('gists/1/star')))
 
     def test_FORK(self, request_method):
         request_method.return_value = mock_response('post')
