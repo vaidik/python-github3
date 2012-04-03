@@ -37,4 +37,4 @@ class Update(Request):
 
 class Delete(Request):
 
-    uri = 'gists/comments/1'
+    uri = 'gists/comments/{id}'
