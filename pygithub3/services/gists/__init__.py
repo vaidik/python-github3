@@ -2,12 +2,14 @@
 # -*- encoding: utf-8 -*-
 
 from pygithub3.services.base import Service
+from comments import Comments
 
 
 class Gist(Service):
     """ Consume `Gists API <http://developer.github.com/v3/gists>`_ """
 
     def __init__(self, **config):
+        self.comments = Comments(**config)
         super(Gist, self).__init__(**config)
 
     def list(self, user=None):

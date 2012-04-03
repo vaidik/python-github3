@@ -6,7 +6,7 @@ from mock import patch, Mock
 
 from pygithub3.tests.utils.core import TestCase
 from pygithub3.resources.base import json
-from pygithub3.services.gists import Gist
+from pygithub3.services.gists import Gist, Comments
 from pygithub3.tests.utils.base import (mock_response, mock_response_result,
                                         mock_json)
 from pygithub3.tests.utils.services import _
@@ -91,3 +91,40 @@ class TestGistService(TestCase):
         self.gs.delete(1)
         self.assertEqual(request_method.call_args[0],
             ('delete', _('gists/1')))
+
+
+@patch.object(requests.sessions.Session, 'request')
+class TestCommentService(TestCase):
+
+    def setUp(self):
+        self.cs = Comments()
+
+    def test_LIST(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.cs.list(1).all()
+        self.assertEqual(request_method.call_args[0],
+            ('get', _('gists/1/comments')))
+
+    def test_GET(self, request_method):
+        request_method.return_value = mock_response()
+        self.cs.get(1)
+        self.assertEqual(request_method.call_args[0],
+            ('get', _('gists/comments/1')))
+
+    def test_CREATE(self, request_method):
+        request_method.return_value = mock_response('post')
+        self.cs.create(1, dict(body='comment'))
+        self.assertEqual(request_method.call_args[0],
+            ('post', _('gists/1/comments')))
+
+    def test_UPDATE(self, request_method):
+        request_method.return_value = mock_response('patch')
+        self.cs.update(1, dict(body='new_comment'))
+        self.assertEqual(request_method.call_args[0],
+            ('patch', _('gists/comments/1')))
+
+    def test_DELETE(self, request_method):
+        request_method.return_value = mock_response('delete')
+        self.cs.delete(1)
+        self.assertEqual(request_method.call_args[0],
+            ('delete', _('gists/comments/1')))

@@ -35,3 +35,11 @@ class Gist(Resource):
 
     def __str__(self):
         return '<Gist (%s)>' % getattr(self, 'description', '')
+
+class Comment(Resource):
+
+    _dates = ('created_at', )
+    _maps = {'user': User}
+
+    def __str__(self):
+        return '<GistComment (%s)>' % getattr(self, 'user', '')
