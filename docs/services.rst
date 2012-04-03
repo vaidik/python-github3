@@ -53,6 +53,16 @@ attributes or all of them.
 .. autoclass:: pygithub3.services.base.MimeTypeMixin
     :members:
 
+**Fast example**::
+
+    from pygithub3 import Github
+
+    gh = Github()
+
+    gh.gists.comments.set_html()
+    comment = gh.gists.comments.list(1).all()[0]
+    print comment.body, comment.body_text, comment.body_html
+
 List of services
 -------------------
 
@@ -61,5 +71,6 @@ List of services
 
     users
     repos
+    gists
 
 .. _mimetypes: http://developer.github.com/v3/mime

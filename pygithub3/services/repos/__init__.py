@@ -11,7 +11,7 @@ from .watchers import Watchers
 from .hooks import Hooks
 
 
-class Repos(Service):
+class Repo(Service):
     """ Consume `Repos API <http://developer.github.com/v3/repos>`_ """
 
     def __init__(self, **config):
@@ -22,7 +22,7 @@ class Repos(Service):
         self.keys = Keys(**config)
         self.watchers = Watchers(**config)
         self.hooks = Hooks(**config)
-        super(Repos, self).__init__(**config)
+        super(Repo, self).__init__(**config)
 
     def list(self, user=None, type='all'):
         """ Get user's repositories
@@ -133,7 +133,7 @@ class Repos(Service):
         return self.__list_contributors(user, repo)
 
     def list_contributors_with_anonymous(self, user=None, repo=None):
-        """ Like :attr:`~pygithub3.services.repos.Repos.list_contributors` plus
+        """ Like :attr:`~pygithub3.services.repos.Repo.list_contributors` plus
         anonymous """
         return self.__list_contributors(user, repo, anom=True)
 

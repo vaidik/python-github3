@@ -37,7 +37,7 @@ class Body(object):
             if attr_required not in parsed:
                 raise ValidationError("'%s' attribute is required" %
                                       attr_required)
-            if not parsed[attr_required]:
+            if parsed[attr_required] is None:
                 raise ValidationError("'%s' attribute can't be empty" %
                                       attr_required)
         return parsed

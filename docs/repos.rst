@@ -1,6 +1,6 @@
 .. _Repos service:
 
-Repos's services
+Repos services
 ===================
 
 **Fast sample**::
@@ -50,7 +50,7 @@ You can see it better with an example: ::
 Repo
 -------
 
-.. autoclass:: pygithub3.services.repos.Repos
+.. autoclass:: pygithub3.services.repos.Repo
     :members:
 
     .. attribute:: collaborators
