@@ -38,12 +38,16 @@ Achievements
 -------------
 
 - The core
-- `User service <http://developer.github.com/v3/users/>`_
+- `Users service <http://developer.github.com/v3/users/>`_
+- `Repos service <http://developer.github.com/v3/repos/>`_
+- `Gists service <http://developer.github.com/v3/gists/>`_
 
 TODO
 -----
 
-- `Repo service <http://developer.github.com/v3/repos/>`_
+- Services: Git Data, Issues, Orgs, Pull Requests, Events
+- Oauth authorization API (service?)
+- Proxy methods into resources (e.g copitux.followers())
 
 Contribute
 -----------
