@@ -61,5 +61,6 @@ List of services
 
     users
     repos
+    gists
 
 .. _mimetypes: http://developer.github.com/v3/mime

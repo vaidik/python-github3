@@ -96,6 +96,10 @@ class Gist(Service):
         """ Star a gist
 
         :param int id: Gist id
+
+        .. warning ::
+            You must be authenticated
+
         """
         request = self.request_builder('gists.star', id=id)
         self._put(request)
@@ -104,6 +108,10 @@ class Gist(Service):
         """ Unstar a gist
 
         :param int id: Gist id
+
+        .. warning ::
+            You must be authenticated
+
         """
         request = self.request_builder('gists.unstar', id=id)
         return self._delete(request)
@@ -112,6 +120,10 @@ class Gist(Service):
         """ Check if a gist is starred
 
         :param int id: Gist id
+
+        .. warning ::
+            You must be authenticated
+
         """
         request = self.request_builder('gists.is_starred', id=id)
         return self._bool(request)
@@ -120,6 +132,10 @@ class Gist(Service):
         """ Fork a gist
 
         :param int id: Gist id
+
+        .. warning ::
+            You must be authenticated
+
         """
 
         request = self.request_builder('gists.fork', id=id)
@@ -129,6 +145,10 @@ class Gist(Service):
         """ Delete a gist
 
         :param int id: Gist id
+
+        .. warning ::
+            You must be authenticated
+
         """
         request = self.request_builder('gists.delete', id=id)
         return self._delete(request)
