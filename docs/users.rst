@@ -1,6 +1,6 @@
-.. _User service:
+.. _Users service:
 
-User's services
+Users services
 ===============
 
 **Fast sample**::

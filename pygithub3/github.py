@@ -2,6 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 
+#TODO: Move the imports out. setup related
 class Github(object):
     """
     You can preconfigure all services globally with a ``config`` dict. See
@@ -14,10 +15,10 @@ class Github(object):
 
     def __init__(self, **config):
         from pygithub3.services.users import User
-        from pygithub3.services.repos import Repos
+        from pygithub3.services.repos import Repo
         from pygithub3.services.gists import Gist
         self._users = User(**config)
-        self._repos = Repos(**config)
+        self._repos = Repo(**config)
         self._gists = Gist(**config)
 
     @property
@@ -29,7 +30,7 @@ class Github(object):
     @property
     def users(self):
         """
-        :ref:`User service <User service>`
+        :ref:`Users service <Users service>`
         """
         return self._users
 
@@ -43,6 +44,6 @@ class Github(object):
     @property
     def gists(self):
         """
-        :ref:`Gist service <Gist service>`
+        :ref:`Gists service <Gists service>`
         """
         return self._gists

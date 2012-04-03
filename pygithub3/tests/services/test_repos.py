@@ -5,7 +5,7 @@ import requests
 from mock import patch, Mock
 
 from pygithub3.tests.utils.core import TestCase
-from pygithub3.services.repos import (Repos, Collaborators, Commits, Downloads,
+from pygithub3.services.repos import (Repo, Collaborators, Commits, Downloads,
                                       Forks, Keys, Watchers, Hooks)
 from pygithub3.resources.base import json
 from pygithub3.tests.utils.base import (mock_response, mock_response_result,
@@ -20,7 +20,7 @@ json.loads = Mock(side_effect=mock_json)
 class TestRepoService(TestCase):
 
     def setUp(self):
-        self.rs = Repos()
+        self.rs = Repo()
         self.rs.set_user('octocat')
         self.rs.set_repo('octocat_repo')
 
