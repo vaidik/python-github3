@@ -19,11 +19,16 @@ class Github(object):
         from pygithub3.services.gists import Gist
         from pygithub3.services.git_data import GitData
         from pygithub3.services.pull_requests import PullRequests
+        from pygithub3.services.issues import Issue
         self._users = User(**config)
         self._repos = Repo(**config)
         self._gists = Gist(**config)
         self._git_data = GitData(**config)
         self._pull_requests = PullRequests(**config)
+        self._users = User(**config)
+        self._repos = Repo(**config)
+        self._gists = Gist(**config)
+        self._issues = Issue(**config)
 
     @property
     def remaining_requests(self):
