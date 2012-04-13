@@ -7,7 +7,7 @@ from .users import User
 class Issue(Resource):
 
     _dates = ('created_at', 'updated_at')
-    _maps = {'assignee': User}
+    _maps = {'assignee': User, 'user': User}
 
     def __str__(self):
         return '<Issue (%s)>' % getattr(self, 'number', '')
@@ -15,7 +15,7 @@ class Issue(Resource):
 
 class Comment(Resource):
 
-    _dates = ('created_at', 'update_at')
+    _dates = ('created_at', 'updated_at')
     _maps = {'user': User}
 
     def __str__(self):
@@ -25,7 +25,7 @@ class Comment(Resource):
 class Event(Resource):
 
     _dates = ('created_at', )
-    _maps = {'actor': User}
+    _maps = {'actor': User, 'issue': Issue}
 
     def __str__(self):
         return '<Event (%s)>' % (getattr(self, 'commit_id', ''))
