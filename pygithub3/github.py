@@ -70,3 +70,9 @@ class Github(object):
         :ref:`Pull Requests service <Pull Requests service>`
         """
         return self._pull_requests
+
+    def issues(self):
+        """
+        :ref:`Issues service <Issues service>`
+        """
+        return self._issues
