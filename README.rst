@@ -58,5 +58,9 @@ Contribute
 4. Add you to ``AUTHORS``
 5. Pull request it
 
-**Note**: I use `nose <http://readthedocs.org/docs/nose/en/latest/>`_ test environment,
-with `mock <http://www.voidspace.org.uk/python/mock/>`_ ``pip install nose mock``
+Tests
+-----
+
+Test and docs requirements are listed in ``test_requirements.txt``.
+Run ``pip install -r test_requirements.txt`` to install them and ``nosetests``
+to run tests

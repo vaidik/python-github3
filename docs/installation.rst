@@ -15,15 +15,21 @@ Dependencies
 Required
 .........
 
-This library only depends on `request library`_ module.
+This library depends only on the `requests`_ module.
 
-If you install ``pygithub3`` with ``pip`` all is done. The best option
+If you install ``pygithub3`` with ``pip`` all is done. This is the best option.
 
 Optional
 .........
 
-If you want to run the test suite, you must install `nose`_ and `mock`_
+The test suite uses `nose`_, `mock`_, and `unittest2`_. Compiling the
+documentation requires `sphinx`_.
 
-.. _request library: http://docs.python-requests.org/en/v0.10.6/index.html
+Install all of these by running ``pip install -r test_requirements.txt``.  Then
+just run ``nosetests`` to run the tests.
+
+.. _requests: http://docs.python-requests.org/en/v0.10.6/index.html
 .. _nose: http://readthedocs.org/docs/nose/en/latest
 .. _mock: http://pypi.python.org/pypi/mock
+.. _unittest2: http://pypi.python.org/pypi/unittest2
+.. _sphinx: http://sphinx.pocoo.org/
