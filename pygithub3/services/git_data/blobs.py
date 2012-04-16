@@ -11,6 +11,8 @@ class Blobs(Service):
         """Get a particular blob
 
         :param str sha: The sha of the blob to get
+        :param str user: Username
+        :param str repo: Repository
 
         """
         request = self.make_request('git_data.blobs.get', sha=sha,
@@ -18,7 +20,13 @@ class Blobs(Service):
         return self._get(request)
 
     def create(self, data, user=None, repo=None):
-        """Create a blob"""
+        """Create a blob
+
+        :param dict data: Data describing the blob to create
+        :param str user: Username
+        :param str repo: Repository
+
+        """
         request = self.make_request('git_data.blobs.create', body=data,
                                     user=user, repo=repo)
         return self._post(request)

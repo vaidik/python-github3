@@ -16,5 +16,3 @@ class Create(Request):
         'schema': ('message', 'tree', 'parents', 'author', 'committer'),
         'required': ('message', 'tree', 'parents'),
     }
-
-

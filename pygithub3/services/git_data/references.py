@@ -13,6 +13,10 @@ class References(Service):
         .. note::
             Remember that branch references look like "heads/<branch_name>"
 
+        :param str ref: the name of the reference to get
+        :param str user: Username
+        :param str repo: Repository
+
         """
         return self._get(
             self.make_request('git_data.references.get', ref=ref, user=user,
@@ -24,6 +28,8 @@ class References(Service):
 
         :param str namespace: Limit the request to a particular type of
                               reference. For example, ``heads`` or ``tags``.
+        :param str user: Username
+        :param str repo: Repository
 
         """
         return self._get(
@@ -34,8 +40,8 @@ class References(Service):
         """Create a reference
 
         :param dict body: Data describing the reference to create
-        :param str user: username
-        :param str repo: repository name
+        :param str user: Username
+        :param str repo: Repository
 
         """
         return self._post(
@@ -47,7 +53,9 @@ class References(Service):
         """Update an existing reference
 
         :param str ref: The SHA of the reference to update
-        :param dict body: data
+        :param dict body: Data to update the reference with
+        :param str user: Username
+        :param str repo: Repository
 
         """
         return self._patch(
@@ -59,6 +67,8 @@ class References(Service):
         """Delete a reference
 
         :param str ref: The SHA of the reference to delete
+        :param str user: Username
+        :param str repo: Repository
 
         """
         return self._delete(

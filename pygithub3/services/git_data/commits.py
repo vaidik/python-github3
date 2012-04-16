@@ -8,7 +8,13 @@ class Commits(Service):
     """Consume `Commits API <http://developer.github.com/v3/git/commits/>`_"""
 
     def get(self, sha, user=None, repo=None):
-        """get a commit from the current repo"""
+        """get a commit from the current repo
+
+        :param str sha: SHA of the Commit that you want.
+        :param str user: Username
+        :param str repo: Repository
+
+        """
         request = self.make_request('git_data.commits.get', sha=sha,
                                        user=user, repo=repo)
         return self._get(request)
