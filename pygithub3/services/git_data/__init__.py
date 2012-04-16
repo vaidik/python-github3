@@ -8,7 +8,7 @@ from .references import References
 from .tags import Tags
 from .trees import Trees
 
-def GitData(Service):
+class GitData(Service):
     """Consume `Git Data API <http://developer.github.com/v3/git/>`_"""
 
     def __init__(self, **config):
