@@ -14,5 +14,5 @@ class Create(Request):
     resource = Blob
     body_schema = {
         'schema': ('content', 'encoding'),
-        'required': ('content', 'encoding'), #TODO: is enc really required?
+        'required': ('content', 'encoding'),  # TODO: is enc really required?
     }

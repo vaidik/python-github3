@@ -17,7 +17,8 @@ class Reference(Resource):
 
 class Tag(Resource):
     _maps = {'object': Commit,
-             'tagger': Author,} # committer? tagger?
+             'tagger': Author}  # committer? tagger?
+
     def __str__(self):
         return '<Tag (%s)>' % getattr(self, 'tag', '')
 

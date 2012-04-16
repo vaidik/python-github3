@@ -31,5 +31,3 @@ class Commits(Service):
             self.make_request('git_data.commits.create', user=user, repo=repo,
                               body=data)
         )
-
-

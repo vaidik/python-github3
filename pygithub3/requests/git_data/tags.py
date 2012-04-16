@@ -13,4 +13,3 @@ class Create(Request):
         'schema': ('tag', 'message', 'object', 'type', 'tagger'),
         'required': ('type',),
     }
-
