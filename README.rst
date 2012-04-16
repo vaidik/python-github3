@@ -41,11 +41,12 @@ Achievements
 - `Users service <http://developer.github.com/v3/users/>`_
 - `Repos service <http://developer.github.com/v3/repos/>`_
 - `Gists service <http://developer.github.com/v3/gists/>`_
+- `Git Data service <http://developer.github.com/v3/git/>`_
 
 TODO
 -----
 
-- Services: Git Data, Issues, Orgs, Pull Requests, Events
+- Services: Issues, Orgs, Pull Requests, Events
 - Oauth authorization API (service?)
 - Proxy methods into resources (e.g copitux.followers())
 
@@ -55,7 +56,7 @@ Contribute
 1. Fork the `repository <https://github.com/copitux/python-github3>`_
 2. Write a test to cover new feature or to reproduce bug
 3. Code with `pep8 <http://www.python.org/dev/peps/pep-0008/>`_ rules
-4. Add you to ``AUTHORS``
+4. Add yourself to ``AUTHORS``
 5. Pull request it
 
 Tests
@@ -63,4 +64,4 @@ Tests
 
 Test and docs requirements are listed in ``test_requirements.txt``.
 Run ``pip install -r test_requirements.txt`` to install them and ``nosetests``
-to run tests
+to run tests.

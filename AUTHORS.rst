@@ -11,8 +11,9 @@ Forked and redesign from Kenneth Reitz's repo
 
 Forked from https://github.com/kennethreitz/python-github3
 
-Kenneth Reitz is also the author of the awesome `requests <https://github.com/kennethreitz/requests>`_ library
-which `python-github3` needs it
+Kenneth Reitz is also the author of the awesome
+`requests <https://github.com/kennethreitz/requests>`_ library, which
+`python-github3` requires.
 
 Patches and Suggestions
 .........................
@@ -21,3 +22,4 @@ Patches and Suggestions
 - Rok Garbas
 - Antti Kaihola <akaihol+github@ambitone.com>
 - Francisco Marcos <fmarcos83@gmail.com>
+- Nathaniel Williams <nat.williams@gmail.com>
