@@ -81,7 +81,7 @@ class Client(object):
 
     def get(self, request, **kwargs):
         response = self.request('get', request, **kwargs)
-        assert response.status_code == 200
+        # there are valid GET responses that != 200
         return response
 
     def post(self, request, **kwargs):

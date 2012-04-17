@@ -14,7 +14,7 @@ def mock_json(content):
 def mock_response(status_code='get', content={}):
     CODES = dict(get=200, patch=200, post=201, delete=204)
     response = Mock(name='response')
-    response.status_code = CODES[str(status_code).lower()] or status_code
+    response.status_code = CODES.get(str(status_code).lower(), status_code)
     response.content = content
     return response
 
