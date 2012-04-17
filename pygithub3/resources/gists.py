@@ -15,6 +15,7 @@ class Fork(Resource):
 
     _dates = ('created_at', )
     _maps = {'user': User}
+
     def __str__(self):
         return '<GistFork>'
 
