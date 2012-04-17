@@ -17,10 +17,11 @@ ABS_IMPORT_PREFIX = 'pygithub3.requests'
 
 class Body(object):
 
-    def __init__(self, content, schema, required):
+    def __init__(self, content, valid_body, validate_body=None):
         self.content = content
-        self.schema = schema
-        self.required = required
+        self.schema = valid_body['schema']
+        self.required = valid_body['required']
+        self.validate_body = validate_body or (lambda x: None)
 
     def dumps(self):
         if not self.schema:
@@ -33,6 +34,7 @@ class Body(object):
                                    % self.__class__.__name__)
         parsed = dict([(key, self.content[key]) for key in self.schema
                       if key in self.content])
+        self.validate_body(parsed)
         for attr_required in self.required:
             if attr_required not in parsed:
                 raise ValidationError("'%s' attribute is required" %
@@ -58,7 +60,8 @@ class Request(object):
 
     def clean(self):
         self.uri = self.clean_uri() or self.uri
-        self.body = Body(self.clean_body(), **self.clean_valid_body())
+        self.body = Body(self.clean_body(), self.clean_valid_body(),
+                         self.validate_body)
 
     def clean_body(self):
         return self.body
@@ -93,6 +96,9 @@ class Request(object):
 
     def get_body(self):
         return self.body.dumps()
+
+    def validate_body(self, *args):
+        pass
 
 
 class Factory(object):

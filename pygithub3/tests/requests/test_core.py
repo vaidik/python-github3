@@ -2,12 +2,14 @@
 # -*- encoding: utf-8 -*-
 
 from mock import Mock
+from nose.tools import raises
 
 from pygithub3.tests.utils.core import TestCase
 from pygithub3.requests.base import Factory, Body, json, Request
 from pygithub3.exceptions import (UriInvalid, DoesNotExists, ValidationError,
                                   InvalidBodySchema)
-from pygithub3.tests.utils.base import mock_json, DummyRequest
+from pygithub3.tests.utils.base import (mock_json, DummyRequest,
+                                        DummyRequestValidation)
 from pygithub3.tests.utils.requests import (
     RequestWithArgs, RequestCleanedUri, RequestBodyInvalidSchema,
     RequestCleanedBody)
@@ -74,7 +76,7 @@ class TestRequestBodyWithSchema(TestCase):
 
     def setUp(self):
         valid_body = dict(schema=('arg1', 'arg2'), required=('arg1', ))
-        self.b = Body({}, **valid_body)
+        self.b = Body({}, valid_body)
 
     def test_with_body_empty_and_schema_permissive(self):
         self.b.schema = ('arg1', 'arg2', '...')
@@ -100,3 +102,14 @@ class TestRequestBodyWithSchema(TestCase):
     def test_only_valid_keys(self):
         self.b.content = dict(arg1='arg1', arg2='arg2', fake='test')
         self.assertEqual(self.b.dumps(), dict(arg1='arg1', arg2='arg2'))
+
+
+class TestBodyValidation(TestCase):
+    @raises(ValidationError)
+    def test_with_error(self):
+        req = DummyRequestValidation(
+            body={'foo': 'bar', 'error': 'yes'},
+        )
+        req.body_schema = {'schema': ('foo',),
+                           'required': ('foo',)}
+        req.get_body()
