@@ -8,7 +8,7 @@ class InvalidBodySchema(Exception):
     pass
 
 
-class DoesNotExists(Exception):
+class RequestDoesNotExist(Exception):
     """ Raised when `Request` factory can't find the subclass """
     pass
 

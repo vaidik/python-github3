@@ -7,8 +7,8 @@ try:
 except ImportError:
     import json
 
-from pygithub3.exceptions import (DoesNotExists, UriInvalid, ValidationError,
-                                  InvalidBodySchema)
+from pygithub3.exceptions import (RequestDoesNotExist, UriInvalid,
+                                  ValidationError, InvalidBodySchema)
 from pygithub3.resources.base import Raw
 from pygithub3.core.utils import import_module
 
@@ -126,11 +126,11 @@ class Factory(object):
                                         % (ABS_IMPORT_PREFIX, module_chunk))
                 request = getattr(module, request_chunk)
             except ImportError:
-                raise DoesNotExists("'%s' module does not exists"
-                                       % module_chunk)
+                raise RequestDoesNotExist("'%s' module does not exist"
+                                          % module_chunk)
             except AttributeError:
-                raise DoesNotExists(
-                    "'%s' request doesn't exists into '%s' module"
+                raise RequestDoesNotExist(
+                    "'%s' request does not exist in '%s' module"
                     % (request_chunk, module_chunk))
             return func(self, request, **kwargs)
         return wrapper

@@ -6,8 +6,8 @@ from nose.tools import raises
 
 from pygithub3.tests.utils.core import TestCase
 from pygithub3.requests.base import Factory, Body, json, Request
-from pygithub3.exceptions import (UriInvalid, DoesNotExists, ValidationError,
-                                  InvalidBodySchema)
+from pygithub3.exceptions import (UriInvalid, RequestDoesNotExist,
+                                  ValidationError, InvalidBodySchema)
 from pygithub3.tests.utils.base import (mock_json, DummyRequest,
                                         DummyRequestValidation)
 from pygithub3.tests.utils.requests import (
@@ -29,8 +29,8 @@ class TestFactory(TestCase):
         self.assertRaises(UriInvalid, self.f, '.invalid')
 
     def test_BUILDER_with_fake_action(self):
-        self.assertRaises(DoesNotExists, self.f, 'users.fake')
-        self.assertRaises(DoesNotExists, self.f, 'fake.users')
+        self.assertRaises(RequestDoesNotExist, self.f, 'users.fake')
+        self.assertRaises(RequestDoesNotExist, self.f, 'fake.users')
 
     def test_BUILDER_builds_users(self):
         """ Users.get as real test because it wouldn't be useful mock
