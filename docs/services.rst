@@ -72,5 +72,6 @@ List of services
     users
     repos
     gists
+    pull_requests
 
 .. _mimetypes: http://developer.github.com/v3/mime
