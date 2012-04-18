@@ -120,10 +120,12 @@ class PullRequests(Service, MimeTypeMixin):
         :param str user: Username
         :param str repo: Repository
 
+        This currently raises an HTTP 405 error if the request is not
+        mergable.
+
         """
-        # so, the API docs don't actually say what the status code will be in
-        # the case of a merge failure. I hope it's not a 404.
+        body = {'commit_message': message}
         return self._put(
             self.make_request('pull_requests.merge', number=number,
-                              message=message, user=user, repo=repo)
+                              body=body, user=user, repo=repo)
         )
