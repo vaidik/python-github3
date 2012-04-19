@@ -60,3 +60,7 @@ class Merge_status(Request):
 class Merge(Request):
     uri = 'repos/{user}/{repo}/pulls/{number}/merge'
     resource = Raw
+    body_schema = {
+        'schema': ('commit_message',),
+        'required': (),
+    }
