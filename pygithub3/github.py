@@ -53,6 +53,6 @@ class Github(object):
     @property
     def pull_requests(self):
         """
-        :ref:`Pull Requests service <Pull Requests service`
+        :ref:`Pull Requests service <Pull Requests service>`
         """
         return self._pull_requests
