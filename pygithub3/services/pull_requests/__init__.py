@@ -95,23 +95,10 @@ class PullRequests(Service, MimeTypeMixin):
         :param str repo: Repository
 
         """
-        # for this to work with a proper Resource, we would need to pass the
-        # response's status code to the Resource constructor, and that's kind
-        # of scary
-        try:
-            resp = self._client.get(
-                self.make_request('pull_requests.merge_status', number=number,
-                                user=user, repo=repo)
-            )
-        except NotFound:
-            return False
-        code = resp.status_code
-        if code == 204:
-            return True
-        # TODO: more flexible way to return arbitrary objects based on
-        # response.  Probably something on Request
-        raise BadRequest('got code %s: %s' % (code, resp.content))
-        # again, I'm sorry.
+        return self._bool(
+            self.make_request('pull_requests.merge_status', number=number,
+                              user=user, repo=repo)
+        )
 
     def merge(self, number, message='', user=None, repo=None):
         """Merge a pull request.

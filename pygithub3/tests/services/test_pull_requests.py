@@ -113,7 +113,7 @@ class TestPullRequestsService(TestCase):
         self.assertEqual(True, resp)
         self.assertEqual(
             reqm.call_args[0],
-            ('get', _('repos/user/repo/pulls/123/merge'))
+            ('head', _('repos/user/repo/pulls/123/merge'))
         )
 
     def test_MERGE_STATUS_false(self, reqm):
@@ -122,7 +122,7 @@ class TestPullRequestsService(TestCase):
         self.assertEqual(False, resp)
         self.assertEqual(
             reqm.call_args[0],
-            ('get', _('repos/user/repo/pulls/123/merge'))
+            ('head', _('repos/user/repo/pulls/123/merge'))
         )
 
     def test_MERGE(self, reqm):
