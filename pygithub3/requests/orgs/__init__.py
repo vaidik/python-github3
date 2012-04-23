@@ -14,12 +14,12 @@ class List(Request):
 
 
 class Get(Request):
-    uri = 'orgs/{name}'
+    uri = 'orgs/{org}'
     resource = Org
 
 
 class Update(Request):
-    uri = 'orgs/{name}'
+    uri = 'orgs/{org}'
     resource = Org
     body_schema = {
         'schema': ('billing_email', 'company', 'email', 'location', 'name'),

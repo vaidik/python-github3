@@ -25,18 +25,18 @@ class Org(Service):
         request = self.request_builder('orgs.list', user=user)
         return self._get_result(request)
 
-    def get(self, name):
+    def get(self, org):
         """ Get a single org
 
-        :param str name: Org name
+        :param str org: Org name
         """
-        request = self.request_builder('orgs.get', name=name)
+        request = self.request_builder('orgs.get', org=org)
         return self._get(request)
 
-    def update(self, name, data):
+    def update(self, org, data):
         """ Update a single org
 
-        :param str name: Org name
+        :param str org: Org name
         :param dict data: Input. See `github orgs doc`_
 
         .. warning ::
@@ -47,5 +47,5 @@ class Org(Service):
             org_service.update(dict(company='ACME Development',
                                     location='Timbuctoo'))
         """
-        request = self.request_builder('orgs.update', name=name, body=data)
+        request = self.request_builder('orgs.update', org=org, body=data)
         return self._patch(request)
