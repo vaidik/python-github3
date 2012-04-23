@@ -12,3 +12,9 @@ class Org(Resource):
 
     def __str__(self):
         return '<Org (%s)>' % getattr(self, 'login', '')
+
+
+class Team(Resource):
+
+    def __str__(self):
+        return '<Team (%s)>' % getattr(self, 'name', '')
