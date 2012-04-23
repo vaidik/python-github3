@@ -17,9 +17,11 @@ class Github(object):
         from pygithub3.services.users import User
         from pygithub3.services.repos import Repo
         from pygithub3.services.gists import Gist
+        from pygithub3.services.orgs import Org
         self._users = User(**config)
         self._repos = Repo(**config)
         self._gists = Gist(**config)
+        self._orgs = Org(**config)
 
     @property
     def remaining_requests(self):
@@ -47,3 +49,10 @@ class Github(object):
         :ref:`Gists service <Gists service>`
         """
         return self._gists
+
+    @property
+    def orgs(self):
+        """
+        :ref:`Orgs service <Orgs service>`
+        """
+        return self._orgs

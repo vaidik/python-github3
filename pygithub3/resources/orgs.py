@@ -11,4 +11,4 @@ class Org(Resource):
     _dates = ('created_at', )
 
     def __str__(self):
-        return '<Org (%s)>' % getattr(self, 'name', '')
+        return '<Org (%s)>' % getattr(self, 'login', '')
