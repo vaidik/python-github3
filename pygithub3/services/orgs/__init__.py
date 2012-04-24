@@ -2,6 +2,7 @@
 
 from pygithub3.services.base import Service
 from .members import Members
+from .teams import Teams
 
 
 class Org(Service):
@@ -9,6 +10,7 @@ class Org(Service):
 
     def __init__(self, **config):
         self.members = Members(**config)
+        self.teams = Teams(**config)
         super(Org, self).__init__(**config)
 
     def list(self, user=None):

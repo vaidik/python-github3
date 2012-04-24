@@ -6,7 +6,7 @@ from mock import patch, Mock
 
 from pygithub3.tests.utils.core import TestCase
 from pygithub3.resources.base import json
-from pygithub3.services.orgs import Org, Members
+from pygithub3.services.orgs import Org, Members, Teams
 from pygithub3.tests.utils.base import (mock_response, mock_response_result,
                                         mock_json)
 from pygithub3.tests.utils.services import _
@@ -89,3 +89,84 @@ class TestOrgMemberService(TestCase):
         self.ms.conceal_membership('acme', 'octocat')
         self.assertEqual(request_method.call_args[0],
                          ('delete', _('orgs/acme/public_members/octocat')))
+
+
+@patch.object(requests.sessions.Session, 'request')
+class TestOrgMemberService(TestCase):
+    def setUp(self):
+        self.ts = Teams()
+
+    def test_LIST(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.ts.list('acme').all()
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('orgs/acme/teams')))
+
+    def test_GET(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.ts.get(1)
+        self.assertEqual(request_method.call_args[0], ('get', _('teams/1')))
+
+    def test_CREATE(self, request_method):
+        request_method.return_value = mock_response_result('post')
+        self.ts.create('acme', 'committers')
+        self.assertEqual(request_method.call_args[0],
+                         ('post', _('orgs/acme/teams')))
+
+    def test_UPDATE(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.ts.update(1, 'committers', 'push')
+        self.assertEqual(request_method.call_args[0], ('patch', _('teams/1')))
+
+    def test_DELETE(self, request_method):
+        request_method.return_value = mock_response_result('delete')
+        self.ts.delete(1)
+        self.assertEqual(request_method.call_args[0], ('delete', _('teams/1')))
+
+    def test_LIST_MEMBERS(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.ts.list_members(1).all()
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('teams/1/members')))
+
+    def test_IS_MEMBER(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.ts.is_member(1, 'octocat')
+        self.assertEqual(request_method.call_args[0],
+                         ('head', _('teams/1/members/octocat')))
+
+    def test_ADD_MEMBER(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.ts.add_member(1, 'octocat')
+        self.assertEqual(request_method.call_args[0],
+                         ('put', _('teams/1/members/octocat')))
+
+    def test_REMOVE_MEMBER(self, request_method):
+        request_method.return_value = mock_response_result('delete')
+        self.ts.remove_member(1, 'octocat')
+        self.assertEqual(request_method.call_args[0],
+                         ('delete', _('teams/1/members/octocat')))
+
+    def test_LIST_REPOS(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.ts.list_repos(1).all()
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('teams/1/repos')))
+
+    def test_CONTAINS_REPO(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.ts.contains_repo(1, 'octocat', 're_oct')
+        self.assertEqual(request_method.call_args[0],
+                         ('head', _('teams/1/repos/octocat/re_oct')))
+
+    def test_ADD_TEAM_REPO(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.ts.add_repo(1, 'octocat', 're_oct')
+        self.assertEqual(request_method.call_args[0],
+                         ('put', _('teams/1/repos/octocat/re_oct')))
+
+    def test_REMOVE_TEAM_REPO(self, request_method):
+        request_method.return_value = mock_response_result('delete')
+        self.ts.remove_repo(1, 'octocat', 're_oct')
+        self.assertEqual(request_method.call_args[0],
+                         ('delete', _('teams/1/repos/octocat/re_oct')))
