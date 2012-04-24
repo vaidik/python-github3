@@ -1,10 +1,15 @@
 # -*- encoding: utf-8 -*-
 
 from pygithub3.services.base import Service
+from .members import Members
 
 
 class Org(Service):
     """ Consume `Orgs API <http://developer.github.com/v3/orgs>`_ """
+
+    def __init__(self, **config):
+        self.members = Members(**config)
+        super(Org, self).__init__(**config)
 
     def list(self, user=None):
         """ Get user's orgs
