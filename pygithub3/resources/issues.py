@@ -1,8 +1,32 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
+import re
+
 from .base import Resource
 from .users import User
+
+
+class Label(Resource):
+    @staticmethod
+    def is_valid_color(color):
+        valid_color = re.compile(r'[0-9abcdefABCDEF]{6}')
+        match = valid_color(color)
+        if match is None:
+            return False
+        return match.start() == 0 and match.end() == len(color)
+
+    def __str__(self):
+        return '<Label (%s)>' % getattr(self, 'name', '')
+
+
+class Milestone(Resource):
+    _dates = ('created_at', 'due_on')
+    _maps = {'creator': User}
+
+    def __str__(self):
+        return '<Milestone (%s)>' % getattr(self, 'title', '')
+
 
 class Issue(Resource):
 

@@ -1,9 +1,10 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
 from pygithub3.services.base import Service
 from .comments import Comments
 from .events import Events
+from .labels import Labels
+from .milestones import Milestones
 
 class Issue(Service):
     """ Consume `Issues API <http://developer.github.com/v3/issues>`_ """
@@ -11,6 +12,8 @@ class Issue(Service):
     def __init__(self, **config):
         self.comments = Comments(**config)
         self.events = Events(**config)
+        self.labels = Labels(**config)
+        self.milestones = Milestones(**config)
         super(Issue, self).__init__(**config)
 
     def list(self, data={}):

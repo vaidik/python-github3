@@ -190,3 +190,33 @@ class Repo(Service):
         request = self.make_request('repos.list_branches',
             user=user, repo=repo)
         return self._get_result(request)
+
+    def list_labels(self, user=None, repo=None):
+        """ Get repository's labels
+
+        :param str user: Username
+        :param str repo: Repository
+        :returns: A :doc:`result`
+
+        .. note::
+            Remember :ref:`config precedence`
+        """
+        request = self.make_request('repos.list_labels',
+                                    user=user, 
+                                    repo=repo)
+        return self._get_result(request)
+
+    def list_milestones(self, user=None, repo=None):
+        """ Get repository's milestones
+
+        :param str user: Username
+        :param str repo: Repository
+        :returns: A :doc:`result`
+
+        .. note::
+            Remember :ref:`config precedence`
+        """
+        request = self.make_request('repos.list_milestones',
+                                    user=user, 
+                                    repo=repo)
+        return self._get_result(request)
