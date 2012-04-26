@@ -4,3 +4,5 @@
 *.rope*
 MANIFEST
 docs/_build
+dist/
+*egg-info
