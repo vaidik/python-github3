@@ -4,6 +4,7 @@
 import requests
 from mock import patch, Mock
 
+from pygithub3.exceptions import ValidationError
 from pygithub3.tests.utils.core import TestCase
 from pygithub3.resources.base import json
 from pygithub3.services.issues import Issue, Comments, Events, Labels, Milestones
@@ -133,11 +134,32 @@ class TestLabelsService(TestCase):
         self.assertEqual(request_method.call_args[0],
             ('post', _('repos/octocat/Hello-World/labels')))
 
+    def test_CREATE_with_invalid_color(self, request_method):
+        request_method.return_value = mock_response('post')
+        # invalid color
+        with self.assertRaises(ValidationError): 
+            args={'user': 'octocat',
+                  'repo': 'Hello-world',
+                  'name': 'bug',
+                  'color': 'FF00',}
+            self.lb.create(**args)
+
     def test_UPDATE(self, request_method):
         request_method.return_value = mock_response('patch')
         self.lb.update('octocat', 'Hello-World', 'bug', 'critical', 'FF0000')
         self.assertEqual(request_method.call_args[0],
             ('patch', _('repos/octocat/Hello-World/labels/bug')))
+
+    def test_UPDATE_with_invalid_color(self, request_method):
+        request_method.return_value = mock_response('post')
+        # invalid color
+        with self.assertRaises(ValidationError): 
+            args={'user': 'octocat',
+                  'repo': 'Hello-world',
+                  'name': 'bug',
+                  'new_name': 'critical',
+                  'color': 'FF00',}
+            self.lb.update(**args)
 
     def test_DELETE(self, request_method):
         request_method.return_value = mock_response('delete')

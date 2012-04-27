@@ -89,7 +89,6 @@ class List_milestones(Request):
 
     uri = 'repos/{user}/{repo}/milestones'
     resource = Milestone
-    # TODO: validate
     body_schema = {
         'schema': ('state', 'sort', 'direction'),
         'required': ()

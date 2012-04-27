@@ -18,11 +18,13 @@ class Create(Request):
         'required': ('name', 'color' )
     }
 
-    def validate_color(color):
-        color = color.get('color', '')
+    def clean_body(self):
+        color = self.body.get('color', '')
         if not Label.is_valid_color(color):
             raise ValidationError('colors must have 6 hexadecimal characters, '
                                   'without # in the beggining')
+        else:
+            return self.body
 
 
 class Update(Request):
@@ -33,12 +35,13 @@ class Update(Request):
         'schema': ('name', 'color'),
         'required': ('name', 'color' )
     }
-
-    def validate_color(color):
-        color = color.get('color', '')
+    def clean_body(self):
+        color = self.body.get('color', '')
         if not Label.is_valid_color(color):
             raise ValidationError('colors must have 6 hexadecimal characters, '
                                   'without # in the beggining')
+        else:
+            return self.body
 
 
 class Delete(Request):
@@ -60,6 +63,7 @@ class List_by_issue(Request):
 class Add_to_issue(Request):
     uri = 'repos/{user}/{repo}/issues/{number}/labels'
     resource = Label
+
 
 class Remove_from_issue(Request):
     uri = 'repos/{user}/{repo}/issues/{number}/labels/{name}'
