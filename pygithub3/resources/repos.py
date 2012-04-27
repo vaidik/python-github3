@@ -10,7 +10,7 @@ from .orgs import Org
 
 class Repo(Resource):
 
-    _dates = ('created_at', 'pushed_at')
+    _dates = ('created_at', 'updated_at', 'pushed_at')
     _maps = {'owner': User, 'organization': Org, 'parent': 'self',
              'source': 'self'}
 
