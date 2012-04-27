@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from pygithub3.services.base import Service
+from pygithub3.services.base import Service, MimeTypeMixin
 
 
-class Blobs(Service):
+class Blobs(Service, MimeTypeMixin):
     """Consume `Blobs API <http://developer.github.com/v3/git/blobs/>`_"""
 
     def get(self, sha, user=None, repo=None):
@@ -14,10 +14,12 @@ class Blobs(Service):
         :param str user: Username
         :param str repo: Repository
 
+        .. note::
+            Remember :ref:`config precedence`
         """
         request = self.make_request('git_data.blobs.get', sha=sha,
-                                       user=user, repo=repo)
-        return self._get(request)
+            user=user, repo=repo)
+        return self._get(request, **self._get_mimetype_as_header())
 
     def create(self, data, user=None, repo=None):
         """Create a blob
@@ -26,7 +28,9 @@ class Blobs(Service):
         :param str user: Username
         :param str repo: Repository
 
+        .. note::
+            Remember :ref:`config precedence`
         """
         request = self.make_request('git_data.blobs.create', body=data,
-                                    user=user, repo=repo)
+            user=user, repo=repo)
         return self._post(request)

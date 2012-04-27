@@ -80,6 +80,12 @@ class Service(object):
         """
         self._client.set_token(token)
 
+    #TODO: Refact as decorator::
+    """
+        Reason: make_request and request_builder ... are confusing names
+        @precedence('user')
+        def list(self, sha, user=None):
+    """
     def make_request(self, request, **kwargs):
         if 'user' in kwargs:
             kwargs['user'] = kwargs['user'] or self.get_user()
@@ -146,6 +152,7 @@ class Service(object):
         return normal.Result(method)
 
 
+# XXX: Refact to set_<type> method
 class MimeTypeMixin(object):
     """
     Mimetype support to Services

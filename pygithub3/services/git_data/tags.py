@@ -8,27 +8,29 @@ class Tags(Service):
     """Consume `Tags API <http://developer.github.com/v3/git/tags/>`_"""
 
     def get(self, sha, user=None, repo=None):
-        """Get a tag
+        """ Get a tag
 
         :param str sha: The sha of the tag to get.
         :param str user: Username
         :param str repo: Repository
 
+        .. note::
+            Remember :ref:`config precedence`
         """
-        return self._get(
-            self.make_request('git_data.tags.get', sha=sha, user=user,
-                              repo=repo)
-        )
+        request = self.make_request('git_data.tags.get', sha=sha, user=user,
+            repo=repo)
+        return self._get(request)
 
-    def create(self, body, user=None, repo=None):
-        """Create a tag
+    def create(self, data, user=None, repo=None):
+        """ Create a tag
 
-        :param dict body: Data describing the tag to create
+        :param dict data: Input. See `github tags doc`_
         :param str user: Username
         :param str repo: Repository
 
+        .. note::
+            Remember :ref:`config precedence`
         """
-        return self._post(
-            self.make_request('git_data.tags.create', body=body, user=user,
-                              repo=repo)
-        )
+        request = self.make_request('git_data.tags.create', body=data,
+            user=user, repo=repo)
+        return self._post(request)

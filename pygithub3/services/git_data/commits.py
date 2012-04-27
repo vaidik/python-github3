@@ -10,24 +10,27 @@ class Commits(Service):
     def get(self, sha, user=None, repo=None):
         """get a commit from the current repo
 
-        :param str sha: SHA of the Commit that you want.
+        :param str sha: SHA of the Commit that you want
         :param str user: Username
         :param str repo: Repository
 
+        .. note::
+            Remember :ref:`config precedence`
         """
         request = self.make_request('git_data.commits.get', sha=sha,
-                                       user=user, repo=repo)
+            user=user, repo=repo)
         return self._get(request)
 
     def create(self, data, user=None, repo=None):
         """create a commit on a repo
 
         :param dict data: Input. See `github commits doc`_
-        :param str user: username
-        :param str repo: repository name
+        :param str user: Username
+        :param str repo: Repository
 
+        .. note::
+            Remember :ref:`config precedence`
         """
-        return self._post(
-            self.make_request('git_data.commits.create', user=user, repo=repo,
-                              body=data)
-        )
+        request = self.make_request('git_data.commits.create', user=user,
+            repo=repo, body=data)
+        return self._post(request)

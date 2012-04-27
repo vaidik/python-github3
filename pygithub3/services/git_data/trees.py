@@ -8,7 +8,7 @@ class Trees(Service):
     """Consume `Trees API <http://developer.github.com/v3/git/trees/>`_"""
 
     def get(self, sha, recursive=False, user=None, repo=None):
-        """Get a tree object
+        """ Get a tree object
 
         :param str sha: The SHA of the tree you want.
         :param bool recursive: Whether to resolve each sub-tree belonging to
@@ -16,19 +16,23 @@ class Trees(Service):
         :param str user: Username
         :param str repo: Repository
 
+        .. note::
+            Remember :ref:`config precedence`
         """
-        return self._get(
-            self.make_request('git_data.trees.get', sha=sha,
-                              recursive=recursive, user=user, repo=repo)
-        )
+        request = self.make_request('git_data.trees.get', sha=sha, user=user,
+            repo=repo)
+        return self._get(request, recursive=recursive)
 
-    def create(self, body, user=None, repo=None):
-        """Create a tree object
+    def create(self, data, user=None, repo=None):
+        """ Create a tree object
 
-        :param dict body: Data describing the tree to create
+        :param dict data: Input. See `github trees doc`_
+        :param str user: Username
+        :param str repo: Repository
 
+        .. note::
+            Remember :ref:`config precedence`
         """
-        return self._post(
-            self.make_request('git_data.trees.create', body=body, user=user,
-                              repo=repo)
-        )
+        request = self.make_request('git_data.trees.create', body=data,
+            user=user, repo=repo)
+        return self._post(request)

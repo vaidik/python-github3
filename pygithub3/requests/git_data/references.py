@@ -8,7 +8,7 @@ class Get(Request):
 
 
 class List(Request):
-    uri = 'repos/{user}/{repo}/git/refs'
+    uri = 'repos/{user}/{repo}/git/refs/{namespace}'
     resource = Reference
 
 

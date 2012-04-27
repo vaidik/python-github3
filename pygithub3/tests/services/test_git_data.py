@@ -61,6 +61,7 @@ class TestCommitsService(TestCase):
             ('post', _('repos/octocat/repo/git/commits'))
         )
 
+
 @patch.object(requests.sessions.Session, 'request')
 class TestReferencesService(TestCase):
     def setUp(self):
@@ -75,8 +76,8 @@ class TestReferencesService(TestCase):
         )
 
     def test_LIST(self, reqm):
-        reqm.return_value = mock_response()
-        self.service.list()
+        reqm.return_value = mock_response_result()
+        self.service.list().all()
         self.assertEqual(
             reqm.call_args[0],
             ('get', _('repos/user/repo/git/refs'))
@@ -140,14 +141,6 @@ class TestTreesService(TestCase):
         self.assertEqual(
             reqm.call_args[0],
             ('get', _('repos/user/repo/git/trees/abc123'))
-        )
-
-    def test_GET_recursive(self, reqm):
-        reqm.return_value = mock_response()
-        self.service.get('abc123', recursive=True)
-        self.assertEqual(
-            reqm.call_args[0],
-            ('get', _('repos/user/repo/git/trees/abc123?recursive=1'))
         )
 
     def test_CREATE(self, reqm):

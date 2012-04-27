@@ -8,60 +8,66 @@ class References(Service):
     """Consume `References API <http://developer.github.com/v3/git/refs/>`_"""
 
     def get(self, ref, user=None, repo=None):
-        """Get a reference.
+        """ Get a reference
 
-        .. note::
-            Remember that branch references look like "heads/<branch_name>"
-
-        :param str ref: the name of the reference to get
+        :param str ref: The name of the reference to get
         :param str user: Username
         :param str repo: Repository
 
+        .. note::
+            Remember :ref:`config precedence`
+
+        .. note::
+            Remember that branch references look like "heads/<branch_name>"
         """
-        return self._get(
-            self.make_request('git_data.references.get', ref=ref, user=user,
-                              repo=repo)
-        )
+        request = self.make_request('git_data.references.get', ref=ref,
+            user=user, repo=repo)
+        return self._get(request)
 
     def list(self, namespace='', user=None, repo=None):
-        """List all the references
+        """ List all the references
 
         :param str namespace: Limit the request to a particular type of
                               reference. For example, ``heads`` or ``tags``.
         :param str user: Username
         :param str repo: Repository
+        :returns: A :doc:`result`
 
+        .. note::
+            Remember :ref:`config precedence`
         """
-        return self._get(
-            self.make_request('git_data.references.list', user=user, repo=repo)
-        )
+        request = self.make_request('git_data.references.list', user=user,
+            repo=repo, namespace=namespace)
+        return self._get_result(request)
 
-    def create(self, body, user=None, repo=None):
-        """Create a reference
+    def create(self, data, user=None, repo=None):
+        """ Create a reference
 
-        :param dict body: Data describing the reference to create
+        :param dict data: Input. See `github refs doc`_
         :param str user: Username
         :param str repo: Repository
 
+        .. note::
+            Remember :ref:`config precedence`
         """
-        return self._post(
-            self.make_request('git_data.references.create', body=body,
-                              user=user, repo=repo)
-        )
+        request = self.make_request('git_data.references.create', body=data,
+            user=user, repo=repo)
+        return self._post(request)
 
-    def update(self, ref, body, user=None, repo=None):
-        """Update an existing reference
+    def update(self, ref, data, user=None, repo=None):
+        """ Update an existing reference
 
         :param str ref: The SHA of the reference to update
-        :param dict body: Data to update the reference with
+        :param dict data: Input. See `github refs doc`_
         :param str user: Username
         :param str repo: Repository
 
+        .. note::
+            Remember :ref:`config precedence`
         """
-        return self._patch(
-            self.make_request('git_data.references.update', ref=ref, body=body,
-                              user=user, repo=repo)
-        )
+        request = self.make_request('git_data.references.update', ref=ref,
+            body=data, user=user, repo=repo)
+        return self._patch(request)
 
     def delete(self, ref, user=None, repo=None):
         """Delete a reference
@@ -70,8 +76,9 @@ class References(Service):
         :param str user: Username
         :param str repo: Repository
 
+        .. note::
+            Remember :ref:`config precedence`
         """
-        return self._delete(
-            self.make_request('git_data.references.delete', ref=ref, user=user,
-                              repo=repo)
-        )
+        request = self.make_request('git_data.references.delete', ref=ref,
+            user=user, repo=repo)
+        return self._delete(request)

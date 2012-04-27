@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 from pygithub3.requests.base import Request
-from pygithub3.resources.git_data import Commit
+from pygithub3.resources.repos import Commit
 
 
 class Get(Request):
