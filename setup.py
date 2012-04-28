@@ -14,7 +14,7 @@ setup(
     long_description=open('README.rst').read(),
     license='ISC',
     packages=find_packages(exclude=['*tests*']),
-    install_requires=map(str.strip, open('requirements.txt')),
+    install_requires=map(str.strip, open('requirements/base.txt')),
     include_package_data=True,
     classifiers=(
         'Programming Language :: Python',
