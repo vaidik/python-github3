@@ -7,8 +7,8 @@ try:
 except ImportError:
     import json
 
-from pygithub3.exceptions import (DoesNotExists, UriInvalid, ValidationError,
-                                  InvalidBodySchema)
+from pygithub3.exceptions import (RequestDoesNotExist, UriInvalid,
+                                  ValidationError, InvalidBodySchema)
 from pygithub3.resources.base import Raw
 from pygithub3.core.utils import import_module
 
@@ -17,10 +17,11 @@ ABS_IMPORT_PREFIX = 'pygithub3.requests'
 
 class Body(object):
 
-    def __init__(self, content, schema, required):
+    def __init__(self, content, valid_body, validate_body=None):
         self.content = content
-        self.schema = schema
-        self.required = required
+        self.schema = valid_body['schema']
+        self.required = valid_body['required']
+        self.validate_body = validate_body or (lambda x: None)
 
     def dumps(self):
         if not self.schema:
@@ -33,6 +34,7 @@ class Body(object):
                                    % self.__class__.__name__)
         parsed = dict([(key, self.content[key]) for key in self.schema
                       if key in self.content])
+        self.validate_body(parsed)
         for attr_required in self.required:
             if attr_required not in parsed:
                 raise ValidationError("'%s' attribute is required" %
@@ -58,7 +60,8 @@ class Request(object):
 
     def clean(self):
         self.uri = self.clean_uri() or self.uri
-        self.body = Body(self.clean_body(), **self.clean_valid_body())
+        self.body = Body(self.clean_body(), self.clean_valid_body(),
+                         self.validate_body)
 
     def clean_body(self):
         return self.body
@@ -94,6 +97,9 @@ class Request(object):
     def get_body(self):
         return self.body.dumps()
 
+    def validate_body(self, *args):
+        pass
+
 
 class Factory(object):
     """ Request builder """
@@ -120,11 +126,11 @@ class Factory(object):
                                         % (ABS_IMPORT_PREFIX, module_chunk))
                 request = getattr(module, request_chunk)
             except ImportError:
-                raise DoesNotExists("'%s' module does not exists"
-                                       % module_chunk)
+                raise RequestDoesNotExist("'%s' module does not exist"
+                                          % module_chunk)
             except AttributeError:
-                raise DoesNotExists(
-                    "'%s' request doesn't exists into '%s' module"
+                raise RequestDoesNotExist(
+                    "'%s' request does not exist in '%s' module"
                     % (request_chunk, module_chunk))
             return func(self, request, **kwargs)
         return wrapper

@@ -4,7 +4,7 @@
 from mock import Mock
 
 from pygithub3.resources.base import Resource
-from pygithub3.requests.base import Request
+from pygithub3.requests.base import Request, ValidationError
 
 
 def mock_json(content):
@@ -14,7 +14,7 @@ def mock_json(content):
 def mock_response(status_code='get', content={}):
     CODES = dict(get=200, patch=200, post=201, delete=204)
     response = Mock(name='response')
-    response.status_code = CODES[str(status_code).lower()] or status_code
+    response.status_code = CODES.get(str(status_code).lower(), status_code)
     response.content = content
     return response
 
@@ -37,3 +37,14 @@ DummyResource.loads = Mock(side_effect=loads_mock)
 class DummyRequest(Request):
     uri = 'dummyrequest'
     resource = DummyResource
+
+
+class DummyRequestValidation(DummyRequest):
+    body_schema = {
+        'schema': ('foo', 'error'),
+        'required': ('foo',)
+    }
+
+    def validate_body(self, body):
+        if body.get('error') == 'yes':
+            raise ValidationError('yes')
