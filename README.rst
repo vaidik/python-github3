@@ -57,11 +57,9 @@ Contribute
 2. Write a test to cover new feature or to reproduce bug
 3. Code with `pep8 <http://www.python.org/dev/peps/pep-0008/>`_ rules
 4. Add yourself to ``AUTHORS``
-5. Pull request it
+5. Pull request it to ``develop`` branch
 
 Tests
 -----
 
-Test and docs requirements are listed in ``test_requirements.txt``.
-Run ``pip install -r test_requirements.txt`` to install them and ``nosetests``
-to run tests.
+Run ``make init`` to install test requirements and ``nosetests`` to run tests.

@@ -22,8 +22,8 @@ If you install ``pygithub3`` with ``pip`` all is done. This is the best option.
 Optional
 .........
 
-The test suite uses `nose`_, `mock`_, and `unittest2`_. Compiling the
-documentation requires `sphinx`_.
+The test suite uses `nose`_, `mock`_, and `unittest2`_ (python 2.6). Compiling
+the documentation requires `sphinx`_.
 
 Install all of these by running ``pip install -r test_requirements.txt``.  Then
 just run ``nosetests`` to run the tests.

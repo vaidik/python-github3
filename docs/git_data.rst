@@ -26,7 +26,7 @@ GitData
 
     .. attribute:: commits
 
-        :ref:`Commits service`
+        :ref:`Gitdata commits service`
 
     .. attribute:: references
 
@@ -50,7 +50,7 @@ Blobs
     :members:
 
 
-.. _Commits service:
+.. _Gitdata commits service:
 
 Commits
 -------
@@ -84,3 +84,8 @@ Trees
 
 .. autoclass:: pygithub3.services.git_data.Trees
     :members:
+
+.. _github commits doc: http://developer.github.com/v3/git/commits
+.. _github refs doc: http://developer.github.com/v3/git/refs
+.. _github tags doc: http://developer.github.com/v3/git/tags
+.. _github trees doc: http://developer.github.com/v3/git/trees
