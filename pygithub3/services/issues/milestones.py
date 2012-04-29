@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
 from pygithub3.services.base import Service
@@ -94,7 +95,7 @@ class Milestones(Service):
         :param str repo: Repo name
         :param int number: Milestone number
 
-        ... warning::
+        .. warning::
             You must be authenticated
         """
         request = self.request_builder('issues.milestones.delete', 

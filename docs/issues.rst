@@ -14,7 +14,7 @@ Issues services
     octocat_repo_issues = gh.issues.list_by_repo('octocat', 'Hello-World')
 
 Issues
------
+------
 
 .. autoclass:: pygithub3.services.issues.Issue
     :members:
@@ -27,21 +27,48 @@ Issues
 
         :ref:`Events service`
 
+    .. attribute:: labels
+
+        :ref:`Labels service`
+
+    .. attribute:: milestones
+
+        :ref:`Milestones service`
+
 .. _Comments service:
 
 Comments
-----------
+--------
 
 .. autoclass:: pygithub3.services.issues.Comments
     :members:
 
-.. _ Events service:
+.. _Events service:
 
 Events
--------
+------
 
-.. autoclass:: pygithub3.services.issues.Comments
+.. autoclass:: pygithub3.services.issues.Events
+    :members:
+
+.. _Labels service:
+
+Labels
+------
+
+.. autoclass:: pygithub3.services.issues.Labels
+    :members:
+
+.. _Milestones service:
+
+Milestones
+----------
+
+.. autoclass:: pygithub3.services.issues.Milestones
     :members:
 
 .. _github issues doc: http://developer.github.com/v3/issues
 .. _github comments doc: http://developer.github.com/v3/issues/comments
+.. _github events doc: http://developer.github.com/v3/issues/events
+.. _github labels doc: http://developer.github.com/v3/issues/labels
+.. _github milestones doc: http://developer.github.com/v3/issues/milestones

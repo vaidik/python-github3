@@ -67,7 +67,7 @@ class Comments(Service):
         :param str repo: Repo name
         :param int id: Comment id
 
-        ... warning::
+        .. warning::
             You must be authenticated
         """
         request = self.request_builder('issues.comments.delete', user=user,
