@@ -23,3 +23,4 @@ Patches and Suggestions
 - Antti Kaihola <akaihol+github@ambitone.com>
 - Francisco Marcos <fmarcos83@gmail.com>
 - Nathaniel Williams <nat.williams@gmail.com>
+- Alejandro Gómez <alejandroogomez@gmail.com>
