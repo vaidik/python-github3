@@ -1,4 +1,6 @@
-from pygithub3.requests.base import Request
+# -*- encoding: utf-8 -*-
+
+from pygithub3.requests.base import Request, ValidationError
 from pygithub3.resources.pull_requests import Comment
 
 
@@ -20,13 +22,14 @@ class Create(Request):
         'required': ('body',),
     }
 
-    def validate_body(self, body):
-        if (not ('commit_id' in body and
-                 'path' in body and
-                 'position' in body) and
-            not 'in_reply_to' in body):
+    def clean_body(self):
+        if (not ('commit_id' in self.body and
+                 'path' in self.body and
+                 'position' in self.body) and
+            not 'in_reply_to' in self.body):
             raise ValidationError('supply either in_reply_to or commit_id, '
                                   'path, and position')
+        return self.body
 
 
 class Edit(Request):

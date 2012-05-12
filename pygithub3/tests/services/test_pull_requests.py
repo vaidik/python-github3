@@ -7,8 +7,7 @@ from nose.tools import raises
 
 from pygithub3.tests.utils.core import TestCase
 from pygithub3.services.pull_requests import PullRequests, Comments
-from pygithub3.resources.base import json
-from pygithub3.requests.base import ValidationError
+from pygithub3.requests.base import ValidationError, json
 from pygithub3.tests.utils.base import (mock_response, mock_response_result,
                                         mock_json)
 from pygithub3.tests.utils.services import _
@@ -107,19 +106,9 @@ class TestPullRequestsService(TestCase):
             ('get', _('repos/user/repo/pulls/123/files'))
         )
 
-    def test_MERGE_STATUS_true(self, reqm):
-        reqm.return_value = mock_response(204)
-        resp = self.service.merge_status(123)
-        self.assertEqual(True, resp)
-        self.assertEqual(
-            reqm.call_args[0],
-            ('head', _('repos/user/repo/pulls/123/merge'))
-        )
-
-    def test_MERGE_STATUS_false(self, reqm):
-        reqm.return_value = mock_response(404)
-        resp = self.service.merge_status(123)
-        self.assertEqual(False, resp)
+    def test_IS_MERGED(self, reqm):
+        resp = self.service.is_merged(123)
+        self.assertTrue(resp)
         self.assertEqual(
             reqm.call_args[0],
             ('head', _('repos/user/repo/pulls/123/merge'))

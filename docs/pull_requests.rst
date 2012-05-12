@@ -7,11 +7,10 @@ Pull Requests service
 
     from pygithub3 import Github
 
-    gh = Github()
+    gh = Github(user='octocat', repo='sample')
 
     pull_requests = gh.pull_requests.list().all()
-    for pr in pull_requests:
-        commits = gh.pull_requests.list_commits(pr.number).all()
+    pull_request_commits = gh.pull_requests.list_commits(2512).all()
 
 Pull Requests
 -------------
@@ -31,3 +30,6 @@ Pull Request Comments
 
 .. autoclass:: pygithub3.services.pull_requests.Comments
     :members:
+
+.. _github pullrequests doc: http://developer.github.com/v3/pulls
+.. _github pullrequests comments doc: http://developer.github.com/v3/pulls/comments

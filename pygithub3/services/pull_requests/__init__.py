@@ -1,4 +1,5 @@
-from pygithub3.exceptions import BadRequest, NotFound
+# -*- encoding: utf-8 -*-
+
 from pygithub3.services.base import Service, MimeTypeMixin
 from .comments import Comments
 
@@ -15,7 +16,10 @@ class PullRequests(Service, MimeTypeMixin):
 
         :param str user: Username
         :param str repo: Repository
+        :returns: A :doc:`result`
 
+        .. note::
+            Remember :ref:`config precedence`
         """
         return self._get_result(
             self.make_request('pull_requests.list', user=user, repo=repo)
@@ -28,37 +32,43 @@ class PullRequests(Service, MimeTypeMixin):
         :param str user: Username
         :param str repo: Repository
 
+        .. note::
+            Remember :ref:`config precedence`
         """
         return self._get(
             self.make_request('pull_requests.get', number=number, user=user,
                               repo=repo)
         )
 
-    def create(self, body, user=None, repo=None):
+    def create(self, data, user=None, repo=None):
         """Create a pull request
 
-        :param dict body: Data for the new pull request
+        :param dict data: Input. See `github pullrequests doc`_
         :param str user: Username
         :param str repo: Repository
 
+        .. note::
+            Remember :ref:`config precedence`
         """
         return self._post(
-            self.make_request('pull_requests.create', body=body, user=user,
+            self.make_request('pull_requests.create', body=data, user=user,
                               repo=repo)
         )
 
-    def update(self, number, body, user=None, repo=None):
+    def update(self, number, data, user=None, repo=None):
         """Update a pull request
 
         :param str number: The number of the the pull request to update
-        :param dict body: The data to update the pull request with
+        :param dict data: Input. See `github pullrequests doc`_
         :param str user: Username
         :param str repo: Repository
 
+        .. note::
+            Remember :ref:`config precedence`
         """
         return self._patch(
             self.make_request('pull_requests.update', number=number,
-                              body=body, user=user, repo=repo)
+                              body=data, user=user, repo=repo)
         )
 
     def list_commits(self, number, user=None, repo=None):
@@ -67,7 +77,10 @@ class PullRequests(Service, MimeTypeMixin):
         :param str number: The number of the pull request to list commits for
         :param str user: Username
         :param str repo: Repository
+        :returns: A :doc:`result`
 
+        .. note::
+            Remember :ref:`config precedence`
         """
         return self._get_result(
             self.make_request('pull_requests.list_commits', number=number,
@@ -80,23 +93,28 @@ class PullRequests(Service, MimeTypeMixin):
         :param str number: The number of the pull request to list files for
         :param str user: Username
         :param str repo: Repository
+        :returns: A :doc:`result`
 
+        .. note::
+            Remember :ref:`config precedence`
         """
         return self._get_result(
             self.make_request('pull_requests.list_files', number=number,
                               user=user, repo=repo)
         )
 
-    def merge_status(self, number, user=None, repo=None):
+    def is_merged(self, number, user=None, repo=None):
         """Gets whether a pull request has been merged or not.
 
         :param str number: The pull request to check
         :param str user: Username
         :param str repo: Repository
 
+        .. note::
+            Remember :ref:`config precedence`
         """
         return self._bool(
-            self.make_request('pull_requests.merge_status', number=number,
+            self.make_request('pull_requests.is_merged', number=number,
                               user=user, repo=repo)
         )
 
@@ -104,8 +122,12 @@ class PullRequests(Service, MimeTypeMixin):
         """Merge a pull request.
 
         :param str number: The pull request to merge
+        :param str message: Message of pull request
         :param str user: Username
         :param str repo: Repository
+
+        .. note::
+            Remember :ref:`config precedence`
 
         This currently raises an HTTP 405 error if the request is not
         mergable.
