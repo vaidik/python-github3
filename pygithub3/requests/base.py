@@ -2,15 +2,11 @@
 # -*- encoding: utf-8 -*-
 
 import re
-try:
-    import simplejson as json
-except ImportError:
-    import json
 
+from pygithub3.core.utils import import_module, json
 from pygithub3.exceptions import (RequestDoesNotExist, UriInvalid,
                                   ValidationError, InvalidBodySchema)
 from pygithub3.resources.base import Raw
-from pygithub3.core.utils import import_module
 
 ABS_IMPORT_PREFIX = 'pygithub3.requests'
 
