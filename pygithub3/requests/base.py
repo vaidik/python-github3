@@ -106,28 +106,21 @@ class Factory(object):
             return func(self, request_uri.lower(), **kwargs)
         return wrapper
 
-    def dispatch(func):
-        def wrapper(self, request_uri, **kwargs):
-            module_chunk, s, request_chunk = request_uri.rpartition('.')
-            request_chunk = request_chunk.capitalize()
-            try:
-                #  TODO: CamelCase and under_score support, now only Class Name
-                module = import_module('%s.%s'
-                                        % (ABS_IMPORT_PREFIX, module_chunk))
-                request = getattr(module, request_chunk)
-            except ImportError:
-                raise RequestDoesNotExist("'%s' module does not exist"
-                                          % module_chunk)
-            except AttributeError:
-                raise RequestDoesNotExist(
-                    "'%s' request does not exist in '%s' module"
-                    % (request_chunk, module_chunk))
-            return func(self, request, **kwargs)
-        return wrapper
-
     @validate
-    @dispatch
-    def __call__(self, request='', **kwargs):
-        request = request(**kwargs)
-        assert isinstance(request, Request)
-        return request
+    def __call__(self, request_uri, **kwargs):
+        module_chunk, s, request_chunk = request_uri.rpartition('.')
+        request_chunk = request_chunk.capitalize()
+        try:
+            #  TODO: CamelCase and under_score support, now only Class Name
+            module = import_module('%s.%s' % (ABS_IMPORT_PREFIX, module_chunk))
+            request_class = getattr(module, request_chunk)
+            request = request_class(**kwargs)
+            assert isinstance(request, Request)
+            return request
+        except ImportError:
+            raise RequestDoesNotExist("'%s' module does not exist"
+                                      % module_chunk)
+        except AttributeError:
+            raise RequestDoesNotExist("'%s' request does not exist in "
+                                      "'%s' module" % (request_chunk,
+                                      module_chunk))
