@@ -73,5 +73,6 @@ List of services
     repos
     gists
     git_data
+    pull_requests
 
 .. _mimetypes: http://developer.github.com/v3/mime

@@ -2,20 +2,17 @@
 # -*- encoding: utf-8 -*-
 
 import re
-try:
-    import simplejson as json
-except ImportError:
-    import json
 
-from pygithub3.exceptions import (DoesNotExists, UriInvalid, ValidationError,
-                                  InvalidBodySchema)
+from pygithub3.core.utils import import_module, json
+from pygithub3.exceptions import (RequestDoesNotExist, UriInvalid,
+                                  ValidationError, InvalidBodySchema)
 from pygithub3.resources.base import Raw
-from pygithub3.core.utils import import_module
 
 ABS_IMPORT_PREFIX = 'pygithub3.requests'
 
 
 class Body(object):
+    """ Input's request handler """
 
     def __init__(self, content, schema, required):
         self.content = content
@@ -28,6 +25,7 @@ class Body(object):
         return json.dumps(self.parse())
 
     def parse(self):
+        """ Parse body with schema-required rules """
         if not hasattr(self.content, 'items'):
             raise ValidationError("'%s' needs a content dictionary"
                                    % self.__class__.__name__)
@@ -44,37 +42,15 @@ class Body(object):
 
 
 class Request(object):
-    """ """
 
     uri = ''
     resource = Raw
     body_schema = {}
 
     def __init__(self, **kwargs):
-        """ """
-        self.body = kwargs.pop('body', None)
+        self.body = kwargs.pop('body', {})
         self.args = kwargs
         self.clean()
-
-    def clean(self):
-        self.uri = self.clean_uri() or self.uri
-        self.body = Body(self.clean_body(), **self.clean_valid_body())
-
-    def clean_body(self):
-        return self.body
-
-    def clean_uri(self):
-        return None
-
-    def clean_valid_body(self):
-        schema = set(self.body_schema.get('schema', ()))
-        required = set(self.body_schema.get('required', ()))
-        if not required.issubset(schema):
-            raise InvalidBodySchema(
-                "'%s:valid_body' attribute is invalid. "
-                "'%s required' isn't a subset of '%s schema'" % (
-                self.__class__.__name__, required, schema))
-        return dict(schema=schema, required=required)
 
     def __getattr__(self, name):
         return self.args.get(name)
@@ -90,6 +66,26 @@ class Request(object):
                 "'%s' request wasn't be able to populate the uri '%s' with "
                 "'%s' args" % (self.__class__.__name__, self.uri, self.args))
         return str(populated_uri).strip('/')
+
+    def clean(self):
+        self.uri = self.clean_uri() or self.uri
+        self.body = Body(self.clean_body(), **self._clean_valid_body())
+
+    def clean_body(self):
+        return self.body
+
+    def clean_uri(self):
+        return None
+
+    def _clean_valid_body(self):
+        schema = set(self.body_schema.get('schema', ()))
+        required = set(self.body_schema.get('required', ()))
+        if not required.issubset(schema):
+            raise InvalidBodySchema(
+                "'%s:valid_body' attribute is invalid. "
+                "'%s required' isn't a subset of '%s schema'" % (
+                self.__class__.__name__, required, schema))
+        return dict(schema=schema, required=required)
 
     def get_body(self):
         return self.body.dumps()
@@ -110,28 +106,21 @@ class Factory(object):
             return func(self, request_uri.lower(), **kwargs)
         return wrapper
 
-    def dispatch(func):
-        def wrapper(self, request_uri, **kwargs):
-            module_chunk, s, request_chunk = request_uri.rpartition('.')
-            request_chunk = request_chunk.capitalize()
-            try:
-                #  TODO: CamelCase and under_score support, now only Class Name
-                module = import_module('%s.%s'
-                                        % (ABS_IMPORT_PREFIX, module_chunk))
-                request = getattr(module, request_chunk)
-            except ImportError:
-                raise DoesNotExists("'%s' module does not exists"
-                                       % module_chunk)
-            except AttributeError:
-                raise DoesNotExists(
-                    "'%s' request doesn't exists into '%s' module"
-                    % (request_chunk, module_chunk))
-            return func(self, request, **kwargs)
-        return wrapper
-
     @validate
-    @dispatch
-    def __call__(self, request='', **kwargs):
-        request = request(**kwargs)
-        assert isinstance(request, Request)
-        return request
+    def __call__(self, request_uri, **kwargs):
+        module_chunk, s, request_chunk = request_uri.rpartition('.')
+        request_chunk = request_chunk.capitalize()
+        try:
+            #  TODO: CamelCase and under_score support, now only Class Name
+            module = import_module('%s.%s' % (ABS_IMPORT_PREFIX, module_chunk))
+            request_class = getattr(module, request_chunk)
+            request = request_class(**kwargs)
+            assert isinstance(request, Request)
+            return request
+        except ImportError:
+            raise RequestDoesNotExist("'%s' module does not exist"
+                                      % module_chunk)
+        except AttributeError:
+            raise RequestDoesNotExist("'%s' request does not exist in "
+                                      "'%s' module" % (request_chunk,
+                                      module_chunk))

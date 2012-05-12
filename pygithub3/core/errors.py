@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-try:
-    import simplejson as json
-except ImportError:
-    import json
-
+from pygithub3.core.utils import json
 from pygithub3.exceptions import NotFound, BadRequest, UnprocessableEntity
 
 

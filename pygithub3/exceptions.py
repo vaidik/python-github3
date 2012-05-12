@@ -8,7 +8,7 @@ class InvalidBodySchema(Exception):
     pass
 
 
-class DoesNotExists(Exception):
+class RequestDoesNotExist(Exception):
     """ Raised when `Request` factory can't find the subclass """
     pass
 
@@ -37,6 +37,6 @@ class UnprocessableEntity(Exception):
 class NotFound(Exception):
     """ Raised when server response is 404
 
-    Catched with a pygithub3-exception to `services.base.Service._bool` method
+    Caught with a pygithub3-exception to `services.base.Service._bool` method
     """
     pass
