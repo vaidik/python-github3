@@ -4,7 +4,7 @@
 from mock import Mock
 
 from pygithub3.resources.base import Resource
-from pygithub3.requests.base import Request, ValidationError
+from pygithub3.requests.base import Request
 
 
 def mock_json(content):
@@ -37,14 +37,3 @@ DummyResource.loads = Mock(side_effect=loads_mock)
 class DummyRequest(Request):
     uri = 'dummyrequest'
     resource = DummyResource
-
-
-class DummyRequestValidation(DummyRequest):
-    body_schema = {
-        'schema': ('foo', 'error'),
-        'required': ('foo',)
-    }
-
-    def validate_body(self, body):
-        if body.get('error') == 'yes':
-            raise ValidationError('yes')
