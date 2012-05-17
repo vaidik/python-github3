@@ -8,7 +8,7 @@ from pygithub3.resources.issues import Label
 
 class TestLabel(TestCase):
     def test_is_valid_color(self):
-        valid_colors = ['BADA55', 'FFFFFF', '45DFCA']
+        valid_colors = ['BADa55', 'FF42FF', '45DFCA']
         for color in valid_colors:
             self.assertTrue(Label.is_valid_color(color))
 

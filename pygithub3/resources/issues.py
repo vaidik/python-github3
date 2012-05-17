@@ -5,9 +5,11 @@ import re
 
 from .base import Resource
 from .users import User
+from .pull_requests import PullRequest
 
 
 class Label(Resource):
+
     @staticmethod
     def is_valid_color(color):
         valid_color = re.compile(r'[0-9abcdefABCDEF]{6}')
@@ -21,6 +23,7 @@ class Label(Resource):
 
 
 class Milestone(Resource):
+
     _dates = ('created_at', 'due_on')
     _maps = {'creator': User}
 
@@ -30,8 +33,15 @@ class Milestone(Resource):
 
 class Issue(Resource):
 
-    _dates = ('created_at', 'updated_at')
-    _maps = {'assignee': User, 'user': User}
+    _dates = ('created_at', 'updated_at', 'closed_at')
+    _maps = {
+        'assignee': User, 
+        'user': User, 
+        'milestone': Milestone,
+        'pull_request': PullRequest
+    }
+
+    _collection_maps = {'labels': Label} 
 
     def __str__(self):
         return '<Issue (%s)>' % getattr(self, 'number', '')
