@@ -32,7 +32,7 @@ class Create(Request):
         return self.body
 
 
-class Edit(Request):
+class Update(Request):
     uri = 'repos/{user}/{repo}/pulls/comments/{number}'
     resource = Comment
     body_schema = {

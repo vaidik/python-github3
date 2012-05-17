@@ -170,12 +170,12 @@ class TestPullRequestCommentsService(TestCase):
             ('post', _('repos/user/repo/pulls/1/comments'))
         )
 
-    def test_EDIT(self, reqm):
+    def test_UPDATE(self, reqm):
         reqm.return_value = mock_response(200)
         data = {
             'body': 'something completely different',
         }
-        self.service.edit(1, data)
+        self.service.update(1, data)
         self.assertEqual(
             reqm.call_args[0],
             ('patch', _('repos/user/repo/pulls/comments/1'))

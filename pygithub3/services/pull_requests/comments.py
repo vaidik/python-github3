@@ -54,9 +54,9 @@ class Comments(Service, MimeTypeMixin):
         )
 
     def update(self, number, message, user=None, repo=None):
-        """Edit a comment
+        """Update a comment
 
-        :param str number: The id of the comment to edit
+        :param str number: The id of the comment to update
         :param str message: Comment message
         :param str user: Username
         :param str repo: Repository
@@ -64,7 +64,7 @@ class Comments(Service, MimeTypeMixin):
         .. note::
             Remember :ref:`config precedence`
         """
-        request = self.make_request('pull_requests.comments.edit',
+        request = self.make_request('pull_requests.comments.update',
             number=number, body={'body': message}, user=user, repo=repo)
         return self._patch(request)
 
