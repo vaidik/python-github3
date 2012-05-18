@@ -1,1 +1,1 @@
-requests
+requests >= 0.12.1
