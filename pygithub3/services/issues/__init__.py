@@ -70,7 +70,7 @@ class Issue(Service):
         return self._post(request)
 
     def update(self, user, repo, number, data):
-        """ Edit an issue
+        """ Update an issue
 
         :param str user: Username
         :param str repo: Repo name
