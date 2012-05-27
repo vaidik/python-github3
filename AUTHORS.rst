@@ -21,3 +21,4 @@ Patches and Suggestions
 - Rok Garbas
 - Antti Kaihola <akaihol+github@ambitone.com>
 - Francisco Marcos <fmarcos83@gmail.com>
+- Stefano Rivera <stefano@rivera.za.net>
