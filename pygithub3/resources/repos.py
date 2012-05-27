@@ -18,12 +18,6 @@ class Repo(Resource):
         return '<Repo (%s)>' % getattr(self, 'name', '')
 
 
-class Team(Resource):
-
-    def __str__(self):
-        return '<Team (%s)>' % getattr(self, 'name', '')
-
-
 class Author(Resource):
 
     _dates = ('date')
@@ -114,6 +108,7 @@ class Download(Resource):
             'Filename': self.name, 'AWSAccessKeyId': self.accesskeyid,
             'Policy': self.policy, 'Signature': self.signature,
             'Content-Type': self.mime_type})
+
 
 class Hook(Resource):
 

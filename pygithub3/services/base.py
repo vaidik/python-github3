@@ -111,10 +111,10 @@ class Service(object):
     def _put(self, request, **kwargs):
         """ Bug in Github API? requests library?
 
-        I must send data as empty string when the specifications' of some PUT
-        request are 'Not send input data'. If I don't do that and send data as
-        None, the requests library doesn't send 'Content-length' header and the
-        server returns 411 - Required Content length (at least 0)
+        I must send data when the specifications' of some PUT request are 'Not
+        send input data'. If I don't do that and send data as None, the
+        requests library doesn't send 'Content-length' header and the server
+        returns 411 - Required Content length (at least 0)
 
         For instance:
             - follow-user request doesn't send input data
@@ -125,7 +125,7 @@ class Service(object):
 
         Related: https://github.com/github/developer.github.com/pull/52
         """
-        input_data = request.get_body() or ''
+        input_data = request.get_body() or 'PLACEHOLDER'
         response = self._client.put(request, data=input_data, **kwargs)
         if response.status_code != 204:  # != NO_CONTENT
             return request.resource.loads(response.content)

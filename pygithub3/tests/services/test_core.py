@@ -27,7 +27,7 @@ class TestServiceCalls(TestCase):
 
     def test_PUT(self, request_method):
         self.s._put(self.r, **self.args)
-        data = ''  # See _put
+        data = 'PLACEHOLDER'  # See _put
         request_method.assert_called_with('put', _('dummyrequest'),
                                           data=data, params=self.args)
 

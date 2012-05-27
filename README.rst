@@ -43,11 +43,12 @@ Achievements
 - `Gists service <http://developer.github.com/v3/gists/>`_
 - `Git Data service <http://developer.github.com/v3/git/>`_
 - `Pull requests service <http://developer.github.com/v3/pulls/>`_
+- `Orgs service <http://developer.github.com/v3/orgs/>`_
 
 TODO
 -----
 
-- Services: Issues, Orgs, Events
+- Services: Issues, Events
 - Oauth authorization API (service?)
 - Proxy methods into resources (e.g copitux.followers)
 
