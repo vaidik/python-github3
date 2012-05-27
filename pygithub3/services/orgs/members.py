@@ -27,7 +27,8 @@ class Members(Service):
         :param str org: Organisation name
         :param str user: User name
         """
-        request = self.request_builder('orgs.members.get', org=org, user=user)
+        request = self.request_builder('orgs.members.is_member', org=org,
+            user=user)
         return self._bool(request)
 
     def remove_member(self, org, user):
@@ -40,7 +41,7 @@ class Members(Service):
             You must be authenticated and an owner of org
 
         """
-        request = self.request_builder('orgs.members.get', org=org, user=user)
+        request = self.request_builder('orgs.members.delete', org=org, user=user)
         return self._delete(request)
 
     def list_public(self, org):
@@ -58,7 +59,7 @@ class Members(Service):
         :param str org: Organisation name
         :param str user: User name
         """
-        request = self.request_builder('orgs.members.getpublic',
+        request = self.request_builder('orgs.members.is_public_member',
                                        org=org, user=user)
         return self._bool(request)
 

@@ -44,7 +44,7 @@ class TestOrgService(TestCase):
 
 
 @patch.object(requests.sessions.Session, 'request')
-class TestOrgMemberService(TestCase):
+class TestMemberService(TestCase):
     def setUp(self):
         self.ms = Members()
 
@@ -92,7 +92,7 @@ class TestOrgMemberService(TestCase):
 
 
 @patch.object(requests.sessions.Session, 'request')
-class TestOrgMemberService(TestCase):
+class TestTeamsService(TestCase):
     def setUp(self):
         self.ts = Teams()
 
@@ -109,13 +109,13 @@ class TestOrgMemberService(TestCase):
 
     def test_CREATE(self, request_method):
         request_method.return_value = mock_response_result('post')
-        self.ts.create('acme', 'committers')
+        self.ts.create('acme', dict(name='new'))
         self.assertEqual(request_method.call_args[0],
                          ('post', _('orgs/acme/teams')))
 
     def test_UPDATE(self, request_method):
         request_method.return_value = mock_response_result()
-        self.ts.update(1, 'committers', 'push')
+        self.ts.update(1, dict(name='edited'))
         self.assertEqual(request_method.call_args[0], ('patch', _('teams/1')))
 
     def test_DELETE(self, request_method):

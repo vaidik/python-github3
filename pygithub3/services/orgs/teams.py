@@ -28,32 +28,21 @@ class Teams(Service):
         request = self.request_builder('orgs.teams.get', id=id)
         return self._get(request)
 
-    def create(self, org, name, repo_names=None, permission=None):
+    def create(self, org, data):
         """ Create a new team
 
         :param str org: Organisation name
-        :param str name: Team name
-        :param list repo_names: List of repo names to belong to the team
-        :param str permission: Permissions to be granted to members
+        :param dict data: Input. See `github orgs teams doc`_
         """
-        data = {'name': name}
-        if repo_names:
-            data['repo_names'] = repo_names
-        if permission:
-            data['permission'] = permission
         request = self.request_builder('orgs.teams.create', org=org, body=data)
         return self._post(request)
 
-    def update(self, id, name, permission=None):
+    def update(self, id, data):
         """ Update a team
 
         :param int id: The team id
-        :param str name: Team name
-        :param str permission: Permissions to be granted to members
+        :param dict data: Input. See `github orgs teams doc`_
         """
-        data = {'name': name}
-        if permission:
-            data['permission'] = permission
         request = self.request_builder('orgs.teams.update', id=id, body=data)
         return self._patch(request)
 

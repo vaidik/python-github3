@@ -2,6 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 from .base import Resource
+from .users import Plan
 
 __all__ = ('Org', )
 
@@ -9,6 +10,7 @@ __all__ = ('Org', )
 class Org(Resource):
 
     _dates = ('created_at', )
+    _maps = {'plan': Plan}
 
     def __str__(self):
         return '<Org (%s)>' % getattr(self, 'login', '')

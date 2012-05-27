@@ -9,7 +9,7 @@ class List(Request):
     resource = Member
 
 
-class Get(Request):
+class Is_member(Request):
     uri = 'orgs/{org}/members/{user}'
 
 
@@ -22,7 +22,7 @@ class Listpublic(Request):
     resource = Member
 
 
-class Getpublic(Request):
+class Is_public_member(Request):
     uri = 'orgs/{org}/public_members/{user}'
 
 

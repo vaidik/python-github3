@@ -23,6 +23,9 @@ class Create(Request):
         'required': ('name',),
     }
 
+    # TODO: Check if this request fails with invalid permission
+    #def clean_body(self):
+
 
 class Update(Request):
     uri = 'teams/{id}'
