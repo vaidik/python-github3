@@ -24,3 +24,4 @@ Patches and Suggestions
 - Francisco Marcos <fmarcos83@gmail.com>
 - Nathaniel Williams <nat.williams@gmail.com>
 - Alejandro Gómez <alejandroogomez@gmail.com>
+- Stefano Rivera <stefano@rivera.za.net>
