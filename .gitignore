@@ -5,4 +5,5 @@
 MANIFEST
 docs/_build
 dist/
+build/
 *egg-info

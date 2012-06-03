@@ -4,6 +4,7 @@ from pygithub3.requests.base import Request, ValidationError
 from pygithub3.resources.orgs import Team
 from pygithub3.resources.repos import Repo, Tag, Branch
 from pygithub3.resources.users import User
+from pygithub3.resources.issues import Label, Milestone
 
 class List(Request):
 
@@ -79,3 +80,17 @@ class List_branches(Request):
 
     uri = 'repos/{user}/{repo}/branches'
     resource = Branch
+
+class List_labels(Request):
+
+    uri = 'repos/{user}/{repo}/labels'
+    resource = Label
+
+class List_milestones(Request):
+
+    uri = 'repos/{user}/{repo}/milestones'
+    resource = Milestone
+    body_schema = {
+        'schema': ('state', 'sort', 'direction'),
+        'required': ()
+    }
