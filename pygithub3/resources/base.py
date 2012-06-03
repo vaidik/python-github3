@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
+from datetime import datetime
+
 from pygithub3.core.utils import json
+
+GITHUB_DATE_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
 
 
 class Resource(object):
@@ -44,9 +48,8 @@ class Resource(object):
             return wrapper
 
         def parse_date(string_date):
-            from datetime import datetime
             try:
-                date = datetime.strptime(string_date, '%Y-%m-%dT%H:%M:%SZ')
+                date = datetime.strptime(string_date, GITHUB_DATE_FORMAT)
             except TypeError:
                 date = None
             return date

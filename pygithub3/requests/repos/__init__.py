@@ -81,10 +81,6 @@ class List_branches(Request):
     uri = 'repos/{user}/{repo}/branches'
     resource = Branch
 
-class List_labels(Request):
-
-    uri = 'repos/{user}/{repo}/labels'
-    resource = Label
 
 class List_milestones(Request):
 

@@ -4,6 +4,11 @@ from pygithub3.requests.base import Request, ValidationError
 from pygithub3.resources.issues import Label
 
 
+class List(Request):
+
+    uri = 'repos/{user}/{repo}/labels'
+    resource = Label
+
 
 class Get(Request):
     uri = 'repos/{user}/{repo}/labels/{name}'
@@ -27,7 +32,7 @@ class Create(Request):
             return self.body
 
 
-class Update(Request):
+class Update(Create):
 
     uri = 'repos/{user}/{repo}/labels/{name}'
     resource = Label
@@ -35,24 +40,11 @@ class Update(Request):
         'schema': ('name', 'color'),
         'required': ('name', 'color' )
     }
-    def clean_body(self):
-        color = self.body.get('color', '')
-        if not Label.is_valid_color(color):
-            raise ValidationError('colors must have 6 hexadecimal characters, '
-                                  'without # in the beggining')
-        else:
-            return self.body
 
 
 class Delete(Request):
     uri = 'repos/{user}/{repo}/labels/{name}'
     resource = Label
-
-
-class List_by_repo(Request):
-    uri = 'repos/{user}/{repo}/labels'
-    resource = Label
-
 
 
 class List_by_issue(Request):

@@ -35,13 +35,13 @@ class Issue(Resource):
 
     _dates = ('created_at', 'updated_at', 'closed_at')
     _maps = {
-        'assignee': User, 
-        'user': User, 
+        'assignee': User,
+        'user': User,
         'milestone': Milestone,
         'pull_request': PullRequest
     }
 
-    _collection_maps = {'labels': Label} 
+    _collection_maps = {'labels': Label}
 
     def __str__(self):
         return '<Issue (%s)>' % getattr(self, 'number', '')
