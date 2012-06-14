@@ -4,6 +4,13 @@
 from setuptools import setup, find_packages
 import pygithub3
 
+# Odd hack to get 'python setup.py test' working on py2.7
+try:
+    import multiprocessing
+    import logging
+except ImportError:
+    pass
+
 setup(
     name=pygithub3.__name__,
     version=pygithub3.__version__,
@@ -14,6 +21,11 @@ setup(
     long_description=open('README.rst').read(),
     license='ISC',
     packages=find_packages(exclude=['*tests*']),
+    test_suite='nose.collector',
+    tests_require=[
+        'nose',
+        'mock',
+    ],
     install_requires=map(str.strip, open('requirements/base.txt')),
     include_package_data=True,
     classifiers=(
