@@ -21,7 +21,7 @@ Issues
 
     .. attribute:: comments
 
-        :ref:`Comments service`
+        :ref:`Issues comments service`
 
     .. attribute:: events
 
@@ -35,7 +35,7 @@ Issues
 
         :ref:`Milestones service`
 
-.. _Comments service:
+.. _Issues comments service:
 
 Comments
 --------
