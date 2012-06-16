@@ -80,13 +80,3 @@ class List_branches(Request):
 
     uri = 'repos/{user}/{repo}/branches'
     resource = Branch
-
-
-class List_milestones(Request):
-
-    uri = 'repos/{user}/{repo}/milestones'
-    resource = Milestone
-    body_schema = {
-        'schema': ('state', 'sort', 'direction'),
-        'required': ()
-    }
