@@ -27,8 +27,8 @@ class Body(object):
     def parse(self):
         """ Parse body with schema-required rules """
         if not hasattr(self.content, 'items'):
-            raise ValidationError("'%s' needs a content dictionary"
-                                   % self.__class__.__name__)
+            raise ValidationError("It needs a content dictionary (%s)" % (
+                self.content, ))
         parsed = dict([(key, self.content[key]) for key in self.schema
                       if key in self.content])
         for attr_required in self.required:

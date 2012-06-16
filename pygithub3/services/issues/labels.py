@@ -102,7 +102,7 @@ class Labels(Service):
             repo=repo, number=number)
         return self._get(request)
 
-    def add_to_issue(self, number,  user=None, repo=None, *labels):
+    def add_to_issue(self, number, labels, user=None, repo=None):
         """ Add labels to issue
 
         :param int number: Issue number
@@ -142,7 +142,7 @@ class Labels(Service):
                                        name=label)
         return self._delete(request)
 
-    def replace_all(self, number, user=None, repo=None, *labels):
+    def replace_all(self, number, labels, user=None, repo=None):
         """ Replace all labels for a issue
 
         :param int number: Issue number
@@ -161,7 +161,7 @@ class Labels(Service):
                                        user=user,
                                        repo=repo,
                                        number=number,
-                                       body=labels,)
+                                       body=map(str, labels))
         return self._put(request)
 
     def remove_all(self, number, user=None, repo=None):

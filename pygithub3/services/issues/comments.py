@@ -68,7 +68,7 @@ class Comments(Service, MimeTypeMixin):
         .. note::
             Remember :ref:`config precedence`
         """
-        request = self.request_builder('issues.comments.edit', user=user,
+        request = self.make_request('issues.comments.edit', user=user,
             repo=repo, id=id, body={'body': message})
         return self._patch(request)
 
@@ -85,6 +85,6 @@ class Comments(Service, MimeTypeMixin):
         .. note::
             Remember :ref:`config precedence`
         """
-        request = self.request_builder('issues.comments.delete', user=user,
+        request = self.make_request('issues.comments.delete', user=user,
             repo=repo, id=id)
         self._delete(request)

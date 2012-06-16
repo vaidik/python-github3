@@ -35,7 +35,7 @@ class Issue(Service, MimeTypeMixin):
         """
         params = dict(filter=filter, state=state, labels=labels, sort=sort,
             direction=direction)
-        self._normalize_data('since', params)
+        self._normalize_date('since', params)
         request = self.request_builder('issues.list')
         return self._get_result(request, **params)
 
@@ -60,7 +60,7 @@ class Issue(Service, MimeTypeMixin):
         """
         params = dict(milestone=milestone, state=state, assignee=assignee,
             mentioned=mentioned, labels=labels, sort=sort, direction=direction)
-        self._normalize_data('since', params)
+        self._normalize_date('since', params)
         request = self.make_request('issues.list_by_repo', user=user,
             repo=repo)
         return self._get_result(request, **params)

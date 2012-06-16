@@ -7,7 +7,8 @@ from mock import patch, Mock
 from pygithub3.exceptions import ValidationError
 from pygithub3.tests.utils.core import TestCase
 from pygithub3.resources.base import json
-from pygithub3.services.issues import Issue, Comments, Events, Labels, Milestones
+from pygithub3.services.issues import (Issue, Comments, Events, Labels,
+                                       Milestones)
 from pygithub3.tests.utils.base import (mock_response, mock_response_result,
                                         mock_json)
 from pygithub3.tests.utils.services import _
@@ -20,7 +21,7 @@ json.loads = Mock(side_effect=mock_json)
 class TestIssuesService(TestCase):
 
     def setUp(self):
-        self.isu = Issue()
+        self.isu = Issue(user='octocat', repo='Hello-World')
 
     def test_LIST_without_user(self, request_method):
         request_method.return_value = mock_response_result()
@@ -29,27 +30,25 @@ class TestIssuesService(TestCase):
 
     def test_LIST_by_repo(self, request_method):
         request_method.return_value = mock_response_result()
-        self.isu.list_by_repo('octocat', 'Hello-World').all()
+        self.isu.list_by_repo().all()
         self.assertEqual(request_method.call_args[0],
             ('get', _('repos/octocat/Hello-World/issues')))
 
     def test_GET(self, request_method):
         request_method.return_value = mock_response()
-        self.isu.get('octocat', 'Hello-World', 1)
+        self.isu.get(1)
         self.assertEqual(request_method.call_args[0],
             ('get', _('repos/octocat/Hello-World/issues/1')))
 
     def test_CREATE(self, request_method):
         request_method.return_value = mock_response('post')
-        self.isu.create('octocat', 'Hello-World', 
-            dict(title='My issue', body='Fix this issue'))
+        self.isu.create(dict(title='My issue', body='Fix this issue'))
         self.assertEqual(request_method.call_args[0],
             ('post', _('repos/octocat/Hello-World/issues')))
 
     def test_UPDATE(self, request_method):
         request_method.return_value = mock_response('patch')
-        self.isu.update('octocat', 'Hello-World', 1, 
-            {'body': 'edited'})
+        self.isu.update(1, {'body': 'edited'})
         self.assertEqual(request_method.call_args[0],
             ('patch', _('repos/octocat/Hello-World/issues/1')))
 
@@ -58,35 +57,35 @@ class TestIssuesService(TestCase):
 class TestCommentService(TestCase):
 
     def setUp(self):
-        self.cs = Comments()
+        self.cs = Comments(user='octocat', repo='Hello-World')
 
     def test_LIST(self, request_method):
         request_method.return_value = mock_response_result()
-        self.cs.list('octocat', 'Hello-World', 1).all()
+        self.cs.list(1).all()
         self.assertEqual(request_method.call_args[0],
             ('get', _('repos/octocat/Hello-World/issues/1/comments')))
 
     def test_GET(self, request_method):
         request_method.return_value = mock_response()
-        self.cs.get('octocat', 'Hello-World', 1)
+        self.cs.get(1)
         self.assertEqual(request_method.call_args[0],
             ('get', _('repos/octocat/Hello-World/issues/comments/1')))
 
     def test_CREATE(self, request_method):
         request_method.return_value = mock_response('post')
-        self.cs.create('octocat', 'Hello-World', 1, 'comment')
+        self.cs.create(1, 'comment')
         self.assertEqual(request_method.call_args[0],
             ('post', _('repos/octocat/Hello-World/issues/1/comments')))
 
     def test_UPDATE(self, request_method):
         request_method.return_value = mock_response('patch')
-        self.cs.update('octocat', 'Hello-World', 1, 'new comment')
+        self.cs.update(1, 'new comment')
         self.assertEqual(request_method.call_args[0],
             ('patch', _('repos/octocat/Hello-World/issues/comments/1')))
 
     def test_DELETE(self, request_method):
         request_method.return_value = mock_response('delete')
-        self.cs.delete('octocat', 'Hello-World', 1)
+        self.cs.delete(1)
         self.assertEqual(request_method.call_args[0],
             ('delete', _('repos/octocat/Hello-World/issues/comments/1')))
 
@@ -95,23 +94,23 @@ class TestCommentService(TestCase):
 class TestEventsService(TestCase):
 
     def setUp(self):
-        self.ev = Events()
+        self.ev = Events(user='octocat', repo='Hello-World')
 
     def test_LIST_by_issue(self, request_method):
         request_method.return_value = mock_response_result()
-        self.ev.list_by_issue('octocat', 'Hello-World', 1).all()
+        self.ev.list_by_issue(1).all()
         self.assertEqual(request_method.call_args[0],
             ('get', _('repos/octocat/Hello-World/issues/1/events')))
 
     def test_LIST_by_repo(self, request_method):
         request_method.return_value = mock_response_result()
-        self.ev.list_by_repo('octocat', 'Hello-World').all()
+        self.ev.list_by_repo().all()
         self.assertEqual(request_method.call_args[0],
             ('get', _('repos/octocat/Hello-World/issues/events')))
 
     def test_GET(self, request_method):
         request_method.return_value = mock_response()
-        self.ev.get('octocat', 'Hello-World', 1)
+        self.ev.get(1)
         self.assertEqual(request_method.call_args[0],
             ('get', _('repos/octocat/Hello-World/issues/events/1')))
 
@@ -120,121 +119,115 @@ class TestEventsService(TestCase):
 class TestLabelsService(TestCase):
 
     def setUp(self):
-        self.lb = Labels()
+        self.lb = Labels(user='octocat', repo='Hello-World')
 
     def test_GET(self, request_method):
         request_method.return_value = mock_response()
-        self.lb.get('octocat', 'Hello-World', 'bug')
+        self.lb.get('bug')
         self.assertEqual(request_method.call_args[0],
             ('get', _('repos/octocat/Hello-World/labels/bug')))
 
     def test_CREATE(self, request_method):
         request_method.return_value = mock_response('post')
-        self.lb.create('octocat', 'Hello-World', 'bug', 'FF0000')
+        self.lb.create(dict(name='bug', color='FF0000'))
         self.assertEqual(request_method.call_args[0],
             ('post', _('repos/octocat/Hello-World/labels')))
 
     def test_CREATE_with_invalid_color(self, request_method):
         request_method.return_value = mock_response('post')
         # invalid color
-        with self.assertRaises(ValidationError): 
-            args={'user': 'octocat',
-                  'repo': 'Hello-world',
-                  'name': 'bug',
-                  'color': 'FF00',}
-            self.lb.create(**args)
+        with self.assertRaises(ValidationError):
+            args={'name': 'bug', 'color': 'FF00'}
+            self.lb.create(args)
 
     def test_UPDATE(self, request_method):
         request_method.return_value = mock_response('patch')
-        self.lb.update('octocat', 'Hello-World', 'bug', 'critical', 'FF0000')
+        self.lb.update('bug', dict(name='critical', color='FF0000'))
         self.assertEqual(request_method.call_args[0],
             ('patch', _('repos/octocat/Hello-World/labels/bug')))
 
     def test_UPDATE_with_invalid_color(self, request_method):
         request_method.return_value = mock_response('post')
         # invalid color
-        with self.assertRaises(ValidationError): 
-            args={'user': 'octocat',
-                  'repo': 'Hello-world',
-                  'name': 'bug',
-                  'new_name': 'critical',
+        with self.assertRaises(ValidationError):
+            args={'name': 'critical',
                   'color': 'FF00',}
-            self.lb.update(**args)
+            self.lb.update('bug', args)
 
     def test_DELETE(self, request_method):
         request_method.return_value = mock_response('delete')
-        self.lb.delete('octocat', 'Hello-World', 'bug')
+        self.lb.delete('bug')
         self.assertEqual(request_method.call_args[0],
             ('delete', _('repos/octocat/Hello-World/labels/bug')))
 
-    def test_LIST_by_repo(self, request_method):
-        request_method.return_value = mock_response()
-        self.lb.list_by_repo('octocat', 'Hello-World')
-        self.assertEqual(request_method.call_args[0],
-            ('get', _('repos/octocat/Hello-World/labels')))
-
     def test_LIST_by_issue(self, request_method):
         request_method.return_value = mock_response()
-        self.lb.list_by_issue('octocat', 'Hello-World', 1)
+        self.lb.list_by_issue(1)
         self.assertEqual(request_method.call_args[0],
             ('get', _('repos/octocat/Hello-World/issues/1/labels')))
 
     def test_ADD_to_issue(self, request_method):
         request_method.return_value = mock_response('post')
-        self.lb.add_to_issue('octocat', 'Hello-World', 1, ['bug', 'critical'])
+        self.lb.add_to_issue(1, ('bug', 'critical'))
         self.assertEqual(request_method.call_args[0],
             ('post', _('repos/octocat/Hello-World/issues/1/labels')))
 
     def test_REMOVE_from_issue(self, request_method):
         request_method.return_value = mock_response('delete')
-        self.lb.remove_from_issue('octocat', 'Hello-World', 1, 'bug')
+        self.lb.remove_from_issue(1, 'bug')
         self.assertEqual(request_method.call_args[0],
             ('delete', _('repos/octocat/Hello-World/issues/1/labels/bug')))
 
     def test_REPLACE_all(self, request_method):
-        self.lb.replace_all('octocat', 'Hello-World', 1, ['bug', 'critical'])
+        self.lb.replace_all(1, ['bug', 'critical'])
         self.assertEqual(request_method.call_args[0],
             ('put', _('repos/octocat/Hello-World/issues/1/labels')))
 
     def test_REMOVE_all(self, request_method):
         request_method.return_value = mock_response('delete')
-        self.lb.remove_all('octocat', 'Hello-World', 1)
+        self.lb.remove_all(1)
         self.assertEqual(request_method.call_args[0],
             ('delete', _('repos/octocat/Hello-World/issues/1/labels')))
-        
+
+    def test_LIST_by_milestone(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.lb.list_by_milestone(1).all()
+        self.assertEqual(request_method.call_args[0],
+            ('get', _('repos/octocat/Hello-World/milestones/1/labels')))
+
 
 @patch.object(requests.sessions.Session, 'request')
 class TestMilestonesService(TestCase):
 
     def setUp(self):
-        self.mi = Milestones()
+        self.mi = Milestones(user='octocat', repo='Hello-World')
 
     def test_LIST_by_repo(self, request_method):
         request_method.return_value = mock_response_result()
-        self.mi.list('octocat', 'Hello-World').all()
+        self.mi.list().all()
         self.assertEqual(request_method.call_args[0],
             ('get', _('repos/octocat/Hello-World/milestones')))
 
     def test_GET(self, request_method):
         request_method.return_value = mock_response()
-        self.mi.get('octocat', 'Hello-World', 1)
+        self.mi.get(1)
         self.assertEqual(request_method.call_args[0],
             ('get', _('repos/octocat/Hello-World/milestones/1')))
 
     def test_CREATE(self, request_method):
         request_method.return_value = mock_response('post')
-        self.mi.create('octocat', 'Hello-World', 'title')
+        self.mi.create(dict(title='test'))
         self.assertEqual(request_method.call_args[0],
             ('post', _('repos/octocat/Hello-World/milestones')))
 
     def test_UPDATE(self, request_method):
         request_method.return_value = mock_response('patch')
-        self.mi.update('octocat', 'Hello-World', 1, 'critical')
+        self.mi.update(1, dict(title='test'))
         self.assertEqual(request_method.call_args[0],
             ('patch', _('repos/octocat/Hello-World/milestones/1')))
 
     def test_DELETE(self, request_method):
         request_method.return_value = mock_response('delete')
-        self.mi.delete('octocat', 'Hello-World', 1)
+        self.mi.delete(1)
         self.assertEqual(request_method.call_args[0],
             ('delete', _('repos/octocat/Hello-World/milestones/1')))

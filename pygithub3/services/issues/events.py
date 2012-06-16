@@ -26,7 +26,7 @@ class Events(Service):
         :param str repo: Repo name
         :returns: A :doc:`result`
         """
-        request = self.request_builder('issues.events.list_by_repo',
+        request = self.make_request('issues.events.list_by_repo',
             user=user, repo=repo)
         return self._get_result(request)
 

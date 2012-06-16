@@ -24,8 +24,9 @@ class Create(Request):
 
     def clean_body(self):  # Test if API normalize it
         state = self.body.get('state', '')
-        if state.lower() not in ('open', 'closed'):
+        if state and state.lower() not in ('open', 'closed'):
             raise ValidationError("'state' must be 'open' or 'closed'")
+        return self.body
 
 
 class Update(Create):
