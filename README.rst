@@ -44,6 +44,7 @@ Achievements
 - `Git Data service <http://developer.github.com/v3/git/>`_
 - `Pull requests service <http://developer.github.com/v3/pulls/>`_
 - `Orgs service <http://developer.github.com/v3/orgs/>`_
+- `Issues service <http://developer.github.com/v3/issues/>`_
 
 TODO
 -----

@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
+from os.path import join
+
 from setuptools import setup, find_packages
 import pygithub3
 
@@ -26,7 +28,7 @@ setup(
         'nose',
         'mock',
     ],
-    install_requires=map(str.strip, open('requirements/base.txt')),
+    install_requires=map(str.strip, open(join('requirements', 'base.txt'))),
     include_package_data=True,
     classifiers=(
         'Programming Language :: Python',
@@ -34,7 +36,7 @@ setup(
         'Programming Language :: Python :: 2.7',
         'License :: OSI Approved :: ISC License (ISCL)',
         'Operating System :: OS Independent',
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
     ),
 )
