@@ -134,18 +134,6 @@ class TestRepoService(TestCase):
         self.assertEqual(request_method.call_args[0],
                          ('get', _('repos/octocat/octocat_repo/branches')))
 
-    def test_LIST_labels(self, request_method):
-        request_method.return_value = mock_response_result()
-        self.rs.list_labels().all()
-        self.assertEqual(request_method.call_args[0],
-                         ('get', _('repos/octocat/octocat_repo/labels')))
-
-    def test_LIST_milestones(self, request_method):
-        request_method.return_value = mock_response_result()
-        self.rs.list_milestones().all()
-        self.assertEqual(request_method.call_args[0],
-                         ('get', _('repos/octocat/octocat_repo/milestones')))
-
 
 @patch.object(requests.sessions.Session, 'request')
 class TestCollaboratorsService(TestCase):
