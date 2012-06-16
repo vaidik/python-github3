@@ -1,9 +1,6 @@
 # -*- encoding: utf-8 -*-
 
-from datetime import datetime
-
 from pygithub3.services.base import Service, MimeTypeMixin
-from pygithub3.resources.base import GITHUB_DATE_FORMAT
 from .comments import Comments
 from .events import Events
 from .labels import Labels
@@ -30,7 +27,7 @@ class Issue(Service, MimeTypeMixin):
                            @high
         :param str sort: 'created', 'updated' or 'comments'
         :param str direction: 'asc' or 'desc'
-        :param datetime since: Date filter
+        :param datetime since: Date filter (datetime or str in ISO 8601)
         :returns: A :doc:`result`
 
         .. warning::
@@ -38,12 +35,7 @@ class Issue(Service, MimeTypeMixin):
         """
         params = dict(filter=filter, state=state, labels=labels, sort=sort,
             direction=direction)
-        try:
-            date = datetime.strptime(since, GITHUB_DATE_FORMAT)
-            params.update(since=date)
-        except:
-            pass
-
+        self._normalize_data('since', params)
         request = self.request_builder('issues.list')
         return self._get_result(request, **params)
 
@@ -60,7 +52,7 @@ class Issue(Service, MimeTypeMixin):
                            @high
         :param str sort: 'created', 'updated' or 'comments'
         :param str direction: 'asc' or 'desc'
-        :param datetime since: Date filter
+        :param datetime since: Date filter (datetime or str in ISO 8601)
         :returns: A :doc:`result`
 
         .. note::
@@ -68,12 +60,7 @@ class Issue(Service, MimeTypeMixin):
         """
         params = dict(milestone=milestone, state=state, assignee=assignee,
             mentioned=mentioned, labels=labels, sort=sort, direction=direction)
-        try:
-            date = datetime.strptime(since, GITHUB_DATE_FORMAT)
-            params.update(since=date)
-        except:
-            pass
-
+        self._normalize_data('since', params)
         request = self.make_request('issues.list_by_repo', user=user,
             repo=repo)
         return self._get_result(request, **params)

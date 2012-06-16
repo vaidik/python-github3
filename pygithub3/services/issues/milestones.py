@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from datetime import datetime
-
 from pygithub3.services.base import Service
-from pygithub3.resources.base import GITHUB_DATE_FORMAT
+
 
 class Milestones(Service):
     """ Consume `Milestones API
@@ -43,14 +41,6 @@ class Milestones(Service):
             repo=repo, number=number)
         return self._get(request)
 
-    def _normalize_due_on(self, data):
-        """ If ``due_on`` comes as ``datetime``, it'll normalize it """
-        try:
-            due_on = datetime.strptime(data.get('due_on'), GITHUB_DATE_FORMAT)
-            data.update({'due_on': due_on})
-        except:
-            pass
-
     def create(self, data, user=None, repo=None):
         """ Create a milestone
 
@@ -64,7 +54,7 @@ class Milestones(Service):
         .. note::
             Remember :ref:`config precedence`
         """
-        self._normalize_due_on(data)
+        self._normalize_date('due_on', data)
         request = self.make_request('issues.milestones.create', user=user,
             repo=repo, body=data)
         return self._post(request)
@@ -83,7 +73,7 @@ class Milestones(Service):
         .. note::
             Remember :ref:`config precedence`
         """
-        self._normalize_due_on(data)
+        self._normalize_date('due_on', data)
         request = self.make_request('issues.milestones.update', user=user,
             repo=repo, number=number, body=data)
         return self._patch(request)
