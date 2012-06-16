@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 
-from pygithub3.requests.base import Request
+from pygithub3.requests.base import Request, ValidationError
 from pygithub3.resources.issues import Milestone
 
 
@@ -22,15 +22,15 @@ class Create(Request):
         'required': ('title',)
     }
 
+    def clean_body(self):  # Test if API normalize it
+        state = self.body.get('state', '')
+        if state.lower() not in ('open', 'closed'):
+            raise ValidationError("'state' must be 'open' or 'closed'")
 
-class Update(Request):
+
+class Update(Create):
 
     uri = 'repos/{user}/{repo}/milestones/{number}'
-    resource = Milestone
-    body_schema = {
-        'schema': ('title', 'state', 'description', 'due_on'),
-        'required': ('title',)
-    }
 
 
 class Delete(Request):

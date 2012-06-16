@@ -142,14 +142,17 @@ class Labels(Service):
                                        name=label)
         return self._delete(request)
 
-    def replace_all(self, number, labels, user=None, repo=None):
-        """ Replace all labels of a issue
+    def replace_all(self, number, user=None, repo=None, *labels):
+        """ Replace all labels for a issue
 
         :param int number: Issue number
         :param list labels: New labels
         :param str user: Username
         :param str repo: Repo name
         :returns: A :doc:`result`
+
+        .. note::
+            If labels weren't especified, it'd remove all labels from the issue
 
         .. note::
             Remember :ref:`config precedence`
