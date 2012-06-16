@@ -137,7 +137,7 @@ class TestLabelsService(TestCase):
         request_method.return_value = mock_response('post')
         # invalid color
         with self.assertRaises(ValidationError):
-            args={'name': 'bug', 'color': 'FF00'}
+            args = {'name': 'bug', 'color': 'FF00'}
             self.lb.create(args)
 
     def test_UPDATE(self, request_method):
@@ -150,8 +150,7 @@ class TestLabelsService(TestCase):
         request_method.return_value = mock_response('post')
         # invalid color
         with self.assertRaises(ValidationError):
-            args={'name': 'critical',
-                  'color': 'FF00',}
+            args = {'name': 'critical', 'color': 'FF00'}
             self.lb.update('bug', args)
 
     def test_DELETE(self, request_method):

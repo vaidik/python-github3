@@ -20,7 +20,7 @@ class Create(Request):
     resource = Label
     body_schema = {
         'schema': ('name', 'color'),
-        'required': ('name', 'color' )
+        'required': ('name', 'color')
     }
 
     def clean_body(self):
@@ -38,7 +38,7 @@ class Update(Create):
     resource = Label
     body_schema = {
         'schema': ('name', 'color'),
-        'required': ('name', 'color' )
+        'required': ('name', 'color')
     }
 
 

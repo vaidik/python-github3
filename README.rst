@@ -48,7 +48,7 @@ Achievements
 TODO
 -----
 
-- Services: Issues, Events
+- Services: Events
 - Oauth authorization API (service?)
 - Proxy methods into resources (e.g copitux.followers)
 

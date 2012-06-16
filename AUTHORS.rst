@@ -1,4 +1,5 @@
 python-github3 is written and maintained by **David Medina** and
+
 various contributors:
 
 Development Lead
@@ -25,3 +26,6 @@ Patches and Suggestions
 - Nathaniel Williams <nat.williams@gmail.com>
 - Alejandro Gómez <alejandroogomez@gmail.com>
 - Stefano Rivera <stefano@rivera.za.net>
+- Ouertani Mohammed Amine <tsl.hacker@gmail.com>
+- Conor Branagan <conor.branagan@gmail.com>
+- Ralph Bean <rbean@redhat.com>
