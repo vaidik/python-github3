@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-import requests
+from datetime import datetime
 
+import requests
 from mock import patch
 
 from pygithub3.tests.utils.core import TestCase
@@ -53,6 +54,16 @@ class TestServiceCalls(TestCase):
         result = self.s._get_result(self.r, **self.args)
         self.assertFalse(request_method.called)
         self.assertIsInstance(result, base.Result)
+
+    def test_normalize_ok(self, request_method):
+        data = {'test': datetime(2012, 12, 12, 3, 3, 3)}
+        self.s._normalize_date('test', data)
+        self.assertEqual(data['test'], '2012-12-12T03:03:03Z')
+
+    def test_normalize_fail(self, request_method):
+        data = {'test': 'fail'}
+        self.s._normalize_date('test', data)
+        self.assertEqual(data['test'], 'fail')
 
 
 @patch.object(requests.sessions.Session, 'request')

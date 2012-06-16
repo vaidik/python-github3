@@ -75,5 +75,6 @@ List of services
     git_data
     pull_requests
     orgs
+    issues
 
 .. _mimetypes: http://developer.github.com/v3/mime

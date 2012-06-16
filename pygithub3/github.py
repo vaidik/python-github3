@@ -20,12 +20,14 @@ class Github(object):
         from pygithub3.services.git_data import GitData
         from pygithub3.services.pull_requests import PullRequests
         from pygithub3.services.orgs import Org
+        from pygithub3.services.issues import Issue
         self._users = User(**config)
         self._repos = Repo(**config)
         self._gists = Gist(**config)
         self._git_data = GitData(**config)
         self._pull_requests = PullRequests(**config)
         self._orgs = Org(**config)
+        self._issues = Issue(**config)
 
     @property
     def remaining_requests(self):
@@ -68,8 +70,16 @@ class Github(object):
         """
         return self._pull_requests
 
+    @property
     def orgs(self):
         """
         :ref:`Orgs service <Orgs service>`
         """
         return self._orgs
+
+    @property
+    def issues(self):
+        """
+        :ref:`Issues service <Issues service>`
+        """
+        return self._issues
