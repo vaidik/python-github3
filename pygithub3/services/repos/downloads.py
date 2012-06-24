@@ -72,9 +72,9 @@ class Downloads(Service):
         # TODO: improve it. e.g Manage all with file desc
         def upload(file_path):
             """ """
-            body = download.ball_to_upload()
-            body['file'] = (file_path, open(file_path, 'rb'))
-            return requests.post(download.s3_url, files=body)
+            data = download.ball_to_upload()
+            files = {'File': open(file_path, 'rb')}
+            return requests.post(download.s3_url, data=data, files=files)
 
         download.upload = upload
         return download
