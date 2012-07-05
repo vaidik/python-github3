@@ -178,6 +178,7 @@ class TestLabelsService(TestCase):
             ('delete', _('repos/octocat/Hello-World/issues/1/labels/bug')))
 
     def test_REPLACE_all(self, request_method):
+        request_method.return_value = mock_response()
         self.lb.replace_all(1, ['bug', 'critical'])
         self.assertEqual(request_method.call_args[0],
             ('put', _('repos/octocat/Hello-World/issues/1/labels')))
