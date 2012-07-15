@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from pygithub3.core.utils import OrderedDict
+from pygithub3.core.compat import OrderedDict
 
 from .base import Resource
 from .users import User
