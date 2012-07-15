@@ -3,7 +3,7 @@
 
 from datetime import datetime
 
-from pygithub3.core.utils import json
+from pygithub3.core.compat import json
 
 GITHUB_DATE_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
 
