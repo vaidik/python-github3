@@ -1,11 +1,6 @@
-#!/usr/bin/env python
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
-from datetime import datetime
-
-from pygithub3.core.compat import json
-
-GITHUB_DATE_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
+from pygithub3.core import json
 
 
 class Resource(object):
@@ -15,7 +10,6 @@ class Resource(object):
     _collection_maps = {}
 
     def __init__(self, attrs):
-        """ """
         self._attrs = attrs
         self.__set_attrs()
 
@@ -47,13 +41,6 @@ class Resource(object):
                 return func(resource, raw_resource)
             return wrapper
 
-        def parse_date(string_date):
-            try:
-                date = datetime.strptime(string_date, GITHUB_DATE_FORMAT)
-            except TypeError:
-                date = None
-            return date
-
         @self_resource
         def parse_map(resource, raw_resource):
             if hasattr(raw_resource, 'items'):
@@ -73,9 +60,6 @@ class Resource(object):
                         for raw_resource in raw_resources]
 
         new_resource = raw_resource.copy()
-        new_resource.update(dict([
-            (attr, parse_date(raw_resource[attr]))
-             for attr in self._dates if attr in raw_resource]))
         new_resource.update(dict([
             (attr, parse_map(resource, raw_resource[attr]))
              for attr, resource in self._maps.items()
