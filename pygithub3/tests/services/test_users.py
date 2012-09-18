@@ -1,22 +1,18 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
 import requests
-from mock import patch, Mock
+from mock import patch
 
-from pygithub3.tests.utils.core import TestCase
 from pygithub3.core.client import Client
-from pygithub3.services.users import User, Emails, Followers, Keys
 from pygithub3.exceptions import ValidationError
-from pygithub3.resources.base import json
-from pygithub3.tests.utils.base import (mock_response, mock_response_result,
-                                        mock_json)
+from pygithub3.services.users import User, Emails, Followers, Keys
+from pygithub3.tests.utils.base import (dummy_json, mock_response,
+    mock_response_result)
+from pygithub3.tests.utils.core import TestCase
 from pygithub3.tests.utils.services import _
 
-json.dumps = Mock(side_effect=mock_json)
-json.loads = Mock(side_effect=mock_json)
 
-
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestUserService(TestCase):
 
@@ -43,6 +39,7 @@ class TestUserService(TestCase):
         self.assertRaises(ValidationError, self.us.update, {})
 
 
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestEmailsService(TestCase):
 
@@ -82,6 +79,7 @@ class TestEmailsService(TestCase):
         self.assertRaises(ValidationError, self.es.delete)
 
 
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestFollowersService(TestCase):
 
@@ -130,6 +128,7 @@ class TestFollowersService(TestCase):
                          ('delete', _('user/following/octocat')))
 
 
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestKeysService(TestCase):
 

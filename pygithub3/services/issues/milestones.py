@@ -54,7 +54,6 @@ class Milestones(Service):
         .. note::
             Remember :ref:`config precedence`
         """
-        self._normalize_date('due_on', data)
         request = self.make_request('issues.milestones.create', user=user,
             repo=repo, body=data)
         return self._post(request)
@@ -73,7 +72,6 @@ class Milestones(Service):
         .. note::
             Remember :ref:`config precedence`
         """
-        self._normalize_date('due_on', data)
         request = self.make_request('issues.milestones.update', user=user,
             repo=repo, number=number, body=data)
         return self._patch(request)

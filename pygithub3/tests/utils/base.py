@@ -1,14 +1,15 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from mock import Mock
+from mock import Mock, patch
 
+from pygithub3.core import json
 from pygithub3.resources.base import Resource
 from pygithub3.requests.base import Request
 
 
-def mock_json(content):
-    return content
+_dummy_json = lambda x, **kwargs: x
+def dummy_json(cls):
+    return patch.multiple(json, dumps=_dummy_json, loads=_dummy_json)(cls)
 
 
 def mock_response(status_code='get', content={}):
@@ -26,12 +27,8 @@ def mock_response_result(status_code='get'):
 
 
 class DummyResource(Resource):
-    pass
 
-
-def loads_mock(content):
-    return content
-DummyResource.loads = Mock(side_effect=loads_mock)
+    loads = Mock(side_effect=_dummy_json)
 
 
 class DummyRequest(Request):

@@ -1,13 +1,9 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-
-from datetime import datetime
 
 from pygithub3.core.client import Client
 from pygithub3.core.errors import NotFound
 from pygithub3.core.result import smart, normal
 from pygithub3.requests.base import Factory
-from pygithub3.resources.base import GITHUB_DATE_FORMAT
 
 
 class Service(object):
@@ -43,15 +39,6 @@ class Service(object):
     def __init__(self, **config):
         self._client = Client(**config)
         self.request_builder = Factory()
-
-    def _normalize_date(self, key, _dict):
-        """ If ``key`` comes as ``datetime``, it'll normalize it """
-        try:
-            key = str(key)
-            date = datetime.strftime(_dict.get(key), GITHUB_DATE_FORMAT)
-            _dict.update({key: date})
-        except:
-            pass
 
     @property
     def remaining_requests(self):

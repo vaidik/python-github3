@@ -1,22 +1,17 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
 import requests
-from mock import patch, Mock
+from mock import patch
 
-from pygithub3.tests.utils.core import TestCase
 from pygithub3.services.git_data import (Blobs, Commits, References, Tags,
-                                         Trees)
-from pygithub3.resources.base import json
-from pygithub3.tests.utils.base import (mock_response, mock_response_result,
-                                        mock_json)
+    Trees)
+from pygithub3.tests.utils.base import (dummy_json, mock_response,
+    mock_response_result)
+from pygithub3.tests.utils.core import TestCase
 from pygithub3.tests.utils.services import _
 
 
-json.dumps = Mock(side_effect=mock_json)
-json.loads = Mock(side_effect=mock_json)
-
-
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestBlobsService(TestCase):
     def setUp(self):
@@ -36,6 +31,7 @@ class TestBlobsService(TestCase):
                          ('post', _('repos/octocat/repo/git/blobs')))
 
 
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestCommitsService(TestCase):
     def setUp(self):
@@ -62,6 +58,7 @@ class TestCommitsService(TestCase):
         )
 
 
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestReferencesService(TestCase):
     def setUp(self):
@@ -107,6 +104,8 @@ class TestReferencesService(TestCase):
             ('delete', _('repos/user/repo/git/refs/branch'))
         )
 
+
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestTagsService(TestCase):
     def setUp(self):
@@ -130,6 +129,7 @@ class TestTagsService(TestCase):
         )
 
 
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestTreesService(TestCase):
     def setUp(self):

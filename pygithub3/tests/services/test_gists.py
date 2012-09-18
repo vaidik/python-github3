@@ -1,20 +1,16 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
 import requests
-from mock import patch, Mock
+from mock import patch
 
-from pygithub3.tests.utils.core import TestCase
-from pygithub3.resources.base import json
 from pygithub3.services.gists import Gist, Comments
-from pygithub3.tests.utils.base import (mock_response, mock_response_result,
-                                        mock_json)
+from pygithub3.tests.utils.base import (dummy_json, mock_response,
+    mock_response_result)
+from pygithub3.tests.utils.core import TestCase
 from pygithub3.tests.utils.services import _
 
-json.dumps = Mock(side_effect=mock_json)
-json.loads = Mock(side_effect=mock_json)
 
-
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestGistService(TestCase):
 
@@ -93,6 +89,7 @@ class TestGistService(TestCase):
             ('delete', _('gists/1')))
 
 
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestCommentService(TestCase):
 

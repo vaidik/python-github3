@@ -1,21 +1,17 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
 import requests
-from mock import patch, Mock
+from mock import patch
 
-from pygithub3.tests.utils.core import TestCase
 from pygithub3.services.repos import (Repo, Collaborators, Commits, Downloads,
-                                      Forks, Keys, Watchers, Hooks)
-from pygithub3.resources.base import json
-from pygithub3.tests.utils.base import (mock_response, mock_response_result,
-                                        mock_json)
+    Forks, Keys, Watchers, Hooks)
+from pygithub3.tests.utils.base import (dummy_json, mock_response,
+    mock_response_result)
+from pygithub3.tests.utils.core import TestCase
 from pygithub3.tests.utils.services import _
 
-json.dumps = Mock(side_effect=mock_json)
-json.loads = Mock(side_effect=mock_json)
 
-
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestRepoService(TestCase):
 
@@ -135,6 +131,7 @@ class TestRepoService(TestCase):
                          ('get', _('repos/octocat/octocat_repo/branches')))
 
 
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestCollaboratorsService(TestCase):
 
@@ -167,6 +164,7 @@ class TestCollaboratorsService(TestCase):
             ('delete', _('repos/octocat/oc_repo/collaborators/user')))
 
 
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestCommitsService(TestCase):
 
@@ -230,6 +228,7 @@ class TestCommitsService(TestCase):
                          ('delete', _('repos/oct/re_oct/comments/1')))
 
 
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestDownloadsService(TestCase):
 
@@ -262,6 +261,7 @@ class TestDownloadsService(TestCase):
         self.assertTrue(hasattr(download, 'upload'))
 
 
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestForksService(TestCase):
 
@@ -281,6 +281,7 @@ class TestForksService(TestCase):
                          ('post', _('repos/oct/re_oct/forks')))
 
 
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestKeysService(TestCase):
 
@@ -318,6 +319,7 @@ class TestKeysService(TestCase):
                          ('delete', _('repos/oct/re_oct/keys/1')))
 
 
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestWatchersService(TestCase):
 
@@ -360,6 +362,7 @@ class TestWatchersService(TestCase):
             ('delete', _('user/watched/oct/re_oct')))
 
 
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestHooksService(TestCase):
 

@@ -1,22 +1,18 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
 import requests
-from mock import patch, Mock
+from mock import patch
 
 from pygithub3.exceptions import ValidationError
-from pygithub3.tests.utils.core import TestCase
-from pygithub3.resources.base import json
 from pygithub3.services.issues import (Issue, Comments, Events, Labels,
-                                       Milestones)
-from pygithub3.tests.utils.base import (mock_response, mock_response_result,
-                                        mock_json)
+    Milestones)
+from pygithub3.tests.utils.base import (dummy_json, mock_response,
+    mock_response_result)
+from pygithub3.tests.utils.core import TestCase
 from pygithub3.tests.utils.services import _
 
-json.dumps = Mock(side_effect=mock_json)
-json.loads = Mock(side_effect=mock_json)
 
-
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestIssuesService(TestCase):
 
@@ -53,6 +49,7 @@ class TestIssuesService(TestCase):
             ('patch', _('repos/octocat/Hello-World/issues/1')))
 
 
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestCommentService(TestCase):
 
@@ -90,6 +87,7 @@ class TestCommentService(TestCase):
             ('delete', _('repos/octocat/Hello-World/issues/comments/1')))
 
 
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestEventsService(TestCase):
 
@@ -115,6 +113,7 @@ class TestEventsService(TestCase):
             ('get', _('repos/octocat/Hello-World/issues/events/1')))
 
 
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestLabelsService(TestCase):
 
@@ -196,6 +195,7 @@ class TestLabelsService(TestCase):
             ('get', _('repos/octocat/Hello-World/milestones/1/labels')))
 
 
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestMilestonesService(TestCase):
 
