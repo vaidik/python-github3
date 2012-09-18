@@ -1,22 +1,18 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
 import requests
-from mock import patch, Mock
+from mock import patch
 from nose.tools import raises
 
-from pygithub3.tests.utils.core import TestCase
+from pygithub3.requests.base import ValidationError
 from pygithub3.services.pull_requests import PullRequests, Comments
-from pygithub3.requests.base import ValidationError, json
-from pygithub3.tests.utils.base import (mock_response, mock_response_result,
-                                        mock_json)
+from pygithub3.tests.utils.base import (dummy_json, mock_response,
+    mock_response_result)
+from pygithub3.tests.utils.core import TestCase
 from pygithub3.tests.utils.services import _
 
 
-json.dumps = Mock(side_effect=mock_json)
-json.loads = Mock(side_effect=mock_json)
-
-
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestPullRequestsService(TestCase):
     def setUp(self):
@@ -123,6 +119,7 @@ class TestPullRequestsService(TestCase):
         )
 
 
+@dummy_json
 @patch.object(requests.sessions.Session, 'request')
 class TestPullRequestCommentsService(TestCase):
     def setUp(self):

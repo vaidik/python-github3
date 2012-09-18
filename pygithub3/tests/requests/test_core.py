@@ -1,19 +1,12 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from mock import Mock
-
-from pygithub3.tests.utils.core import TestCase
-from pygithub3.requests.base import Factory, Body, json, Request
 from pygithub3.exceptions import (UriInvalid, RequestDoesNotExist,
-                                  ValidationError, InvalidBodySchema)
-from pygithub3.tests.utils.base import mock_json, DummyRequest
-from pygithub3.tests.utils.requests import (
-    RequestWithArgs, RequestCleanedUri, RequestBodyInvalidSchema,
-    RequestCleanedBody)
-
-json.dumps = Mock(side_effect=mock_json)
-json.loads = Mock(side_effect=mock_json)
+    ValidationError, InvalidBodySchema)
+from pygithub3.requests.base import Factory, Body, Request
+from pygithub3.tests.utils.base import DummyRequest, dummy_json
+from pygithub3.tests.utils.core import TestCase
+from pygithub3.tests.utils.requests import (RequestWithArgs, RequestCleanedUri,
+    RequestBodyInvalidSchema, RequestCleanedBody)
 
 
 class TestFactory(TestCase):
@@ -70,6 +63,7 @@ class TestRequest(TestCase):
         self.assertIsNone(request.get_body())
 
 
+@dummy_json
 class TestRequestBodyWithSchema(TestCase):
 
     def setUp(self):

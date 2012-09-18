@@ -4,10 +4,10 @@ import requests
 
 from mock import patch
 
-from pygithub3.tests.utils.core import TestCase
 from pygithub3.core.client import Client
 from pygithub3.exceptions import NotFound, BadRequest, UnprocessableEntity
 from pygithub3.tests.utils.base import mock_response
+from pygithub3.tests.utils.core import TestCase
 
 
 class TestClient(TestCase):

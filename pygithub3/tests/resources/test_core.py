@@ -1,15 +1,15 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
 from datetime import datetime
 
-from pygithub3.tests.utils.core import TestCase
+from pygithub3.core import json
 from pygithub3.resources.base import Raw
+from pygithub3.tests.utils.core import TestCase
 from pygithub3.tests.utils.resources import Nested, Simple, HasSimple
 
 simple_resource = dict(type='simple')
 has_simple = dict(type='has_simple', simple=simple_resource)
-github_return = dict(
+github_dict = dict(
     id=1,
     name='name_test',
     date='2008-01-14T04:33:35Z',
@@ -17,10 +17,11 @@ github_return = dict(
     list_collection=[has_simple] * 2,
     items_collections=dict(arg1=has_simple, arg2=has_simple)
 )
-github_return_nested = github_return.copy()
-github_return.update({'self_nested': github_return_nested})
-github_return.update({'self_nested_list': [github_return_nested] * 2})
-github_return.update({'self_nested_dict': dict(arg1=github_return_nested)})
+github_dict_nested = github_dict.copy()
+github_dict.update({'self_nested': github_dict_nested})
+github_dict.update({'self_nested_list': [github_dict_nested] * 2})
+github_dict.update({'self_nested_dict': dict(arg1=github_dict_nested)})
+github_return = json.dumps(github_dict)
 
 
 class TestResourceMapping(TestCase):
@@ -61,8 +62,7 @@ class TestResourceMapping(TestCase):
 
 
 class TestRawResource(TestCase):
-    """ Litle obvious :P """
 
     def test_return_original_copy(self):
         self.r = Raw.loads(github_return)
-        self.assertEqual(id(self.r), id(github_return))
+        self.assertEqual(self.r['id'], github_dict['id'])

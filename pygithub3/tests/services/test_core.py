@@ -55,16 +55,6 @@ class TestServiceCalls(TestCase):
         self.assertFalse(request_method.called)
         self.assertIsInstance(result, base.Result)
 
-    def test_normalize_ok(self, request_method):
-        data = {'test': datetime(2012, 12, 12, 3, 3, 3)}
-        self.s._normalize_date('test', data)
-        self.assertEqual(data['test'], '2012-12-12T03:03:03Z')
-
-    def test_normalize_fail(self, request_method):
-        data = {'test': 'fail'}
-        self.s._normalize_date('test', data)
-        self.assertEqual(data['test'], 'fail')
-
 
 @patch.object(requests.sessions.Session, 'request')
 class TestMimeType(TestCase):
