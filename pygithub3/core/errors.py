@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from pygithub3.core.compat import json
+from pygithub3.core import json
 from pygithub3.exceptions import NotFound, BadRequest, UnprocessableEntity
 
 

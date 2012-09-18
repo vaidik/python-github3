@@ -2,11 +2,6 @@
 # -*- encoding: utf-8 -*-
 """ Utils to support python 2.6 compatibility """
 
-try:
-    import simplejson as json
-except ImportError:
-    import json
-
 from collections import MutableMapping
 
 
