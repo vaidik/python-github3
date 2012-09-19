@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
 import requests
@@ -50,10 +49,11 @@ class Client(object):
 
     def set_token(self, token):
         if token:
-            self.requester.params['access_token'] = token
+            self.requester.params.append(('access_token', token))
 
     def __set_params(self, config):
-        self.requester.params['per_page'] = config.get('per_page')
+        per_page = ('per_page', config.get('per_page'))
+        self.requester.params.append(per_page)
         if config.get('verbose'):
             self.requester.config = {'verbose': config['verbose']}
 
