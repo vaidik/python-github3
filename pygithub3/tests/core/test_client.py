@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
 import requests
@@ -26,17 +25,18 @@ class TestClient(TestCase):
 
     def test_set_token_with_valid(self):
         self.c.set_token('tokenize')
-        self.assertEqual(self.c.requester.params['access_token'], 'tokenize')
+        self.assertEqual(dict(self.c.requester.params)['access_token'],
+            'tokenize')
 
     def test_set_token_with_invalid(self):
         self.c.set_token('')
-        self.assertIsNone(self.c.requester.params.get('access_token'))
+        self.assertIsNone(dict(self.c.requester.params).get('access_token'))
 
     def test_INIT_client_with_another_config_args(self):
         new_c = Client(base_url='url', per_page=10, user='me', repo='myrepo',
                        verbose='stream')
         self.assertEqual(new_c.config['base_url'], 'url')
-        self.assertEqual(new_c.requester.params['per_page'], 10)
+        self.assertEqual(dict(new_c.requester.params)['per_page'], 10)
         self.assertEqual(new_c.user, 'me')
         self.assertEqual(new_c.repo, 'myrepo')
         self.assertEqual(new_c.requester.config['verbose'], 'stream')
