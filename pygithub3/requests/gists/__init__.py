@@ -1,7 +1,8 @@
 # -*- encoding: utf-8 -*-
 
-from pygithub3.requests.base import Request, ValidationError
+from pygithub3.requests.base import Request
 from pygithub3.resources.gists import Gist
+
 
 class List(Request):
 

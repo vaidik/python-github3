@@ -3,6 +3,7 @@
 from pygithub3.requests.base import Request
 from pygithub3.resources.gists import Comment
 
+
 class List(Request):
 
     uri = 'gists/{gist_id}/comments'

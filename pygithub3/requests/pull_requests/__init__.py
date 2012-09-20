@@ -30,6 +30,7 @@ class Create(Request):
                                   'issue number or a title and body')
         return self.body
 
+
 class Update(Request):
     uri = 'repos/{user}/{repo}/pulls/{number}'
     resource = PullRequest

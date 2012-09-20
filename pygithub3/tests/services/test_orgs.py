@@ -4,7 +4,8 @@ import requests
 from mock import patch
 
 from pygithub3.services.orgs import Org, Members, Teams
-from pygithub3.tests.utils.base import (dummy_json, mock_response, mock_response_result)
+from pygithub3.tests.utils.base import (dummy_json, mock_response,
+    mock_response_result)
 from pygithub3.tests.utils.core import TestCase
 from pygithub3.tests.utils.services import _
 

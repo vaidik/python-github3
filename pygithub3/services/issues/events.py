@@ -1,7 +1,7 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
 from pygithub3.services.base import Service
+
 
 class Events(Service):
     """ Consume `Events API

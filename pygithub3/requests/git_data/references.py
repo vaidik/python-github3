@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 from pygithub3.requests.base import Request
 from pygithub3.resources.git_data import Reference
 
@@ -19,6 +21,7 @@ class Create(Request):
         'schema': ('ref', 'sha'),
         'required': ('ref', 'sha'),
     }
+
 
 class Update(Request):
     uri = 'repos/{user}/{repo}/git/refs/{ref}'

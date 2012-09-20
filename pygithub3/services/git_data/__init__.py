@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
 from pygithub3.services.base import Service
@@ -7,6 +6,7 @@ from .commits import Commits
 from .references import References
 from .tags import Tags
 from .trees import Trees
+
 
 class GitData(Service):
     """Consume `Git Data API <http://developer.github.com/v3/git/>`_"""

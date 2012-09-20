@@ -1,7 +1,6 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from . import Service, MimeTypeMixin
+from pygithub3.services.base import Service, MimeTypeMixin
 
 
 class Commits(Service, MimeTypeMixin):

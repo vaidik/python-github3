@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
 from mock import Mock
@@ -20,6 +19,7 @@ class ResultInitMixin(object):
 
     def tearDown(self):
         self.resource_loads.reset_mock()  # It mocks class method
+
 
 class TestSmartResultWithPaginate(ResultInitMixin, TestCase):
 

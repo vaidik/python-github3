@@ -1,7 +1,7 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
 from pygithub3.services.base import Service, MimeTypeMixin
+
 
 class Comments(Service, MimeTypeMixin):
     """ Consume `Comments API
