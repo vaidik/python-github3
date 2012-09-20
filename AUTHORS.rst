@@ -30,3 +30,4 @@ Patches and Suggestions
 - Conor Branagan <conor.branagan@gmail.com>
 - Ralph Bean <rbean@redhat.com>
 - Jason A. Donenfeld <Jason@zx2c4.com>
+- Brad Montgomery <http://about.me/bkmontgomery>
