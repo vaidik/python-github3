@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
 from .base import Resource
@@ -28,6 +27,7 @@ class History(Resource):
     def __str__(self):
         return '<GistHistory (%s)>' % getattr(self, 'version', '')
 
+
 class Gist(Resource):
 
     _dates = ('created_at', )
@@ -36,6 +36,7 @@ class Gist(Resource):
 
     def __str__(self):
         return '<Gist (%s)>' % getattr(self, 'description', '')
+
 
 class Comment(Resource):
 

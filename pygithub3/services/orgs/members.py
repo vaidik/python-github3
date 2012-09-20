@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 
-from . import Service
+from pygithub3.services.base import Service
 
 
 class Members(Service):
@@ -41,7 +41,8 @@ class Members(Service):
             You must be authenticated and an owner of org
 
         """
-        request = self.request_builder('orgs.members.delete', org=org, user=user)
+        request = self.request_builder('orgs.members.delete', org=org,
+            user=user)
         return self._delete(request)
 
     def list_public(self, org):

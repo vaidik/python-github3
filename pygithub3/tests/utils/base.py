@@ -8,6 +8,8 @@ from pygithub3.requests.base import Request
 
 
 _dummy_json = lambda x, **kwargs: x
+
+
 def dummy_json(cls):
     return patch.multiple(json, dumps=_dummy_json, loads=_dummy_json)(cls)
 

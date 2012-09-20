@@ -5,6 +5,7 @@ from datetime import datetime
 from pygithub3.tests.utils.core import TestCase
 from pygithub3.core import json
 
+
 class TestJson(TestCase):
     """
     Test dates parse and normalize
