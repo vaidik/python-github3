@@ -1,10 +1,9 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
 from pygithub3.services.base import Service
 
 
-class OrgEvents(Service):
+class Org(Service):
     """ Consume a `Org Events API
     <http://developer.github.com/v3/events>`_
 
