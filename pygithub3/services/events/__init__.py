@@ -1,11 +1,8 @@
 # -*- encoding: utf-8 -*-
 
 from pygithub3.services.base import Service
-from .. issues import Events as IssueEvents
-from . networks import NetworkEvents
-from . orgs import OrgEvents
-from . repos import RepoEvents
-from . users import UserEvents
+from pygithub3.services import issues
+from pygithub3.services.events import networks, orgs, repos, users
 
 
 class Events(Service):
@@ -17,11 +14,11 @@ class Events(Service):
     """
 
     def __init__(self, **config):
-        self._issues = IssueEvents(**config)
-        self._networks = NetworkEvents(**config)
-        self._orgs = OrgEvents(**config)
-        self._repos = RepoEvents(**config)
-        self._users = UserEvents(**config)
+        self._issues = issues.events.Events(**config)
+        self._networks = networks.Network(**config)
+        self._orgs = orgs.Org(**config)
+        self._repos = repos.Repo(**config)
+        self._users = users.User(**config)
         super(Events, self).__init__(**config)
 
     @property

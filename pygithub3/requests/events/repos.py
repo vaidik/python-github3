@@ -1,11 +1,10 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
 from . import Request
-from pygithub3.resources.events import RepoEvent
+from pygithub3.resources.events import Repo
 
 
 class List(Request):
 
     uri = 'repos/{user}/{repo}/events'
-    resource = RepoEvent
+    resource = Repo

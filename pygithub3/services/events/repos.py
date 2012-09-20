@@ -1,10 +1,9 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
 from pygithub3.services.base import Service
 
 
-class RepoEvents(Service):
+class Repo(Service):
     """ Consume `Repo Events API
     <http://developer.github.com/v3/events/#list-repository-events>`_
 

@@ -1,52 +1,49 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from .base import Resource
-from .users import User
-from .repos import Repo
-from .orgs import Org
+from pygithub3.resources.base import Resource
+from pygithub3.resources import users, repos, orgs
 
 
 class Event(Resource):
 
     _dates = ('created_at', )
-    _maps = {'actor': User, 'repo': Repo, 'org': Org}
+    _maps = {'actor': users.User, 'repo': repos.Repo, 'org': orgs.Org}
 
     def __str__(self):
-        return '<Event (%s)>' % getattr(self, 'type', '')
+        return '<(%s)>' % getattr(self, 'type', '')
 
 
-class RepoEvent(Resource):
+class Repo(Resource):
 
     _dates = ('created_at', )
-    _maps = {'actor': User, 'repo': Repo, 'org': Org}
+    _maps = {'actor': users.User, 'repo': repos.Repo, 'org': orgs.Org}
 
     def __str__(self):
-        return '<Event (%s)>' % getattr(self, 'type', '')
+        return '<(%s)>' % getattr(self, 'type', '')
 
 
-class NetworkEvent(Resource):
+class Network(Resource):
 
     _dates = ('created_at', )
-    _maps = {'actor': User, 'repo': Repo, 'org': Org}
+    _maps = {'actor': users.User, 'repo': repos.Repo, 'org': orgs.Org}
 
     def __str__(self):
-        return '<Event (%s)>' % getattr(self, 'type', '')
+        return '<(%s)>' % getattr(self, 'type', '')
 
 
-class OrgEvent(Resource):
+class Org(Resource):
 
     _dates = ('created_at', )
-    _maps = {'actor': User, 'repo': Repo, 'org': Org}
+    _maps = {'actor': users.User, 'repo': repos.Repo, 'org': orgs.Org}
 
     def __str__(self):
-        return '<Event (%s)>' % getattr(self, 'type', '')
+        return '<(%s)>' % getattr(self, 'type', '')
 
 
-class UserEvent(Resource):
+class User(Resource):
 
     _dates = ('created_at', )
-    _maps = {'actor': User, 'repo': Repo, 'org': Org}
+    _maps = {'actor': users.User, 'repo': repos.Repo, 'org': orgs.Org}
 
     def __str__(self):
-        return '<Event (%s)>' % getattr(self, 'type', '')
+        return '<(%s)>' % getattr(self, 'type', '')
