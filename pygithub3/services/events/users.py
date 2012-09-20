@@ -16,6 +16,8 @@ class User(Service):
         :param str user: Username
         :returns: A :doc:`result`
 
+        .. note::
+            Remember :ref:`config precedence`
         """
         request = self.make_request('events.users.list_received', user=user)
         return self._get_normal_result(request)
@@ -26,6 +28,8 @@ class User(Service):
         :param str user: Username
         :returns: A :doc:`result`
 
+        .. note::
+            Remember :ref:`config precedence`
         """
         request = self.make_request('events.users.list_received_public',
                                     user=user)
@@ -38,6 +42,8 @@ class User(Service):
         :param str user: Username
         :returns: A :doc:`result`
 
+        .. note::
+            Remember :ref:`config precedence`
         """
         request = self.make_request('events.users.list_performed', user=user)
         return self._get_normal_result(request)
@@ -48,6 +54,8 @@ class User(Service):
         :param str user: Username
         :returns: A :doc:`result`
 
+        .. note::
+            Remember :ref:`config precedence`
         """
         request = self.make_request('events.users.list_performed_public',
                                     user=user)
@@ -62,6 +70,8 @@ class User(Service):
         .. warning::
             You must be authenticated as the given user.
 
+        .. note::
+            Remember :ref:`config precedence`
         """
         request = self.make_request('events.users.list_org_events',
                                     user=user, org=org)

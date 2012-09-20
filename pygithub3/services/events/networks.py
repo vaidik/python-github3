@@ -16,6 +16,8 @@ class Network(Service):
         :param str repo: Repository
         :returns: A :doc:`result`
 
+        .. note::
+            Remember :ref:`config precedence`
         """
         request = self.make_request('events.networks.list',
                                     user=user, repo=repo)

@@ -25,7 +25,7 @@ Issues
 
     .. attribute:: events
 
-        :ref:`Events service`
+        :ref:`Issues events service`
 
     .. attribute:: labels
 
@@ -43,7 +43,7 @@ Comments
 .. autoclass:: pygithub3.services.issues.Comments
     :members:
 
-.. _Events service:
+.. _Issues events service:
 
 Events
 ------

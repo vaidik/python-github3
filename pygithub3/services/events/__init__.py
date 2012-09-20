@@ -26,6 +26,10 @@ class Event(Service):
         :returns: A :doc:`result`
 
         .. note::
+            Hits the API fetching maximum number of events (300 = 30/page * 10)
+        """
+
+        """ TODO
             This method uses ``_get_normal_result`` which hits the API fetching
             maximum number of events (300 = 30/page * 10).
 
@@ -33,8 +37,6 @@ class Event(Service):
             ahead of time, that may be a better way to proceed. Otherwise it
             tries to set that via ``_set_last_page_from`` which fails because
             that data is not in the returned header.
-
-
         """
         request = self.request_builder('events.list')
         return self._get_normal_result(request, per_page=None)
