@@ -11,9 +11,10 @@ class PullRequests(Service, MimeTypeMixin):
         self.comments = Comments(**config)
         super(PullRequests, self).__init__(**config)
 
-    def list(self, user=None, repo=None):
+    def list(self, state='open', user=None, repo=None):
         """List all of the pull requests for a repo
 
+        :param str state: Pull requests state ('open' or 'closed')
         :param str user: Username
         :param str repo: Repository
         :returns: A :doc:`result`
@@ -22,7 +23,8 @@ class PullRequests(Service, MimeTypeMixin):
             Remember :ref:`config precedence`
         """
         return self._get_result(
-            self.make_request('pull_requests.list', user=user, repo=repo)
+            self.make_request('pull_requests.list', user=user, repo=repo),
+            state=state
         )
 
     def get(self, number, user=None, repo=None):
