@@ -5,46 +5,20 @@ from pygithub3.services import issues
 from pygithub3.services.events import networks, orgs, repos, users
 
 
-class Events(Service):
+class Event(Service):
     """ Consume `Events API <http://developer.github.com/v3/events>`_
 
     The events API supports pagination, but with a fixed page size of 30; In
     addition, fetching up to ten pages is supported, for a total of 300 events.
-
     """
 
     def __init__(self, **config):
-        self._issues = issues.events.Events(**config)
-        self._networks = networks.Network(**config)
-        self._orgs = orgs.Org(**config)
-        self._repos = repos.Repo(**config)
-        self._users = users.User(**config)
-        super(Events, self).__init__(**config)
-
-    @property
-    def issues(self):
-        """ Events for Issues """
-        return self._issues
-
-    @property
-    def networks(self):
-        """ Events for a Network of Repositories """
-        return self._networks
-
-    @property
-    def orgs(self):
-        """ Events for an Organization """
-        return self._orgs
-
-    @property
-    def repos(self):
-        """ Events for Repos """
-        return self._repos
-
-    @property
-    def users(self):
-        """ Events for Users """
-        return self._users
+        self.issues = issues.events.Events(**config)
+        self.networks = networks.Network(**config)
+        self.orgs = orgs.Org(**config)
+        self.repos = repos.Repo(**config)
+        self.users = users.User(**config)
+        super(Event, self).__init__(**config)
 
     def list(self):
         """ List all public events.
