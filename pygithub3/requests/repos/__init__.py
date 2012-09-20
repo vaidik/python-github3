@@ -43,6 +43,12 @@ class Get(Request):
     resource = Repo
 
 
+class Delete(Request):
+
+    uri = 'repos/{user}/{repo}'
+    resource = Repo
+
+
 class Update(Request):
 
     uri = 'repos/{user}/{repo}'
