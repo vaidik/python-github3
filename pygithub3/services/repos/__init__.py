@@ -81,6 +81,18 @@ class Repo(Service):
         request = self.make_request('repos.create', org=in_org, body=data)
         return self._post(request)
 
+    def delete(self, user=None, repo=None):
+        """ Delete a single repo
+
+        :param str user: Username
+        :param str repo: Repository
+
+        .. note::
+            Remember :ref:`config precedence`
+        """
+        request = self.make_request('repos.delete', user=user, repo=repo)
+        return self._delete(request)
+
     def get(self, user=None, repo=None):
         """ Get a single repo
 

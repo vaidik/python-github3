@@ -29,3 +29,4 @@ Patches and Suggestions
 - Ouertani Mohammed Amine <tsl.hacker@gmail.com>
 - Conor Branagan <conor.branagan@gmail.com>
 - Ralph Bean <rbean@redhat.com>
+- Jason A. Donenfeld <Jason@zx2c4.com>

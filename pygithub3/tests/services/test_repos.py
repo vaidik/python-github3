@@ -78,6 +78,12 @@ class TestRepoService(TestCase):
         self.assertEqual(request_method.call_args[0],
                          ('get', _('repos/octocat/octocat_repo')))
 
+    def test_DELETE(self, request_method):
+        request_method.return_value = mock_response('delete')
+        self.rs.delete()
+        self.assertEqual(request_method.call_args[0],
+                         ('delete', _('repos/octocat/octocat_repo')))
+
     def test_UPDATE_with_repo_in_args(self, request_method):
         request_method.return_value = mock_response('patch')
         self.rs.update({'name': 'test'}, user='user', repo='repo')
