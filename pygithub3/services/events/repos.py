@@ -17,9 +17,11 @@ class Repo(Service):
         :returns: A :doc:`result`
 
         .. note::
+            Remember :ref:`config precedence`
+
+        .. note::
             Remember that the Events API give 10 pages with 30 entries, up to
             300 events, so you'll only get the last 300 Repo events
-
         """
         request = self.make_request('events.repos.list', user=user, repo=repo)
         return self._get_normal_result(request)

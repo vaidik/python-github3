@@ -4,7 +4,7 @@ from pygithub3.services.base import Service
 
 
 class Events(Service):
-    """ Consume `Events API
+    """ Consume `Issues Events API
     <http://developer.github.com/v3/issues/events>`_ """
 
     def list_by_issue(self, number, user=None, repo=None):
