@@ -4,7 +4,7 @@ import requests
 from mock import patch
 
 from pygithub3.tests.utils.core import TestCase
-from pygithub3.services.events import Events
+from pygithub3.services.events import Event
 from pygithub3.tests.utils.base import (mock_response_result, dummy_json)
 from pygithub3.tests.utils.services import _
 
@@ -14,7 +14,7 @@ from pygithub3.tests.utils.services import _
 class TestEventsService(TestCase):
 
     def setUp(self):
-        self.events = Events()
+        self.events = Event()
 
     def test_LIST(self, request_method):
         request_method.return_value = mock_response_result()
@@ -27,7 +27,7 @@ class TestEventsService(TestCase):
 class TestRepoEventsService(TestCase):
 
     def setUp(self):
-        self.events = Events()
+        self.events = Event()
 
     def test_LIST(self, request_method):
         request_method.return_value = mock_response_result()
@@ -41,7 +41,7 @@ class TestRepoEventsService(TestCase):
 class TestNetworkEventsService(TestCase):
 
     def setUp(self):
-        self.events = Events()
+        self.events = Event()
 
     def test_LIST(self, request_method):
         request_method.return_value = mock_response_result()
@@ -55,7 +55,7 @@ class TestNetworkEventsService(TestCase):
 class TestOrgsEventsService(TestCase):
 
     def setUp(self):
-        self.events = Events()
+        self.events = Event()
 
     def test_LIST(self, request_method):
         request_method.return_value = mock_response_result()
@@ -69,7 +69,7 @@ class TestOrgsEventsService(TestCase):
 class TestUserEventsService(TestCase):
 
     def setUp(self):
-        self.events = Events()
+        self.events = Event()
 
     def test_LIST_received(self, request_method):
         request_method.return_value = mock_response_result()
