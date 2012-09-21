@@ -1,3 +1,5 @@
+.. image:: https://secure.travis-ci.org/copitux/python-github3.png
+
 Pygithub3
 ==========
 
