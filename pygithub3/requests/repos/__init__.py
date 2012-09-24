@@ -87,3 +87,9 @@ class List_branches(Request):
 
     uri = 'repos/{user}/{repo}/branches'
     resource = Branch
+
+
+class Get_branch(Request):
+
+    uri = 'repos/{user}/{repo}/branches/{branch}'
+    resource = Branch

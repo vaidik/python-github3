@@ -1,7 +1,6 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from pygithub3.services.base import Service, MimeTypeMixin
+from pygithub3.services.base import Service
 from .collaborators import Collaborators
 from .commits import Commits
 from .downloads import Downloads
@@ -24,11 +23,13 @@ class Repo(Service):
         self.hooks = Hooks(**config)
         super(Repo, self).__init__(**config)
 
-    def list(self, user=None, type='all'):
+    def list(self, user=None, type='all', sort='full_name', direction='desc'):
         """ Get user's repositories
 
         :param str user: Username
-        :param str type: Filter by type (optional). See `github repos doc`_
+        :param str type: *all*, owner, public, private, member
+        :param str sort: created, updated, pushed, *full_name*
+        :param str direction: asc or *desc*
         :returns: A :doc:`result`
 
         If you call it without user and you are authenticated, get the
@@ -43,13 +44,14 @@ class Repo(Service):
             repo_service.list(type='private')
         """
         request = self.request_builder('repos.list', user=user)
-        return self._get_result(request, type=type)
+        return self._get_result(request, type=type, sort=sort,
+            direction=direction)
 
     def list_by_org(self, org, type='all'):
         """ Get organization's repositories
 
         :param str org: Organization name
-        :param str type: Filter by type (optional). See `github repos doc`_
+        :param str type: *all*, public, member, private
         :returns: A :doc:`result`
 
         ::
@@ -147,7 +149,7 @@ class Repo(Service):
     def list_contributors_with_anonymous(self, user=None, repo=None):
         """ Like :attr:`~pygithub3.services.repos.Repo.list_contributors` plus
         anonymous """
-        return self.__list_contributors(user, repo, anom=True)
+        return self.__list_contributors(user, repo, anon=True)
 
     def list_languages(self, user=None, repo=None):
         """ Get repository's languages
@@ -202,3 +204,17 @@ class Repo(Service):
         request = self.make_request('repos.list_branches',
             user=user, repo=repo)
         return self._get_result(request)
+
+    def get_branch(self, branchname, user=None, repo=None):
+        """ Get branch
+
+        :param str user: Username
+        :param str repo: Repository
+        :param str branchname
+
+        .. note::
+            Remember :ref:`config precedence`
+        """
+        request = self.make_request('repos.get_branch', user=user,
+            repo=repo, branch=branchname)
+        return self._get(request)

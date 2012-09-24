@@ -110,7 +110,7 @@ class TestRepoService(TestCase):
         self.rs.list_contributors_with_anonymous().all()
         self.assertEqual(request_method.call_args[0],
                          ('get', _('repos/octocat/octocat_repo/contributors')))
-        self.assertEqual(request_method.call_args[1]['params']['anom'], True)
+        self.assertEqual(request_method.call_args[1]['params']['anon'], True)
 
     def test_LIST_languages(self, request_method):
         request_method.return_value = mock_response()
@@ -135,6 +135,12 @@ class TestRepoService(TestCase):
         self.rs.list_branches().all()
         self.assertEqual(request_method.call_args[0],
                          ('get', _('repos/octocat/octocat_repo/branches')))
+
+    def test_GET_branch(self, request_method):
+        request_method.return_value = mock_response()
+        self.rs.get_branch('master')
+        self.assertEqual(request_method.call_args[0],
+            ('get', _('repos/octocat/octocat_repo/branches/master')))
 
 
 @dummy_json
