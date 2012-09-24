@@ -1,3 +1,5 @@
+.. image:: https://secure.travis-ci.org/copitux/python-github3.png
+
 Pygithub3
 ==========
 
@@ -45,11 +47,11 @@ Achievements
 - `Pull requests service <http://developer.github.com/v3/pulls/>`_
 - `Orgs service <http://developer.github.com/v3/orgs/>`_
 - `Issues service <http://developer.github.com/v3/issues/>`_
+- `Events service <http://developer.github.com/v3/events/>`_
 
 TODO
 -----
 
-- Services: Events
 - Oauth authorization API (service?)
 - Proxy methods into resources (e.g copitux.followers)
 

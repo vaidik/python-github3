@@ -6,6 +6,7 @@ from mock import patch
 
 from pygithub3.core.client import Client
 from pygithub3.exceptions import NotFound, BadRequest, UnprocessableEntity
+from pygithub3.github import Github
 from pygithub3.tests.utils.base import mock_response
 from pygithub3.tests.utils.core import TestCase
 
@@ -99,3 +100,17 @@ class TestClientRaises(TestCase):
         request_method.return_value.status_code = 422
         request_method.return_value.content = {}
         self.assertRaises(UnprocessableEntity, *self.callback)
+
+class TestGithubGlue(TestCase):
+
+    def test_init(self):
+        gh = Github(login='dummy', password='dummy', user='dummy',
+            repo='dummy')
+        self.assertTrue(getattr(gh, '_users', False))
+        self.assertTrue(getattr(gh, '_repos', False))
+        self.assertTrue(getattr(gh, '_gists', False))
+        self.assertTrue(getattr(gh, '_git_data', False))
+        self.assertTrue(getattr(gh, '_pull_requests', False))
+        self.assertTrue(getattr(gh, '_orgs', False))
+        self.assertTrue(getattr(gh, '_issues', False))
+        self.assertTrue(getattr(gh, '_events', False))
