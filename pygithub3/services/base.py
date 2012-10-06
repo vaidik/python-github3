@@ -18,6 +18,7 @@ class Service(object):
     :param int per_page: Items in each page of multiple returns
     :param str base_url: To support another github-related API (untested)
     :param stream verbose: Stream to write debug logs
+    :param timeout float: Timeout for requests
 
     You can configure the **authentication** with BasicAuthentication (login
     and password) and with `OAuth <http://developer.github.com/v3/oauth/>`_ (

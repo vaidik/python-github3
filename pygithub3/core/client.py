@@ -56,6 +56,8 @@ class Client(object):
         self.requester.params.append(per_page)
         if config.get('verbose'):
             self.requester.config = {'verbose': config['verbose']}
+        if config.get('timeout'):
+            self.requester.timeout = config['timeout']
 
     def __parse_kwargs(func):
         """ Decorator to put extra args into requests.params """
