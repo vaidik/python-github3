@@ -8,6 +8,7 @@ from .downloads import Downloads
 from .forks import Forks
 from .keys import Keys
 from .watchers import Watchers
+from .stargazers import Stargazers
 from .hooks import Hooks
 
 
@@ -21,6 +22,7 @@ class Repo(Service):
         self.forks = Forks(**config)
         self.keys = Keys(**config)
         self.watchers = Watchers(**config)
+        self.stargazers = Stargazers(**config)
         self.hooks = Hooks(**config)
         super(Repo, self).__init__(**config)
 

@@ -4,12 +4,12 @@
 from . import Service
 
 
-class Watchers(Service):
-    """ Consume `Watching API
-    <http://developer.github.com/v3/repos/subscribers>`_ """
+class Stargazers(Service):
+    """ Consume `starring API
+    <http://developer.github.com/v3/repos/starring>`_ """
 
     def list(self, user=None, repo=None):
-        """ Get repository's watchers
+        """ Get repository's stargazers
 
         :param str user: Username
         :param str repo: Repository
@@ -18,32 +18,33 @@ class Watchers(Service):
         .. note::
             Remember :ref:`config precedence`
         """
-        request = self.make_request('repos.watchers.list',
+        request = self.make_request('repos.stargazers.list',
                                     user=user, repo=repo)
         return self._get_result(request)
 
     def list_repos(self, user=None):
-        """ Get repositories being watched by a user
+        """ Get repositories being starred by a user
 
         :param str user: Username
         :returns: A :doc:`result`
 
         If you call it without user and you are authenticated, get the
-        repositories being watched by the authenticated user.
+        repositories being starred by the authenticated user.
 
         .. warning::
             If you aren't authenticated and call without user, it returns 403
 
         ::
 
-            watchers_service.list_repos('copitux')
-            watchers_service.list_repos()
+            stargazers_service.list_repos('copitux')
+            stargazers_service.list_repos()
         """
-        request = self.request_builder('repos.watchers.list_repos', user=user)
+        request = self.request_builder('repos.stargazers.list_repos',
+                                       user=user)
         return self._get_result(request)
 
-    def is_watching(self, user=None, repo=None):
-        """ Check if authenticated user is watching a repository
+    def is_starring(self, user=None, repo=None):
+        """ Check if authenticated user is starring a repository
 
         :param str user: Username
         :param str repo: Repository
@@ -54,12 +55,12 @@ class Watchers(Service):
         .. warning::
             You must be authenticated
         """
-        request = self.make_request('repos.watchers.is_watching',
+        request = self.make_request('repos.stargazers.is_starring',
                                     user=user, repo=repo)
         return self._bool(request)
 
-    def watch(self, user=None, repo=None):
-        """ Watch a repository
+    def star(self, user=None, repo=None):
+        """ Star a repository
 
         :param str user: Username
         :param str repo: Repository
@@ -70,12 +71,12 @@ class Watchers(Service):
         .. warning::
             You must be authenticated
         """
-        request = self.make_request('repos.watchers.watch',
+        request = self.make_request('repos.stargazers.star',
                                     user=user, repo=repo)
         self._put(request)
 
-    def unwatch(self, user=None, repo=None):
-        """ Stop watching a repository
+    def unstar(self, user=None, repo=None):
+        """ Stop starring a repository
 
         :param str user: Username
         :param str repo: Repository
@@ -86,6 +87,6 @@ class Watchers(Service):
         .. warning::
             You must be authenticated
         """
-        request = self.make_request('repos.watchers.unwatch',
+        request = self.make_request('repos.stargazers.unstar',
                                     user=user, repo=repo)
         self._delete(request)

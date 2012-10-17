@@ -12,6 +12,8 @@ class Service(object):
 
     :param str login: Username to authenticate
     :param str password: Username to authenticate
+    :param str client_id: Client id to prevent rate limiting
+    :param str client_key: Client key to prevent rate limiting
     :param str user: Default username in requests
     :param str repo: Default repository in requests
     :param str token: Token to OAuth
@@ -72,6 +74,14 @@ class Service(object):
         :param str password: Username to authenticate
         """
         self._client.set_credentials(login, password)
+
+    def set_oauth_credentials(self, client_id, client_key):
+        """ Set Oauth Identification
+
+        :param str client_id: Client id to prevent rate limiting
+        :param str client_key: Client key to prevent rate limiting
+        """
+        self._client.set_oauth_credentials(client_id, client_key)
 
     def set_token(self, token):
         """ Set OAuth token

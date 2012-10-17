@@ -24,6 +24,8 @@ class Client(object):
         self.config.update(kwargs)
         self.set_credentials(self.config.get('login'),
                              self.config.get('password'))
+        self.set_oauth_credentials(self.config.get('client_id'),
+                             self.config.get('client_secret'))
         self.set_token(self.config.get('token'))
         self.__set_params(self.config)
 
@@ -46,6 +48,11 @@ class Client(object):
     def set_credentials(self, login, password):
         if login and password:
             self.requester.auth = (login, password)
+
+    def set_oauth_credentials(self, client_id, client_secret):
+        if client_id and client_secret:
+            self.requester.params.append(('client_id', client_id))
+            self.requester.params.append(('client_secret', client_secret))
 
     def set_token(self, token):
         if token:
