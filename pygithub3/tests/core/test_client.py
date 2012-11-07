@@ -24,10 +24,22 @@ class TestClient(TestCase):
         self.c.set_credentials('', '')
         self.assertIsNone(self.c.requester.auth)
 
+    def test_set_oauth_credentials_with_valid(self):
+        self.c.set_oauth_credentials('id', 'secret')
+        self.assertEqual(dict(self.c.requester.params)['client_id'],
+                         'id')
+        self.assertEqual(dict(self.c.requester.params)['client_secret'],
+                         'secret')
+
+    def test_set_credentials_with_invalid(self):
+        self.c.set_oauth_credentials('', '')
+        self.assertIsNone(dict(self.c.requester.params).get('client_id'))
+        self.assertIsNone(dict(self.c.requester.params).get('client_secret'))
+
     def test_set_token_with_valid(self):
         self.c.set_token('tokenize')
         self.assertEqual(dict(self.c.requester.params)['access_token'],
-            'tokenize')
+                         'tokenize')
 
     def test_set_token_with_invalid(self):
         self.c.set_token('')

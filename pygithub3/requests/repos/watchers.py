@@ -8,30 +8,30 @@ from pygithub3.resources.repos import Repo
 
 class List(Request):
 
-    uri = 'repos/{user}/{repo}/watchers'
+    uri = 'repos/{user}/{repo}/subscribers'
     resource = User
 
 
 class List_repos(Request):
 
-    uri = 'users/{user}/watched'
+    uri = 'users/{user}/subscriptions'
     resource = Repo
 
     def clean_uri(self):
         if not self.user:
-            return 'user/watched'
+            return 'user/subscriptions'
 
 
 class Is_watching(Request):
 
-    uri = 'user/watched/{user}/{repo}'
+    uri = 'user/subscriptions/{user}/{repo}'
 
 
 class Watch(Request):
 
-    uri = 'user/watched/{user}/{repo}'
+    uri = 'user/subscriptions/{user}/{repo}'
 
 
 class Unwatch(Request):
 
-    uri = 'user/watched/{user}/{repo}'
+    uri = 'user/subscriptions/{user}/{repo}'

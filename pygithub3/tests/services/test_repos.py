@@ -4,7 +4,7 @@ import requests
 from mock import patch
 
 from pygithub3.services.repos import (Repo, Collaborators, Commits, Downloads,
-    Forks, Keys, Watchers, Hooks)
+    Forks, Keys, Watchers, Stargazers, Hooks)
 from pygithub3.tests.utils.base import (dummy_json, mock_response,
     mock_response_result)
 from pygithub3.tests.utils.core import TestCase
@@ -342,36 +342,79 @@ class TestWatchersService(TestCase):
         request_method.return_value = mock_response_result()
         self.ws.list().all()
         self.assertEqual(request_method.call_args[0],
-            ('get', _('repos/oct/re_oct/watchers')))
+            ('get', _('repos/oct/re_oct/subscribers')))
 
     def test_LIST_repos(self, request_method):
         request_method.return_value = mock_response_result()
         self.ws.list_repos().all()
         self.assertEqual(request_method.call_args[0],
-            ('get', _('user/watched')))
+            ('get', _('user/subscriptions')))
 
     def test_LIST_repos_with_user(self, request_method):
         request_method.return_value = mock_response_result()
         self.ws.list_repos('oct').all()
         self.assertEqual(request_method.call_args[0],
-            ('get', _('users/oct/watched')))
+            ('get', _('users/oct/subscriptions')))
 
     def test_IS_watching(self, request_method):
         request_method.return_value = mock_response()
         self.assertTrue(self.ws.is_watching())
         self.assertEqual(request_method.call_args[0],
-            ('head', _('user/watched/oct/re_oct')))
+            ('head', _('user/subscriptions/oct/re_oct')))
 
     def test_WATCH(self, request_method):
         self.ws.watch()
         self.assertEqual(request_method.call_args[0],
-            ('put', _('user/watched/oct/re_oct')))
+            ('put', _('user/subscriptions/oct/re_oct')))
 
     def test_UNWATCH(self, request_method):
         request_method.return_value = mock_response('delete')
         self.ws.unwatch()
         self.assertEqual(request_method.call_args[0],
-            ('delete', _('user/watched/oct/re_oct')))
+            ('delete', _('user/subscriptions/oct/re_oct')))
+
+
+@dummy_json
+@patch.object(requests.sessions.Session, 'request')
+class TestStargazersService(TestCase):
+
+    def setUp(self):
+        self.sg = Stargazers(user='oct', repo='re_oct')
+
+    def test_LIST(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.sg.list().all()
+        self.assertEqual(request_method.call_args[0],
+            ('get', _('repos/oct/re_oct/stargazers')))
+
+    def test_LIST_repos(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.sg.list_repos().all()
+        self.assertEqual(request_method.call_args[0],
+            ('get', _('user/starred')))
+
+    def test_LIST_repos_with_user(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.sg.list_repos('oct').all()
+        self.assertEqual(request_method.call_args[0],
+            ('get', _('users/oct/starred')))
+
+    def test_IS_starring(self, request_method):
+        request_method.return_value = mock_response()
+        self.assertTrue(self.sg.is_starring())
+        self.assertEqual(request_method.call_args[0],
+            ('head', _('user/starred/oct/re_oct')))
+
+    def test_STAR(self, request_method):
+        self.sg.watch()
+        self.assertEqual(request_method.call_args[0],
+            ('put', _('user/starred/oct/re_oct')))
+
+    def test_STAR(self, request_method):
+        request_method.return_value = mock_response('delete')
+        self.sg.unstar()
+        self.assertEqual(request_method.call_args[0],
+            ('delete', _('user/starred/oct/re_oct')))
 
 
 @dummy_json

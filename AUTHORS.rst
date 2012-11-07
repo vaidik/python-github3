@@ -31,3 +31,4 @@ Patches and Suggestions
 - Ralph Bean <rbean@redhat.com>
 - Jason A. Donenfeld <Jason@zx2c4.com>
 - Brad Montgomery <http://about.me/bkmontgomery>
+- Thomas Whitton <mail@thomaswhitton.com>

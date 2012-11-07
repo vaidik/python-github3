@@ -128,6 +128,14 @@ Watchers
 .. autoclass:: pygithub3.services.repos.Watchers
     :members:
 
+.. _Stargazers service:
+
+Stargazers
+---------
+
+.. autoclass:: pygithub3.services.repos.Stargazers
+    :members:
+
 .. _Hooks service:
 
 Hooks
