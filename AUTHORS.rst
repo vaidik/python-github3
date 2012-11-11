@@ -32,3 +32,4 @@ Patches and Suggestions
 - Jason A. Donenfeld <Jason@zx2c4.com>
 - Brad Montgomery <http://about.me/bkmontgomery>
 - Thomas Whitton <mail@thomaswhitton.com>
+- Jonas Baumann <https://github.com/jone>

@@ -4,7 +4,7 @@ import requests
 from mock import patch
 
 from pygithub3.services.repos import (Repo, Collaborators, Commits, Downloads,
-    Forks, Keys, Watchers, Stargazers, Hooks)
+    Forks, Keys, Watchers, Stargazers, Hooks, Statuses)
 from pygithub3.tests.utils.base import (dummy_json, mock_response,
     mock_response_result)
 from pygithub3.tests.utils.core import TestCase
@@ -459,3 +459,25 @@ class TestHooksService(TestCase):
         self.hs.delete(1)
         self.assertEqual(request_method.call_args[0],
                 ('delete', _('repos/oct/re_oct/hooks/1')))
+
+@dummy_json
+@patch.object(requests.sessions.Session, 'request')
+class TestStatusesService(TestCase):
+
+    def setUp(self):
+        self.ss = Statuses(user='oct', repo='re_oct')
+
+    def test_LIST(self, request_method):
+        request_method.return_value = mock_response_result()
+        self.ss.list(sha='e3bc').all()
+        self.assertEqual(request_method.call_args[0],
+                         ('get', _('repos/oct/re_oct/statuses/e3bc')))
+
+    def test_CREATE(self, request_method):
+        request_method.return_value = mock_response('post')
+        self.ss.create({"state": "success",
+                        "target_url": "https://example.com/build/status",
+                        "description": "The build succeeded!"},
+                       sha='e3bc')
+        self.assertEqual(request_method.call_args[0],
+                         ('post', _('repos/oct/re_oct/statuses/e3bc')))

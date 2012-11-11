@@ -144,6 +144,12 @@ Hooks
 .. autoclass:: pygithub3.services.repos.Hooks
     :members:
 
+Statuses
+---------
+
+.. autoclass:: pygithub3.services.repos.Statuses
+    :members:
+
 .. _github repos doc: http://developer.github.com/v3/repos
 .. _github collaborators doc: http://developer.github.com/v3/repos/collaborators
 .. _github commits doc: http://developer.github.com/v3/repos/commits
@@ -152,3 +158,4 @@ Hooks
 .. _github keys doc: http://developer.github.com/v3/repos/keys
 .. _github watching doc: http://developer.github.com/v3/repos/watching
 .. _github hooks doc: http://developer.github.com/v3/repos/hooks
+.. _github statuses doc: http://developer.github.com/v3/repos/statuses

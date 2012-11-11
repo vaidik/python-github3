@@ -9,6 +9,7 @@ from .keys import Keys
 from .watchers import Watchers
 from .stargazers import Stargazers
 from .hooks import Hooks
+from .statuses import Statuses
 
 
 class Repo(Service):
@@ -23,6 +24,7 @@ class Repo(Service):
         self.watchers = Watchers(**config)
         self.stargazers = Stargazers(**config)
         self.hooks = Hooks(**config)
+        self.statuses = Statuses(**config)
         super(Repo, self).__init__(**config)
 
     def list(self, user=None, type='all', sort='full_name', direction='desc'):
